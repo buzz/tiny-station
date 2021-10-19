@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// http://localhost:9999/status-json.xsl
-
-const SRC_STOPPED = "about:blank";
-
 const useAudioStream = (src) => {
   const [volume, setVolume] = useState(1.0);
   const [muted, setMuted] = useState(false);
@@ -19,30 +15,30 @@ const useAudioStream = (src) => {
       audioRef.current.play();
 
       audioRef.current.addEventListener("playing", () => {
-        console.log("playing");
         setStreamState("playing");
       });
       audioRef.current.addEventListener("loadstart", () => {
-        console.log("loadstart");
         setStreamState("loading");
       });
       audioRef.current.addEventListener("stalled", () => {
-        console.log("stalled");
+        console.warn("stalled");
         setStreamState("error");
       });
-      audioRef.current.addEventListener("error", (event, b) => {
-        if (audioRef.current.src === SRC_STOPPED) return;
-        if (audioRef.current) {
-          console.log("src:", audioRef.current.src);
+      audioRef.current.addEventListener("error", (event) => {
+        if (audioRef.current && audioRef.current.src === "about:dummy") {
+          audioRef.current = undefined;
+          setStreamState("stopped");
+          return;
         }
-        console.log("event");
-        console.log(event);
+        console.error(event);
         setStreamState("error");
       });
       audioRef.current.addEventListener("ended", () => {
+        console.error("Stream ended");
         setStreamState("stopped");
       });
       audioRef.current.addEventListener("abort", () => {
+        console.log("abort");
         setStreamState("stopped");
       });
       audioRef.current.addEventListener("pause", () => {
@@ -53,20 +49,15 @@ const useAudioStream = (src) => {
 
   const stopStream = useCallback(() => {
     if (audioRef.current) {
+      audioRef.current.src = "about:dummy";
       audioRef.current.pause();
-      audioRef.current = undefined;
+      setTimeout(() => {
+        audioRef.current.load(); // Force streaming to stop
+      });
     }
   }, []);
 
-  useEffect(
-    () => () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = undefined;
-      }
-    },
-    []
-  );
+  useEffect(() => () => stopStream(), [stopStream]);
 
   return {
     setVolume: useCallback((vol) => {

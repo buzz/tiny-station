@@ -29,6 +29,10 @@ body {
   padding: 0;
 }
 
+.iconButton[disabled] {
+  color: #888;
+}
+
 .iconButton:not([disabled]) {
   cursor: pointer;
 }
@@ -48,8 +52,22 @@ body {
   display: flex;
 }
 
-.navbar .center {
+.navbar > * {
+  margin-right: 1rem;
+}
+
+.navbar > *:last-child {
+  margin-right: 0;
+}
+
+.navbar .fill {
   flex-grow: 1;
+}
+
+.navbar .player,
+.navbar .listeners {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 /* player */
