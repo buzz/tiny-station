@@ -13,7 +13,27 @@ import {
 
 import useAudioStream from './useAudioStream'
 import VolumeControl from './VolumeControl'
-import { timeConversion } from './utils'
+
+const timeConversion = (duration) => {
+  let dur = duration
+  const portions = []
+
+  const msInHour = 1000 * 60 * 60
+  const hours = Math.trunc(dur / msInHour)
+  if (hours > 0) {
+    portions.push(`${hours} h`)
+    dur -= hours * msInHour
+  }
+
+  const msInMinute = 1000 * 60
+  const minutes = Math.trunc(dur / msInMinute)
+  if (minutes > 0) {
+    portions.push(`${minutes} min`)
+    dur -= minutes * msInMinute
+  }
+
+  return portions.join(' ')
+}
 
 const SpinnerIcon = () => (
   <span className="fa-layers fa-fw fa-2x">
@@ -83,7 +103,7 @@ const AudioPlayer = ({ listeners, listenUrl, streamOnline, streamStart, title })
         </button>
         <div title={`Stream online since ${timeConversion(timeDiff)}.`}>{statusText}</div>
       </div>
-      <div className="fill"></div>
+      <div className="fill" />
       <div className="listeners" title="Current listeners">
         <FontAwesomeIcon icon={faHeadphonesAlt} /> <strong className="label">{listeners}</strong>
       </div>
