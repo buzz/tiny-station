@@ -14,26 +14,22 @@ const useSocketIO = () => {
     io.current = socketIOClient()
 
     io.current.on('connect', () => {
-      console.log('connected')
-
       io.current.emit('requestStreamInfo')
 
       io.current.on('streamInfo', (info) => {
-        console.log('streamInfo', info)
-
-        if (!info.listenUrl) {
+        if (info.listenUrl) {
+          setListeners(info.listeners)
+          setListenUrl(info.listenUrl)
+          setSteamStart(new Date(info.streamStart))
+          setStreamTitle(info.title)
+          setStreamOnline('online')
+        } else {
           setListeners(undefined)
           setListenUrl(undefined)
           setSteamStart(undefined)
           setStreamTitle(undefined)
           setStreamOnline('offline')
         }
-
-        setListeners(info.listeners)
-        setListenUrl(info.listenUrl)
-        setSteamStart(new Date(info.streamStart))
-        setStreamTitle(info.title)
-        setStreamOnline('online')
       })
     })
 
