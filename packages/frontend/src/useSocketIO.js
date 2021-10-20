@@ -6,7 +6,7 @@ const useSocketIO = () => {
   const [listeners, setListeners] = useState()
   const [listenUrl, setListenUrl] = useState()
   const [streamStart, setSteamStart] = useState()
-  const [title, setTitle] = useState()
+  const [streamTitle, setStreamTitle] = useState()
   const [streamOnline, setStreamOnline] = useState('unknown')
   const io = useRef()
 
@@ -25,14 +25,14 @@ const useSocketIO = () => {
           setListeners(undefined)
           setListenUrl(undefined)
           setSteamStart(undefined)
-          setTitle(undefined)
+          setStreamTitle(undefined)
           setStreamOnline('offline')
         }
 
         setListeners(info.listeners)
         setListenUrl(info.listenUrl)
         setSteamStart(new Date(info.streamStart))
-        setTitle(info.title)
+        setStreamTitle(info.title)
         setStreamOnline('online')
       })
     })
@@ -49,7 +49,7 @@ const useSocketIO = () => {
     listenUrl,
     streamOnline,
     streamStart,
-    title,
+    streamTitle,
   }
 }
 

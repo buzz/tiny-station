@@ -13,6 +13,7 @@ const VolumeControl = ({ disabled, muted, volume, onToggleMuted, onVolumeChange 
         className={classNames('iconButton', 'muteButton')}
         disabled={disabled}
         onClick={onToggleMuted}
+        type="button"
       >
         {volumeIcon}
       </button>

@@ -87,6 +87,11 @@ body {
   margin-right: 0.5rem;
 }
 
+.onlineSince {
+  margin-left: 0.5rem;
+  font-size: 80%;
+}
+
 /* volume */
 
 .volumeControl {

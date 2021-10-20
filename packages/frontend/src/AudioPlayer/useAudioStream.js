@@ -35,7 +35,7 @@ const useAudioStream = (src) => {
       })
       audioRef.current.addEventListener('ended', () => {
         console.error('Stream ended')
-        setStreamState('stopped')
+        stopStream()
       })
       audioRef.current.addEventListener('abort', () => {
         console.log('abort')
@@ -66,10 +66,10 @@ const useAudioStream = (src) => {
         audioRef.current.volume = vol
       }
     }, []),
-    setMuted: useCallback((muted) => {
-      setMuted(muted)
+    setMuted: useCallback((mutedNew) => {
+      setMuted(mutedNew)
       if (audioRef.current) {
-        audioRef.current.muted = muted
+        audioRef.current.muted = mutedNew
       }
     }, []),
     streamState,
