@@ -1,9 +1,11 @@
+@import '../styles/_colors.sss'
+
 .navbar
   align-items: center
-  background-color: #f3f3f3
-  border-bottom: 1px solid rgb(0 0 0 / 14%)
-  box-shadow: 0 0 6px rgb(0 0 0 / 14%)
-  color: #333
+  background: linear-gradient(180deg, color($color-navbar-bg tint(5%)) 0%, $color-navbar-bg 100%)
+  border-bottom: 1px solid black
+  box-shadow: 0 0 6px rgb(0 0 0 / 40%)
+  color: $color-navbar-base
   display: flex
 
   > *
@@ -23,6 +25,7 @@
 
 .listenersLabel
   font-size: 80%
+  margin-left: 0.1rem
 
 .player
   align-items: center
@@ -45,7 +48,6 @@
   width: 7rem
 
 .muteButton
-  color: #444
   cursor: pointer
   text-align: left
   width: 1.5rem
@@ -57,20 +59,25 @@
   &:global(.rc-slider-disabled)
     background-color: transparent
 
-  &:global(.rc-slider-disabled .rc-slider-rail)
-    background-color: #ccc
+    :global(.rc-slider-rail), :global(.rc-slider-track)
+      background-color: $color-navbar-disabled
+
+    :global(.rc-slider-handle)
+      background-color: $color-navbar-disabled
+      border-color: $color-navbar-disabled
 
   :global(.rc-slider-rail)
-    background-color: #bbb
+    background-color: $color-navbar-base
 
   :global(.rc-slider-track)
-    background-color: #666
+    background-color: $color-navbar-base
 
   :global(.rc-slider-handle)
-    border-color: #666
+    background-color: $color-navbar-bg
+    border-color: $color-navbar-base
 
   :global(.rc-slider-handle:active),
   :global(.rc-slider-handle:focus),
   :global(.rc-slider-handle:hover)
     box-shadow: none
-    border-color: #666
+    border-color: $color-navbar-highlight

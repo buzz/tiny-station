@@ -1,14 +1,16 @@
+@import './_colors.sss'
+
 .iconButton
-  color: #444
+  color: $color-navbar-base
   border: none
   background-color: transparent
   padding: 0
 
 .iconButton[disabled]
-  color: #888
+  color: $color-navbar-disabled
 
 .iconButton:not([disabled])
   cursor: pointer
 
 .iconButton:not([disabled]):hover
-  color: #666
+  color: $color-navbar-highlight

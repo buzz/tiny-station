@@ -9,7 +9,7 @@ import {
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
 
-import styleCommon from '../styles/common.sss'
+import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
 const SpinnerIcon = () => (

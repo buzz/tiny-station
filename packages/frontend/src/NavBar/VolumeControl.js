@@ -4,7 +4,7 @@ import { faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-import styleCommon from '../styles/common.sss'
+import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
 const VolumeControl = ({ disabled, muted, volume, onToggleMuted, onVolumeChange }) => {

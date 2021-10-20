@@ -1,13 +1,18 @@
+@import './_colors.sss'
+
 html
   height: 100%
 
 body
+  background-color: $color-bg
+  color: $color-base
   margin: 0
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   height: 100%
+  text-shadow: 0 1px 0 rgb(0 0 0 / 50%)
 
 :global(#root)
   display: flex
