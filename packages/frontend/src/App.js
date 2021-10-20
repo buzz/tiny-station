@@ -1,4 +1,4 @@
-import AudioPlayer from './AudioPlayer'
+import NavBar from './NavBar'
 import Chat from './Chat'
 import useSocketIO from './useSocketIO'
 
@@ -7,7 +7,7 @@ const App = () => {
 
   return (
     <>
-      <AudioPlayer streamInfo={streamInfo} />
+      <NavBar streamInfo={streamInfo} />
       <Chat />
     </>
   )

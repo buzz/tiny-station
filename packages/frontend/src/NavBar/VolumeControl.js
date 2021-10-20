@@ -4,13 +4,16 @@ import { faVolumeMute, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
+import styleCommon from '../styles/common.sss'
+import style from './NavBar.sss'
+
 const VolumeControl = ({ disabled, muted, volume, onToggleMuted, onVolumeChange }) => {
   const volumeIcon = <FontAwesomeIcon icon={volume === 0.0 || muted ? faVolumeMute : faVolumeUp} />
 
   return (
-    <div className="volumeControl">
+    <div className={style.volumeControl}>
       <button
-        className={classNames('iconButton', 'muteButton')}
+        className={classNames(styleCommon.iconButton, style.muteButton)}
         disabled={disabled}
         onClick={onToggleMuted}
         type="button"
@@ -18,7 +21,7 @@ const VolumeControl = ({ disabled, muted, volume, onToggleMuted, onVolumeChange 
         {volumeIcon}
       </button>
       <Slider
-        className="volumeSlider"
+        className={style.volumeSlider}
         disabled={disabled || muted}
         min={0}
         max={1}

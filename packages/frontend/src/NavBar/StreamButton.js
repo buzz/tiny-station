@@ -9,6 +9,9 @@ import {
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
 
+import styleCommon from '../styles/common.sss'
+import style from './NavBar.sss'
+
 const SpinnerIcon = () => (
   <span className="fa-layers fa-fw fa-2x">
     <FontAwesomeIcon icon={faCircle} />
@@ -51,7 +54,7 @@ const StreamButton = ({ streamInfo: { streamOnline }, streamState, startStream, 
 
   return (
     <button
-      className={classNames('iconButton', 'playButton')}
+      className={classNames(styleCommon.iconButton, style.playButton)}
       disabled={streamState === 'loading' || streamOnline !== 'online'}
       title={btnTitle}
       type="button"

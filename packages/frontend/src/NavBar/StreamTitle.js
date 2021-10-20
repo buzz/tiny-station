@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
+import style from './NavBar.sss'
+
 const getTimeSince = (duration) => {
   let dur = duration
   const portions = []
@@ -50,7 +52,7 @@ const StreamTitle = ({ streamInfo: { streamOnline, streamStart, streamTitle } })
   return (
     <div>
       {statusText}
-      <span className="onlineSince">(online since {timeSince})</span>
+      <span className={style.onlineSince}>(online since {timeSince})</span>
     </div>
   )
 }

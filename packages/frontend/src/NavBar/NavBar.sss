@@ -1,0 +1,76 @@
+.navbar
+  align-items: center
+  background-color: #f3f3f3
+  border-bottom: 1px solid rgb(0 0 0 / 14%)
+  box-shadow: 0 0 6px rgb(0 0 0 / 14%)
+  color: #333
+  display: flex
+
+  > *
+    margin-right: 1rem
+
+    &:last-child
+      margin-right: 0
+
+  .fill
+    flex-grow: 1
+
+/* player controls */
+
+.player, .listeners
+  overflow: hidden
+  white-space: nowrap
+
+.listenersLabel
+  font-size: 80%
+
+.player
+  align-items: center
+  display: flex
+  font-size: 80%
+  height: 2rem
+
+.playButton
+  margin-right: 0.5rem
+
+.onlineSince
+  margin-left: 0.5rem
+  font-size: 80%
+
+/* volume control */
+
+.volumeControl
+  align-items: center
+  display: flex
+  width: 7rem
+
+.muteButton
+  color: #444
+  cursor: pointer
+  text-align: left
+  width: 1.5rem
+
+.volumeSlider
+  margin-left: 0.5rem
+  margin-right: 0.5rem
+
+  &:global(.rc-slider-disabled)
+    background-color: transparent
+
+  &:global(.rc-slider-disabled .rc-slider-rail)
+    background-color: #ccc
+
+  :global(.rc-slider-rail)
+    background-color: #bbb
+
+  :global(.rc-slider-track)
+    background-color: #666
+
+  :global(.rc-slider-handle)
+    border-color: #666
+
+  :global(.rc-slider-handle:active),
+  :global(.rc-slider-handle:focus),
+  :global(.rc-slider-handle:hover)
+    box-shadow: none
+    border-color: #666
