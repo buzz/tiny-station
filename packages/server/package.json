@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "description": "Server for stream listener",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "babel --delete-dir-on-start --out-dir dist src",
+    "dev": "nodemon --exec babel-node src/server.js",
+    "start": "NODE_ENV=production node dist/server.js"
+  },
+  "dependencies": {
+    "date-format-parse": "^0.2.7",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "socket.io": "^4.3.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/node": "^7.15.8",
+    "nodemon": "^2.0.14"
+  }
+}

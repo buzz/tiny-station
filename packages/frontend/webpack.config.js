@@ -126,7 +126,7 @@ if (devMode) {
     hot: true,
     port: 3000,
     proxy: {
-      '/api': 'http://localhost:3001',
+      '/socket.io': 'http://localhost:3001',
     },
   }
 }

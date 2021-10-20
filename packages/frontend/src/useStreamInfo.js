@@ -29,7 +29,7 @@ const useStreamInfo = (icecastUrl) => {
         .then((source) => {
           setListeners(source.listeners)
           setListenUrl(source.listenurl)
-          setSteamStart(new Date(source.stream_start_iso8601))
+          setSteamStart(new Date(source.stream_start))
           setTitle(source.title)
           document.title = source.title
           setStreamOnline('online')

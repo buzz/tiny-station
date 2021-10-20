@@ -1,9 +1,9 @@
 import AudioPlayer from './AudioPlayer'
 import Chat from './Chat'
-import useStreamInfo from './useStreamInfo'
+import useSocketIO from './useSocketIO'
 
 const App = () => {
-  const { listeners, listenUrl, streamOnline, streamStart, title } = useStreamInfo(
+  const { listeners, listenUrl, streamOnline, streamStart, title } = useSocketIO(
     process.env.ICECAST_URL
   )
 

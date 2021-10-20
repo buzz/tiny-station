@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browser": true
+        }
+      }
+    ],
+    ["@babel/preset-react", { "runtime": "automatic" }]
+  ]
+}

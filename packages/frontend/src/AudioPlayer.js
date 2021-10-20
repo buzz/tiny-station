@@ -5,10 +5,10 @@ import {
   faCircle,
   faExclamationCircle,
   faFrownOpen,
+  faHeadphonesAlt,
   faPlayCircle,
   faSpinner,
   faStopCircle,
-  faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
 import useAudioStream from './useAudioStream'
@@ -85,7 +85,7 @@ const AudioPlayer = ({ listeners, listenUrl, streamOnline, streamStart, title })
       </div>
       <div className="fill"></div>
       <div className="listeners" title="Current listeners">
-        <strong>{listeners}</strong> <FontAwesomeIcon icon={faUsers} />
+        <FontAwesomeIcon icon={faHeadphonesAlt} /> <strong className="label">{listeners}</strong>
       </div>
       <VolumeControl
         onToggleMuted={onToggleMuted}
