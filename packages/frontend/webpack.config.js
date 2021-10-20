@@ -4,6 +4,7 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserJSPlugin = require('terser-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 const pkgInfo = require('../../package.json')
 
@@ -113,6 +114,7 @@ const config = {
         start_url: '/',
       },
     }),
+    new Dotenv({ path: path.resolve(__dirname, '..', '..', '.env') }),
   ],
 }
 

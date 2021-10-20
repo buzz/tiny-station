@@ -24,7 +24,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = ({ file }) => ({
-  parser:
-    path.extname(file) === '.sss' ? require.resolve('sugarss') : undefined,
+  parser: path.extname(file) === '.sss' ? require.resolve('sugarss') : undefined,
   plugins,
 })
