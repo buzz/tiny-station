@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCircle,
   faExclamationCircle,
   faFrownOpen,
   faPlayCircle,
@@ -12,14 +11,9 @@ import {
 import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
-const SpinnerIcon = () => (
-  <span className="fa-layers fa-fw fa-2x">
-    <FontAwesomeIcon icon={faCircle} />
-    <FontAwesomeIcon icon={faSpinner} inverse spin transform="shrink-6" />
-  </span>
-)
-
 const PlayIcon = ({ icon }) => <FontAwesomeIcon icon={icon} fixedWidth size="2x" />
+
+const SpinnerIcon = () => <FontAwesomeIcon icon={faSpinner} fixedWidth size="2x" spin />
 
 const StreamButton = ({ streamInfo: { streamOnline }, streamState, startStream, stopStream }) => {
   let btnTitle
