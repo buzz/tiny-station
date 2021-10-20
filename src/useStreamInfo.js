@@ -31,6 +31,7 @@ const useStreamInfo = (icecastUrl) => {
           setListenUrl(source.listenurl);
           setSteamStart(new Date(source.stream_start_iso8601));
           setTitle(source.title);
+          document.title = source.title;
           setStreamOnline("online");
         })
         .catch(() => {
