@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "build": "babel --delete-dir-on-start --out-dir dist src",
-    "dev": "nodemon --exec babel-node src/server.js",
-    "start": "NODE_ENV=production node dist/server.js"
+    "dev": "nodemon --exec babel-node src/index.js",
+    "start": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
     "date-format-parse": "^0.2.7",
