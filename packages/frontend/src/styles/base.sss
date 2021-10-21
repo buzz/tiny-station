@@ -1,7 +1,12 @@
-@import './_colors.sss'
+@import './_vars.sss'
+
+$max-width: 960px
 
 html
   height: 100%
+
+  *
+    box-sizing: border-box
 
 body
   background-color: $color-bg
@@ -9,15 +14,29 @@ body
   margin: 0
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
+  font-size: $font-size-base
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   height: 100%
   text-shadow: 0 1px 0 rgb(0 0 0 / 50%)
 
+  @media (max-width: 600px)
+    &
+      font-size: $font-size-small-vp
+
 :global(#root)
+  align-items: center
   display: flex
   flex-direction: column
   height: 100%
+  margin: 0 auto
+  max-width: $max-width
+  padding: 0 0.67rem
 
   > *
+    margin: 0.67rem 0 0.67rem
     padding: 0.5rem 1rem
+    width: 100%
+
+    &:last-child
+      margin: 0 0 0.67rem

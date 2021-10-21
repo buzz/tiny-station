@@ -24,17 +24,17 @@ const getTimeSince = (startTime) => {
 }
 
 const StreamTitle = ({ streamInfo: { streamOnline, streamStart, streamTitle } }) => {
-  let statusText
+  let titleText
 
   const [timeSince, setTimeSince] = useState('')
   const intervalRef = useRef()
 
   if (streamOnline === 'online') {
-    statusText = streamTitle || 'No name stream'
+    titleText = streamTitle || 'No name stream'
   } else if (streamOnline === 'offline') {
-    statusText = 'Stream offline'
+    titleText = 'Stream offline'
   } else {
-    statusText = ''
+    titleText = ''
   }
 
   useEffect(() => {
@@ -53,10 +53,10 @@ const StreamTitle = ({ streamInfo: { streamOnline, streamStart, streamTitle } })
   const timeSinceLabel = streamOnline === 'online' ? `(online for ${timeSince})` : undefined
 
   return (
-    <div>
-      {statusText}
-      <span className={style.onlineSince}>{timeSinceLabel}</span>
-    </div>
+    <>
+      <div className={style.title}>{titleText}</div>
+      <div className={style.onlineSince}>{timeSinceLabel}</div>
+    </>
   )
 }
 

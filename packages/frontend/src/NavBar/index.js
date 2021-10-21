@@ -6,6 +6,7 @@ import useAudioStream from './useAudioStream'
 import StreamButton from './StreamButton'
 import StreamTitle from './StreamTitle'
 import VolumeControl from './VolumeControl'
+import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
 const NavBar = ({ streamInfo }) => {
@@ -19,18 +20,16 @@ const NavBar = ({ streamInfo }) => {
 
   return (
     <div className={style.navbar}>
-      <div className={style.player}>
-        <StreamButton
-          streamInfo={streamInfo}
-          streamState={streamState}
-          startStream={startStream}
-          stopStream={stopStream}
-        />
-        <StreamTitle streamInfo={streamInfo} />
-      </div>
+      <StreamButton
+        streamInfo={streamInfo}
+        streamState={streamState}
+        startStream={startStream}
+        stopStream={stopStream}
+      />
+      <StreamTitle streamInfo={streamInfo} />
       <div className={style.fill} />
-      <div className={style.listeners} title="Current listeners">
-        <FontAwesomeIcon icon={faHeadphonesAlt} />{' '}
+      <div title="Current listeners">
+        <FontAwesomeIcon className={styleCommon.icon} icon={faHeadphonesAlt} />{' '}
         <strong className={style.listenersLabel}>{listeners}</strong>
       </div>
       <VolumeControl
