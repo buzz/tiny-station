@@ -83,7 +83,7 @@ class StreamInfoFetcher extends EventEmitter {
         const streamSource = Array.isArray(source) ? source[0] : source
 
         newStreamInfo.listeners = streamSource.listeners
-        newStreamInfo.listenUrl = streamSource.listenurl
+        newStreamInfo.listenUrl = StreamInfoFetcher.rewriteListenUrl(streamSource.listenurl)
         newStreamInfo.title = streamSource.title
         newStreamInfo.streamStart = parseDate(source.stream_start, 'DD/MMM/YYYY:HH:mm:ss ZZ')
 
@@ -109,6 +109,11 @@ class StreamInfoFetcher extends EventEmitter {
         this.emit('update', this.streamInfo)
       })
       .finally(() => this.createPollTimeout())
+  }
+
+  static rewriteListenUrl(listenUrl) {
+    // Working around bugged Icecast
+    return listenUrl.replace('http://', 'https://')
   }
 
   getStreamInfo() {
