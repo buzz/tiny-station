@@ -15,7 +15,7 @@ const PlayIcon = ({ icon }) => <FontAwesomeIcon icon={icon} fixedWidth size="2x"
 
 const SpinnerIcon = () => <FontAwesomeIcon icon={faSpinner} fixedWidth size="2x" spin />
 
-const StreamButton = ({ streamInfo: { streamOnline }, streamState, startStream, stopStream }) => {
+const StreamButton = ({ streamOnline, streamState, startStream, stopStream }) => {
   let btnTitle
   let btnIcon
 

@@ -1,16 +1,15 @@
 import { useCallback } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeadphonesAlt } from '@fortawesome/free-solid-svg-icons'
 
 import useAudioStream from './useAudioStream'
+import ListenerCount from './ListenerCount'
+import OnlineCounter from './OnlineCounter'
 import StreamButton from './StreamButton'
 import StreamTitle from './StreamTitle'
 import VolumeControl from './VolumeControl'
-import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
 const NavBar = ({ streamInfo }) => {
-  const { listeners, listenUrl } = streamInfo
+  const { listenUrl, listeners, streamOnline, streamStart, streamTitle } = streamInfo
   const { setVolume, setMuted, streamState, startStream, stopStream, volume, muted } =
     useAudioStream(listenUrl)
 
@@ -21,17 +20,17 @@ const NavBar = ({ streamInfo }) => {
   return (
     <div className={style.navbar}>
       <StreamButton
-        streamInfo={streamInfo}
+        streamOnline={streamOnline}
         streamState={streamState}
         startStream={startStream}
         stopStream={stopStream}
       />
-      <StreamTitle streamInfo={streamInfo} />
+      <StreamTitle streamOnline={streamOnline} streamTitle={streamTitle} />
+      {streamState === 'playing' ? (
+        <OnlineCounter streamOnline={streamOnline} streamStart={streamStart} />
+      ) : undefined}
       <div className={style.fill} />
-      <div title="Current listeners">
-        <FontAwesomeIcon className={styleCommon.icon} icon={faHeadphonesAlt} />{' '}
-        <strong className={style.listenersLabel}>{listeners}</strong>
-      </div>
+      {streamOnline === 'online' ? <ListenerCount listeners={listeners} /> : undefined}
       <VolumeControl
         onToggleMuted={onToggleMuted}
         onVolumeChange={setVolume}
