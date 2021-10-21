@@ -4,11 +4,6 @@ import { parse as parseDate } from 'date-format-parse'
 
 const POLL_INTERVAL = 10 * 1000
 
-const isEmptyObject = (obj) =>
-  obj && // null and undefined check
-  Object.keys(obj).length === 0 &&
-  Object.getPrototypeOf(obj) === Object.prototype
-
 class StreamInfoFetcher extends EventEmitter {
   streamInfo = {}
 
@@ -24,18 +19,20 @@ class StreamInfoFetcher extends EventEmitter {
     this.createPollTimeout(0)
   }
 
-  startPolling() {
-    console.log('[StreamInfoFetcher] polling started')
+  startPolling(immediatePoll = false) {
+    if (!this.pollingEnabled) {
+      console.log('[StreamInfoFetcher] polling started')
 
-    this.pollingEnabled = true
+      this.pollingEnabled = true
 
-    if (isEmptyObject(this.streamInfo)) {
-      console.log('[StreamInfoFetcher] poll right away')
+      if (immediatePoll) {
+        console.log('[StreamInfoFetcher] immediate poll')
 
-      if (this.timeoutID) {
-        clearTimeout(this.timeoutID)
+        if (this.timeoutID) {
+          clearTimeout(this.timeoutID)
+        }
+        this.createPollTimeout(0)
       }
-      this.createPollTimeout(0)
     }
   }
 
@@ -75,8 +72,10 @@ class StreamInfoFetcher extends EventEmitter {
         if (!source) {
           console.log('[StreamInfoFetcher] polling result: stream offline')
 
-          this.streamInfo = newStreamInfo
-          this.emit('update', this.streamInfo)
+          if (Object.prototype.hasOwnProperty.call(this.streamInfo, 'listenUrl')) {
+            this.streamInfo = newStreamInfo
+            this.emit('update', this.streamInfo)
+          }
           return
         }
 

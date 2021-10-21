@@ -7,18 +7,11 @@ class SocketIOManager {
 
   connectedClients = 0
 
-  constructor(server, streamInfoFetcher) {
+  constructor(streamInfoFetcher) {
     this.streamInfoFetcher = streamInfoFetcher
-    this.setupSocketIO(server)
-
-    this.streamInfoFetcher.on('update', (info) => {
-      console.log('[SocketIOManager] got new stream info', info)
-
-      this.socketIO.to('streamInfoUpdates').emit('streamInfo', info)
-    })
   }
 
-  setupSocketIO(server) {
+  start(server) {
     this.socketIO = socketio(server)
 
     this.socketIO.on('connection', (socket) => {
@@ -42,48 +35,25 @@ class SocketIOManager {
       this.connectedClients += 1
       this.checkPolling()
     })
+
+    this.streamInfoFetcher.on('update', (info) => {
+      console.log('[SocketIOManager] got new stream info', info)
+
+      this.socketIO.to('streamInfoUpdates').emit('streamInfo', info)
+    })
   }
 
   // Stop/start polling
   checkPolling() {
     if (this.connectedClients > 0) {
-      this.streamInfoFetcher.startPolling()
+      // Don't let the first client wait until next poll
+      const info = this.streamInfoFetcher.getStreamInfo()
+      const immediatePoll = this.connectedClients === 1 && !info.listenUrl
+      this.streamInfoFetcher.startPolling(immediatePoll)
     } else {
       this.streamInfoFetcher.stopPolling()
     }
   }
 }
-
-// const makeSocketIo = (server, streamInfoFetcher) => {
-//   let connectedClients = 0
-
-//   const io = socketio(server)
-
-//   streamInfoFetcher.on('update', (info) => {
-//     console.log('got new stream info', info)
-
-//     io.to('clients').emit('streamInfo', info)
-//   })
-
-//   io.on('connection', (socket) => {
-//     connectedClients += 1
-
-//     console.log('client connect')
-
-//     socket.on('requestStreamInfo', () => {
-//       console.log('requestStreamInfo')
-
-//       socket.emit('streamInfo', streamInfoFetcher.getStreamInfo())
-//     })
-
-//     socket.on('disconnect', () => {
-//       console.log('disconnect')
-
-//       connectedClients += 1
-//     })
-//   })
-
-//   return io
-// }
 
 export default SocketIOManager

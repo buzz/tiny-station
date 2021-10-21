@@ -6,6 +6,16 @@ const useAudioStream = (src) => {
   const [streamState, setStreamState] = useState('stopped')
   const audioRef = useRef()
 
+  const stopStream = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.src = 'about:dummy'
+      audioRef.current.pause()
+      setTimeout(() => {
+        audioRef.current.load() // Force streaming to stop
+      })
+    }
+  }, [])
+
   const startStream = useCallback(() => {
     if (!audioRef.current) {
       audioRef.current = new Audio()
@@ -20,42 +30,26 @@ const useAudioStream = (src) => {
       audioRef.current.addEventListener('loadstart', () => {
         setStreamState('loading')
       })
-      audioRef.current.addEventListener('stalled', () => {
-        console.warn('stalled')
-        setStreamState('error')
-      })
-      audioRef.current.addEventListener('error', (event) => {
+      audioRef.current.addEventListener('error', () => {
         if (audioRef.current && audioRef.current.src === 'about:dummy') {
           audioRef.current = undefined
           setStreamState('stopped')
           return
         }
-        console.error(event)
         setStreamState('error')
+        // TODO: hande error
       })
       audioRef.current.addEventListener('ended', () => {
-        console.error('Stream ended')
         stopStream()
       })
       audioRef.current.addEventListener('abort', () => {
-        console.log('abort')
         setStreamState('stopped')
       })
       audioRef.current.addEventListener('pause', () => {
         setStreamState('stopped')
       })
     }
-  }, [src, volume, muted])
-
-  const stopStream = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.src = 'about:dummy'
-      audioRef.current.pause()
-      setTimeout(() => {
-        audioRef.current.load() // Force streaming to stop
-      })
-    }
-  }, [])
+  }, [src, volume, muted, stopStream])
 
   useEffect(() => () => stopStream(), [stopStream])
 
