@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import SocketIOContext from '../SocketIOContext'
 
-import socketIOClient from 'socket.io-client'
-
-const useSocketIO = () => {
+const useStreamInfo = () => {
+  const socket = useContext(SocketIOContext)
   const [listeners, setListeners] = useState()
   const [listenUrl, setListenUrl] = useState()
   const [streamStart, setSteamStart] = useState()
   const [streamTitle, setStreamTitle] = useState()
   const [streamOnline, setStreamOnline] = useState('unknown')
-  const io = useRef()
 
   useEffect(() => {
-    io.current = socketIOClient()
+    socket.on('connect', () => {
+      socket.emit('stream:request')
 
-    io.current.on('connect', () => {
-      io.current.emit('requestStreamInfo')
-
-      io.current.on('streamInfo', (info) => {
+      socket.on('stream:info', (info) => {
         if (info.listenUrl) {
           setListeners(info.listeners)
           setListenUrl(info.listenUrl)
@@ -32,13 +29,7 @@ const useSocketIO = () => {
         }
       })
     })
-
-    return () => {
-      if (io.current) {
-        io.current.disconnect()
-      }
-    }
-  }, [])
+  }, [socket])
 
   return {
     listeners,
@@ -49,4 +40,4 @@ const useSocketIO = () => {
   }
 }
 
-export default useSocketIO
+export default useStreamInfo

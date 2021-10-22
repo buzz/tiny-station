@@ -37,6 +37,8 @@
     "rc-slider": "^9.7.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "simplebar": "^5.3.6",
+    "simplebar-react": "^2.3.6",
     "socket.io": "^4.3.1",
     "socket.io-client": "^4.3.2",
     "style-loader": "^3.3.0",

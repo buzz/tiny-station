@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import useAudioStream from './useAudioStream'
+import useStreamInfo from './useStreamInfo'
 import ListenerCount from './ListenerCount'
 import OnlineCounter from './OnlineCounter'
 import StreamButton from './StreamButton'
@@ -8,8 +9,8 @@ import StreamTitle from './StreamTitle'
 import VolumeControl from './VolumeControl'
 import style from './NavBar.sss'
 
-const NavBar = ({ streamInfo }) => {
-  const { listenUrl, listeners, streamOnline, streamStart, streamTitle } = streamInfo
+const NavBar = () => {
+  const { listenUrl, listeners, streamOnline, streamStart, streamTitle } = useStreamInfo()
   const { setVolume, setMuted, streamState, startStream, stopStream, volume, muted } =
     useAudioStream(listenUrl)
 

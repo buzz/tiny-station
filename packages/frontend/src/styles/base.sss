@@ -7,6 +7,7 @@ html
 
   *
     box-sizing: border-box
+    outline: none !important
 
 body
   background-color: $color-bg
@@ -23,6 +24,19 @@ body
   @media (max-width: 600px)
     &
       font-size: $font-size-small-vp
+
+button, input[type=text]
+  background-color: rgba(1 1 1 / 10%)
+  border: 1px solid $color-base
+  border-radius: $border-radius-sm
+  color: $color-input-base
+  padding: 0.2rem 0.4rem
+
+  &:disabled
+    color: $color-input-disabled
+
+  &:focus
+    border: 1px solid $color-highlight
 
 :global(#root)
   align-items: center

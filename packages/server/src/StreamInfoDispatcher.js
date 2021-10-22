@@ -8,11 +8,11 @@ class StreamInfoDispatcher {
   handleClientConnect(io, socket) {
     console.log('[StreamInfoDispatcher] handleClientConnect')
 
-    socket.join('streamInfoUpdates')
+    socket.join('stream')
 
-    socket.on('requestStreamInfo', () => {
-      console.log('[StreamInfoDispatcher] requestStreamInfo')
-      socket.emit('streamInfo', this.streamInfoFetcher.getStreamInfo())
+    socket.on('stream:request', () => {
+      console.log('[StreamInfoDispatcher] stream:request')
+      socket.emit('stream:info', this.streamInfoFetcher.getStreamInfo())
     })
 
     socket.on('disconnect', () => {
@@ -22,7 +22,7 @@ class StreamInfoDispatcher {
 
     this.streamInfoFetcher.on('update', (info) => {
       console.log('[StreamInfoDispatcher] Got new stream info', info)
-      io.to('streamInfoUpdates').emit('streamInfo', info)
+      io.to('stream').emit('stream:info', info)
     })
 
     this.checkPolling(io)
@@ -31,7 +31,7 @@ class StreamInfoDispatcher {
   // Stop/start polling
   checkPolling(io) {
     const { rooms } = io.of('/').adapter
-    const clientsCount = rooms.has('streamInfoUpdates') ? rooms.get('streamInfoUpdates').size : 0
+    const clientsCount = rooms.has('stream') ? rooms.get('stream').size : 0
 
     if (clientsCount > 0) {
       // Don't let the first client wait until next poll

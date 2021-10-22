@@ -1,16 +1,12 @@
 import NavBar from './NavBar'
 import Chat from './Chat'
-import useSocketIO from './useSocketIO'
+import SocketIOContext, { socket } from './SocketIOContext'
 
-const App = () => {
-  const streamInfo = useSocketIO(process.env.ICECAST_URL)
-
-  return (
-    <>
-      <NavBar streamInfo={streamInfo} />
-      <Chat />
-    </>
-  )
-}
+const App = () => (
+  <SocketIOContext.Provider value={socket}>
+    <NavBar />
+    <Chat />
+  </SocketIOContext.Provider>
+)
 
 export default App

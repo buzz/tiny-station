@@ -3,6 +3,63 @@
 .chat
   background: linear-gradient(179deg, color($color-navbar-bg tint(9%)) 0%, $color-navbar-bg 100%)
   border-radius: $border-radius-default
-  box-shadow: 0 0 6px rgb(0 0 0 / 40%)
+  box-shadow: $box-shadow-default
   color: $color-navbar-base
+  display: flex
+  flex-direction: column
   flex-grow: 1
+  overflow: hidden
+
+  .messagePane
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    margin-right: -0.5rem
+    overflow-y: auto
+    padding-right: 0.75rem
+
+    table.messageTable
+      width: 100%
+
+      .message
+
+        &:last-child
+          margin-bottom: 0
+
+        > td
+          padding: 0 0.75rem 0.5rem 0
+          vertical-align: top
+
+          &:last-child
+            padding-right: 0
+
+        .nickname
+          font-weight: bold
+          white-space: nowrap
+
+        .text
+          width: 80%
+
+        .time
+          font-size: $font-size-small
+          font-style: italic
+          text-align: right
+          white-space: nowrap
+
+  .chatControls
+    align-items: center
+    display: flex
+    justify-content: center
+    margin-top: 1.5rem
+
+    > *
+      margin-right: 0.5rem
+
+      &:last-child
+        margin-right: 0
+
+    .label
+      margin-right: 1.0rem
+
+    .messageInput
+      flex-grow: 1
