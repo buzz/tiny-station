@@ -1,12 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
+import { getMessages, storeMessage } from './redis'
 
 class ChatManager {
   nicknamesBySocket = {}
 
   handleClientConnect(io, socket) {
     console.log('[ChatManager] handleClientConnect')
-
-    socket.join('chat')
 
     socket.on('chat:join', (nickname) => {
       console.log(`[ChatManager] chat:join ${nickname}`)
@@ -35,11 +34,13 @@ class ChatManager {
 
     socket.on('chat:message', (msg) => {
       const nickname = this.getNickname(socket.id)
+      const cleanMsg = ChatManager.processString(msg, 512)
 
-      if (nickname) {
-        const cleanMsg = ChatManager.processString(msg, 512)
-
-        io.to('chat').emit('chat:message', uuidv4(), Date.now(), nickname, cleanMsg)
+      if (nickname && cleanMsg) {
+        const uuid = uuidv4()
+        const timestamp = Date.now()
+        io.to('chat').emit('chat:message', uuid, timestamp, nickname, cleanMsg)
+        storeMessage(uuid, timestamp, nickname, cleanMsg)
       } else {
         socket.emit('chat:kick', 'Connection lost. Please rejoin.')
       }
@@ -48,6 +49,12 @@ class ChatManager {
     socket.on('disconnect', () => {
       console.log('[ChatManager] disconnect')
       this.removeNickname(socket.id)
+    })
+
+    socket.join('chat')
+
+    getMessages().then((messages) => {
+      socket.emit('chat:push-messages', messages)
     })
   }
 

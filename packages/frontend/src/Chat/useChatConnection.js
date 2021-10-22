@@ -48,6 +48,21 @@ const useChatConnection = () => {
           setFailMessage(errorMsg)
           removeCookie(COOKIE_NAME)
         })
+
+        socket.on('chat:push-messages', (pushMessages) => {
+          const newMessages = pushMessages.reduce(
+            (acc, [uuid, timestamp, senderNickname, msg]) => ({
+              ...acc,
+              [uuid]: [timestamp, senderNickname, msg],
+            }),
+            {}
+          )
+
+          setMessages((oldMessages) => ({
+            ...oldMessages,
+            ...newMessages,
+          }))
+        })
       })
 
       if (cookies[COOKIE_NAME]) {

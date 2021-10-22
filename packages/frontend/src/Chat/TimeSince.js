@@ -23,7 +23,7 @@ const timeSince = (date) => {
     return `${Math.floor(interval)} min ago`
   }
 
-  return 'now'
+  return null
 }
 
 const TimeSince = ({ timestamp }) => {
@@ -31,7 +31,7 @@ const TimeSince = ({ timestamp }) => {
   const intervalID = useRef()
 
   useEffect(() => {
-    intervalID.current = setInterval(() => setOutput(timeSince(timestamp)), 30 * 1000)
+    intervalID.current = setInterval(() => setOutput(timeSince(timestamp)), 15 * 1000)
 
     return () => {
       if (intervalID.current) {
