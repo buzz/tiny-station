@@ -14,13 +14,23 @@ class ChatManager {
       const cleanNickname = ChatManager.processString(nickname, 16)
 
       try {
-        this.setNickname(socket.id, cleanNickname)
+        this.addNickname(socket.id, cleanNickname)
       } catch (e) {
         socket.emit('chat:join-fail', e.message)
         return
       }
 
       socket.emit('chat:join-success', cleanNickname)
+    })
+
+    socket.on('chat:exit', () => {
+      console.log('[ChatManager] chat:exit')
+
+      const nickname = this.getNickname(socket.id)
+      if (nickname) {
+        this.removeNickname(socket.id)
+        socket.emit('chat:exit-success')
+      }
     })
 
     socket.on('chat:message', (msg) => {
@@ -45,7 +55,7 @@ class ChatManager {
     return this.nicknamesBySocket[socketId]
   }
 
-  setNickname(socketId, nickname) {
+  addNickname(socketId, nickname) {
     if (!nickname) {
       throw new Error('Nickname is empty.')
     }
@@ -53,6 +63,7 @@ class ChatManager {
     if (this.nicknameTaken(nickname)) {
       throw new Error('Nickname is already taken.')
     }
+
     this.nicknamesBySocket[socketId] = nickname
   }
 

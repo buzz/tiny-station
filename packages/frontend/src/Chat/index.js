@@ -6,14 +6,24 @@ import useChatConnection from './useChatConnection'
 import style from './Chat.sss'
 
 const Chat = () => {
-  const { failMessage, connectState, joinChat, messages, nickname, resetError, sendMessage } =
-    useChatConnection()
+  const {
+    failMessage,
+    connectState,
+    exitChat,
+    joinChat,
+    messages,
+    nickname,
+    resetError,
+    sendMessage,
+  } = useChatConnection()
 
   let chatControls
 
   switch (connectState) {
     case 'connected':
-      chatControls = <MessageInput nickname={nickname} sendMessage={sendMessage} />
+      chatControls = (
+        <MessageInput exitChat={exitChat} nickname={nickname} sendMessage={sendMessage} />
+      )
       break
     case 'disconnected':
       chatControls = <Joiner joinChat={joinChat} />

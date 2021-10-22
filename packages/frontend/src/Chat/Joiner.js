@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import style from './Chat.sss'
 
 const Joiner = ({ joinChat }) => {
   const [nickname, setNickname] = useState('')
@@ -13,16 +12,19 @@ const Joiner = ({ joinChat }) => {
 
   return (
     <>
-      <div className={style.label}>Choose a nickname</div>
       <input
+        autoComplete="off"
+        autoCorrect="off"
         maxLength="16"
         onChange={(ev) => setNickname(ev.target.value)}
         onKeyDown={onKeyDown}
+        placeholder="Choose nickname"
+        spellCheck="false"
         type="text"
         value={nickname}
       />
       <button disabled={nickname.length < 1} type="button" onClick={() => joinChat(nickname)}>
-        Login
+        Chat
       </button>
     </>
   )

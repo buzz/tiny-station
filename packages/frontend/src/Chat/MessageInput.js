@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import style from './Chat.sss'
 
-const MessageInput = ({ nickname, sendMessage }) => {
+const MessageInput = ({ exitChat, nickname, sendMessage }) => {
   const [message, setMessage] = useState('')
 
   const submit = () => {
@@ -22,15 +22,22 @@ const MessageInput = ({ nickname, sendMessage }) => {
     <>
       <div className={style.label}>{nickname}</div>
       <input
+        autoComplete="off"
+        autoCorrect="off"
         className={style.messageInput}
         maxLength="500"
         onChange={(ev) => setMessage(ev.target.value)}
         onKeyDown={onKeyDown}
+        placeholder="Type your message…"
+        spellCheck="false"
         type="text"
         value={message}
       />
       <button disabled={message.length < 1} type="button" onClick={submit}>
         Send
+      </button>
+      <button type="button" onClick={exitChat}>
+        Exit
       </button>
     </>
   )
