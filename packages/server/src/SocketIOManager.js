@@ -8,7 +8,10 @@ class SocketIOManager {
   }
 
   start(server) {
-    const socketIO = socketio(server)
+    const socketIO = socketio(server, {
+      // don't serve client lib
+      serveClient: false,
+    })
 
     socketIO.on('connection', (socket) => {
       console.log('[SocketIOManager] client connect')
