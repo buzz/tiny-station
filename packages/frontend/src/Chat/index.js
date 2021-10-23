@@ -26,7 +26,7 @@ const Chat = () => {
       )
       break
     case 'disconnected':
-      chatControls = <Joiner joinChat={joinChat} />
+      chatControls = <Joiner joinChat={joinChat} nickname={nickname} />
       break
     case 'failed':
       chatControls = <Error failMessage={failMessage} resetError={resetError} />

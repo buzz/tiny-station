@@ -7,10 +7,10 @@ const COOKIE_NAME = 'listen-app-username'
 const useChatConnection = () => {
   const socket = useContext(SocketIOContext)
   const [connectState, setConnectState] = useState('disconnected')
-  const [nickname, setNickname] = useState()
+  const [nickname, setNickname] = useState('')
   const [failMessage, setFailMessage] = useState()
   const [messages, setMessages] = useState({})
-  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_NAME])
+  const [cookies, setCookie] = useCookies([COOKIE_NAME])
 
   useEffect(
     () => {
@@ -26,7 +26,6 @@ const useChatConnection = () => {
         socket.on('chat:join-fail', (errorMsg) => {
           setConnectState('failed')
           setFailMessage(errorMsg)
-          removeCookie(COOKIE_NAME)
         })
 
         socket.on('chat:message', (uuid, timestamp, senderNickname, msg) => {
@@ -37,16 +36,12 @@ const useChatConnection = () => {
         })
 
         socket.on('chat:exit-success', () => {
-          setNickname(undefined)
           setConnectState('disconnected')
-          removeCookie(COOKIE_NAME)
         })
 
         socket.on('chat:kick', (errorMsg) => {
           setConnectState('failed')
-          setNickname(undefined)
           setFailMessage(errorMsg)
-          removeCookie(COOKIE_NAME)
         })
 
         socket.on('chat:push-messages', (pushMessages) => {
@@ -64,14 +59,17 @@ const useChatConnection = () => {
           }))
         })
       })
-
-      if (cookies[COOKIE_NAME]) {
-        socket.emit('chat:join', cookies[COOKIE_NAME])
-        setConnectState('connecting')
-      }
     },
     [socket] // eslint-disable-line react-hooks/exhaustive-deps
   )
+
+  useEffect(() => {
+    if (['disconnected', 'failed'].includes(connectState)) {
+      if (cookies[COOKIE_NAME]) {
+        setNickname(cookies[COOKIE_NAME])
+      }
+    }
+  }, [cookies, connectState])
 
   return {
     connectState,

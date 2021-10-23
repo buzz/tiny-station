@@ -1,12 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-const Joiner = ({ joinChat }) => {
-  const [nickname, setNickname] = useState('')
+const Joiner = ({ joinChat, nickname }) => {
+  const [joinNickname, setJoinNickname] = useState('')
+
+  useEffect(() => {
+    setJoinNickname(nickname)
+  }, [nickname])
 
   const onKeyDown = (ev) => {
-    if (ev.key === 'Enter' && nickname) {
+    if (ev.key === 'Enter' && joinNickname) {
       ev.preventDefault()
-      joinChat(nickname)
+      joinChat(joinNickname)
     }
   }
 
@@ -16,14 +20,14 @@ const Joiner = ({ joinChat }) => {
         autoComplete="off"
         autoCorrect="off"
         maxLength="16"
-        onChange={(ev) => setNickname(ev.target.value)}
+        onChange={(ev) => setJoinNickname(ev.target.value)}
         onKeyDown={onKeyDown}
         placeholder="Choose nickname"
         spellCheck="false"
         type="text"
-        value={nickname}
+        value={joinNickname}
       />
-      <button disabled={nickname.length < 1} type="button" onClick={() => joinChat(nickname)}>
+      <button disabled={!joinNickname} type="button" onClick={() => joinChat(joinNickname)}>
         Chat
       </button>
     </>
