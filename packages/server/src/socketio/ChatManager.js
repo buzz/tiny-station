@@ -1,8 +1,13 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getMessages, storeMessage } from './redis'
 
 class ChatManager {
   nicknamesBySocket = {}
+
+  redis = undefined
+
+  constructor(redis) {
+    this.redis = redis
+  }
 
   handleClientConnect(io, socket) {
     console.log('[ChatManager] handleClientConnect')
@@ -40,7 +45,7 @@ class ChatManager {
         const uuid = uuidv4()
         const timestamp = Date.now()
         io.to('chat').emit('chat:message', uuid, timestamp, nickname, cleanMsg)
-        storeMessage(uuid, timestamp, nickname, cleanMsg)
+        this.redis.storeMessage(uuid, timestamp, nickname, cleanMsg)
       } else {
         socket.emit('chat:kick', 'Connection lost. Please rejoin.')
       }
@@ -53,7 +58,7 @@ class ChatManager {
 
     socket.join('chat')
 
-    getMessages().then((messages) => {
+    this.redis.getMessages().then((messages) => {
       socket.emit('chat:push-messages', messages)
     })
   }

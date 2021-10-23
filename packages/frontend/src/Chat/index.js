@@ -1,6 +1,4 @@
-import Error from './Error'
-import Joiner from './Joiner'
-import MessageInput from './MessageInput'
+import { Error, Joiner, MessageInput, Register } from './chatControls'
 import MessagePane from './MessagePane'
 import useChatConnection from './useChatConnection'
 import style from './Chat.sss'
@@ -13,7 +11,9 @@ const Chat = () => {
     joinChat,
     messages,
     nickname,
+    register,
     resetError,
+    showRegisterForm,
     sendMessage,
   } = useChatConnection()
 
@@ -26,10 +26,16 @@ const Chat = () => {
       )
       break
     case 'disconnected':
-      chatControls = <Joiner joinChat={joinChat} nickname={nickname} />
+      chatControls = (
+        <Joiner joinChat={joinChat} nickname={nickname} showRegisterForm={showRegisterForm} />
+      )
       break
     case 'failed':
       chatControls = <Error failMessage={failMessage} resetError={resetError} />
+      break
+    case 'registerForm':
+    case 'registering':
+      chatControls = <Register connectState={connectState} register={register} />
       break
     default:
   }

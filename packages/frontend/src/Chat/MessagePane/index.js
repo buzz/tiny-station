@@ -3,7 +3,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 import Message from './Message'
-import style from './Chat.sss'
+import style from './MessagePane.sss'
 
 const sortUUidsByTimestamp = (messages) =>
   Object.keys(messages).sort((a, b) => {

@@ -53,10 +53,21 @@ const useChatConnection = () => {
             {}
           )
 
+          socket.on('chat:register-success', () => {})
+
+          socket.on('chat:register-fail', () => {})
+
           setMessages((oldMessages) => ({
             ...oldMessages,
             ...newMessages,
           }))
+        })
+
+        socket.on('user:register-success', (msg) => {})
+
+        socket.on('user:register-fail', (msg) => {
+          console.log('user:register-fail', msg)
+          setFailMessage(msg)
         })
       })
     },
@@ -83,9 +94,16 @@ const useChatConnection = () => {
       socket.emit('chat:join', chosenNickname)
       setConnectState('connecting')
     },
+    register: (registerNickname, email, password, passwordConfirm) => {
+      socket.emit('user:register', registerNickname, email, password, passwordConfirm)
+      setConnectState('registering')
+    },
     resetError: () => {
       setFailMessage(undefined)
       setConnectState('disconnected')
+    },
+    showRegisterForm: () => {
+      setConnectState('registerForm')
     },
     sendMessage: (message) => {
       socket.emit('chat:message', message)

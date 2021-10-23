@@ -1,0 +1,37 @@
+@import '../../styles/_vars.sss'
+
+.messagePane
+  display: flex
+  flex-direction: column
+  flex-grow: 1
+  margin-right: -0.5rem
+  overflow: hidden auto
+  padding-right: 0.75rem
+
+  table.messageTable
+    width: 100%
+
+    .message
+
+      &:last-child
+        margin-bottom: 0
+
+      > td
+        padding: 0 0.75rem 0.5rem 0
+        vertical-align: top
+
+        &:last-child
+          padding-right: 0
+
+      .nickname
+        font-weight: bold
+        white-space: nowrap
+
+      .text
+        width: 80%
+
+      .time
+        font-size: $font-size-small
+        font-style: italic
+        text-align: right
+        white-space: nowrap

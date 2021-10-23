@@ -25,7 +25,7 @@ body
     &
       font-size: $font-size-small-vp
 
-button, input[type=text]
+button, input[type=text], input[type=password]
   background-color: rgba(1 1 1 / 10%)
   border: 1px solid $color-base
   border-radius: $border-radius-sm
@@ -37,6 +37,9 @@ button, input[type=text]
 
   &:focus
     border: 1px solid $color-highlight
+
+input[type=text], input[type=password]
+  width: 10rem
 
 :global(#root)
   align-items: center

@@ -1,5 +1,5 @@
 import TimeSince from './TimeSince'
-import style from './Chat.sss'
+import style from './MessagePane.sss'
 
 const Message = ({ message: [timestamp, nickname, text], elementRef }) => (
   <tr className={style.message} ref={elementRef}>

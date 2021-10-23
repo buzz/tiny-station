@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import style from './Chat.sss'
+import style from './chatControls.sss'
 
 const MessageInput = ({ exitChat, nickname, sendMessage }) => {
   const [message, setMessage] = useState('')

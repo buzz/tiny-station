@@ -1,4 +1,4 @@
-import style from './Chat.sss'
+import style from './chatControls.sss'
 
 const Error = ({ failMessage, resetError }) => (
   <>

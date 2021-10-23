@@ -2,20 +2,18 @@ import express from 'express'
 import http from 'http'
 
 import './dotenvConfig'
-import ChatManager from './ChatManager'
 import errorHandlers from './errorHandlers'
-import StreamInfoDispatcher from './StreamInfoDispatcher'
 import StreamInfoFetcher from './StreamInfoFetcher'
-import SocketIOManager from './SocketIOManager'
+import SocketIOManager from './socketio'
+import setupPassport from './passport'
+import RedisConnection from './redis'
 
 const PORT = 3001
 
+const redis = new RedisConnection()
+const passport = setupPassport(redis)
 const streamInfoFetcher = new StreamInfoFetcher(process.env.ICECAST_URL)
-const streamInfoDispatcher = new StreamInfoDispatcher(streamInfoFetcher)
-const chatManager = new ChatManager()
-
-const socketIOHandlers = [streamInfoDispatcher, chatManager]
-const socketIOManager = new SocketIOManager(socketIOHandlers)
+const socketIOManager = new SocketIOManager(passport, redis, streamInfoFetcher)
 
 const app = express()
 app.use(express.json()).use(errorHandlers)
