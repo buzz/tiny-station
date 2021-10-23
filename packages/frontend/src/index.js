@@ -1,6 +1,9 @@
 import ReactDOM from 'react-dom'
+import Modal from 'react-modal'
 
 import './styles/base.sss'
 import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const rootElem = document.getElementById('root')
+Modal.setAppElement(rootElem)
+ReactDOM.render(<App />, rootElem)

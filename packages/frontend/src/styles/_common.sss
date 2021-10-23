@@ -9,11 +9,11 @@
   background-color: transparent
   padding: 0
 
-.iconButton[disabled]
-  color: $color-navbar-disabled
+  &:focus
+    border: none
 
-.iconButton:not([disabled])
-  cursor: pointer
+  &[disabled]
+    color: $color-navbar-disabled
 
-.iconButton:not([disabled]):hover
-  color: $color-navbar-highlight
+  &:not([disabled]):hover
+    color: $color-navbar-highlight

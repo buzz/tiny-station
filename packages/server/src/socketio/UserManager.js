@@ -1,46 +1,135 @@
 import EmailValidator from 'email-validator'
+import jwt from 'jsonwebtoken'
 
-class UserManager {
-  redis = undefined
+import AbstractHandler from './AbstractHandler'
 
-  constructor(redis) {
-    this.redis = redis
-  }
+const confirmationText = (token) => `Hey there!
 
-  handleClientConnect(io, socket) {
-    console.log('[UserManager] handleClientConnect')
+Open this link to confirm your email:
+${process.env.BASE_URL}?token=${token}
 
-    socket.on('user:register', (nickname, email, password, passwordConfirm) => {
-      console.log(`[UserManager] user:register ${nickname} ${email} ${password} ${passwordConfirm}`)
+If it wasn't you who registered, please just ignore this message.
+`
 
-      if (!nickname) {
-        socket.emit('user-register:fail', 'No nickname.')
+class UserManager extends AbstractHandler {
+  handleClientConnect(socket) {
+    const mailer = this.getMailer()
+    const redis = this.getRedis()
+
+    socket.on('user:verify-jwt', async () => {
+      console.log('[UserManager] user:verify-jwt')
+      try {
+        await this.auth(socket)
+      } catch (err) {
+        socket.emit('user:kick')
+        return
+      }
+
+      socket.emit('user:verify-jwt-success', socket.request.user.nickname)
+    })
+
+    socket.on('user:login', async (nickname, password) => {
+      console.log(`[UserManager] user:login ${nickname}`)
+
+      const email = await redis.getEmail(nickname)
+      if (typeof email !== 'string') {
+        socket.emit('user:login-fail', 'Wrong nickname or password.')
+        return
+      }
+
+      if (!(await redis.verifyPassword(email, password))) {
+        socket.emit('user:login-fail', 'Wrong nickname or password.')
+        return
+      }
+
+      const token = UserManager.createJWT(nickname, email)
+
+      socket.emit('user:login-success', nickname, token)
+    })
+
+    socket.on('user:register', async (nickname, email, password, passwordConfirm, notif) => {
+      if (!nickname || !email || !password || !passwordConfirm) {
+        socket.emit('user-register:fail', 'Bad form data.')
+        return
+      }
+
+      const cleanNickname = nickname.trim()
+
+      if (!cleanNickname || cleanNickname.length > 16) {
+        socket.emit('user:register-fail', 'Bad nickname,')
         return
       }
 
       if (!EmailValidator.validate(email)) {
-        socket.emit('user:register-fail', 'No valid email.')
+        socket.emit('user:register-fail', 'Not a valid email address.')
         return
       }
 
       if (password !== passwordConfirm) {
-        socket.emit('user-register:fail', 'Passwords do not match.')
+        socket.emit('user:register-fail', 'Passwords do not match.')
+        return
+      }
+
+      if (password.length < 6) {
+        socket.emit('user:register-fail', 'Password needs to be at least 6 characters long.')
+        return
+      }
+
+      if (await redis.nicknameExists(cleanNickname)) {
+        socket.emit('user:register-fail', 'The nickname is not available.')
+        return
+      }
+
+      if (await redis.emailExists(email)) {
+        socket.emit('user:register-fail', 'The email is not available.')
+        return
+      }
+
+      const token = UserManager.generateVerificationToken()
+
+      try {
+        await redis.addUser(email, cleanNickname, password, token, notif)
+      } catch (err) {
+        socket.emit('user:register-fail', err.message)
         return
       }
 
       try {
-        this.redis.addUser(email, nickname, password)
-      } catch (err) {
-        socket.emit('user-register:fail', err.message)
-        return
+        await mailer.send(email, 'Listen app - Confirmation Mail', confirmationText(token))
+        socket.emit(
+          'user:register-success',
+          "Check your inbox and click the link in the confirmation mail. It's valid for one hour."
+        )
+      } catch {
+        try {
+          await redis.deleteUser(email)
+        } finally {
+          socket.emit('user:register-fail', 'Failed to send confirmation mail. Try again later…')
+        }
       }
-
-      socket.emit('user-register:success', 'Passwords do not match.')
     })
 
-    socket.on('disconnect', () => {
-      console.log('[UserManager] disconnect')
+    socket.on('user:verify', async (token) => {
+      if (await redis.verifyUser(token)) {
+        socket.emit('user:verify-success')
+      } else {
+        socket.emit('user:verify-fail')
+      }
     })
+  }
+
+  static generateVerificationToken() {
+    let token = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < 10; i += 1) {
+      token += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return token
+  }
+
+  static createJWT(nickname, email) {
+    return jwt.sign({ user: { _id: email, nickname } }, process.env.JWT_SECRET)
   }
 }
 

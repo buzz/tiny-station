@@ -1,46 +1,47 @@
-class StreamInfoDispatcher {
-  streamInfoFetcher = undefined
+import AbstractHandler from './AbstractHandler'
 
-  constructor(streamInfoFetcher) {
-    this.streamInfoFetcher = streamInfoFetcher
+const STREAM_INFO_ROOM = 'streamInfo'
+
+class StreamInfoDispatcher extends AbstractHandler {
+  constructor(manager) {
+    super(manager)
+
+    this.getStreamInfoFetcher().on('update', (info) => this.onInfoUpdate(info))
   }
 
-  handleClientConnect(io, socket) {
-    console.log('[StreamInfoDispatcher] handleClientConnect')
+  handleClientConnect(socket) {
+    socket.join(STREAM_INFO_ROOM)
 
-    socket.join('stream')
+    const streamInfoFetcher = this.getStreamInfoFetcher()
 
     socket.on('stream:request', () => {
-      console.log('[StreamInfoDispatcher] stream:request')
-      socket.emit('stream:info', this.streamInfoFetcher.getStreamInfo())
+      socket.emit('stream:info', streamInfoFetcher.getStreamInfo())
     })
 
     socket.on('disconnect', () => {
-      console.log('[StreamInfoDispatcher] disconnect')
-      this.checkPolling(io)
+      this.checkPolling()
     })
 
-    this.streamInfoFetcher.on('update', (info) => {
-      console.log('[StreamInfoDispatcher] Got new stream info', info)
-      io.to('stream').emit('stream:info', info)
-    })
-
-    this.checkPolling(io)
+    this.checkPolling()
   }
 
   // Stop/start polling
-  checkPolling(io) {
-    const { rooms } = io.of('/').adapter
-    const clientsCount = rooms.has('stream') ? rooms.get('stream').size : 0
+  checkPolling() {
+    const streamInfoFetcher = this.getStreamInfoFetcher()
+    const clientsCount = this.getClientsNum(STREAM_INFO_ROOM)
 
     if (clientsCount > 0) {
       // Don't let the first client wait until next poll
-      const info = this.streamInfoFetcher.getStreamInfo()
+      const info = streamInfoFetcher.getStreamInfo()
       const immediatePoll = clientsCount === 1 && !info.listenUrl
-      this.streamInfoFetcher.startPolling(immediatePoll)
+      streamInfoFetcher.startPolling(immediatePoll)
     } else {
-      this.streamInfoFetcher.stopPolling()
+      streamInfoFetcher.stopPolling()
     }
+  }
+
+  onInfoUpdate(info) {
+    this.getIOSocket().to(STREAM_INFO_ROOM).emit('stream:info', info)
   }
 }
 

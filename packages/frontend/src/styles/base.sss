@@ -25,21 +25,7 @@ body
     &
       font-size: $font-size-small-vp
 
-button, input[type=text], input[type=password]
-  background-color: rgba(1 1 1 / 10%)
-  border: 1px solid $color-base
-  border-radius: $border-radius-sm
-  color: $color-input-base
-  padding: 0.2rem 0.4rem
-
-  &:disabled
-    color: $color-input-disabled
-
-  &:focus
-    border: 1px solid $color-highlight
-
-input[type=text], input[type=password]
-  width: 10rem
+// Layout
 
 :global(#root)
   align-items: center
@@ -57,3 +43,33 @@ input[type=text], input[type=password]
 
     &:last-child
       margin: 0 0 0.67rem
+
+// Elements
+
+button, input[type=text], input[type=password]
+  background-color: rgba(1 1 1 / 10%)
+  border: 1px solid $color-base
+  border-radius: $border-radius-sm
+  color: $color-input-base
+  padding: 0.2rem 0.4rem
+
+  &:disabled
+    color: $color-input-disabled
+
+  &:focus
+    border: 1px solid $color-highlight
+
+input[type=text], input[type=password]
+  width: 10rem
+
+input[type=checkbox]
+  margin-right: 0.5rem
+
+button:not([disabled])
+  cursor: pointer
+
+ul
+  padding-left: 1.5rem
+
+label
+  font-size: $font-size-small

@@ -6,14 +6,16 @@ import errorHandlers from './errorHandlers'
 import StreamInfoFetcher from './StreamInfoFetcher'
 import SocketIOManager from './socketio'
 import setupPassport from './passport'
+import Mailer from './mailer'
 import RedisConnection from './redis'
 
 const PORT = 3001
 
+const mailer = new Mailer()
 const redis = new RedisConnection()
 const passport = setupPassport(redis)
 const streamInfoFetcher = new StreamInfoFetcher(process.env.ICECAST_URL)
-const socketIOManager = new SocketIOManager(passport, redis, streamInfoFetcher)
+const socketIOManager = new SocketIOManager(passport, redis, streamInfoFetcher, mailer)
 
 const app = express()
 app.use(express.json()).use(errorHandlers)

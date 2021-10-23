@@ -1,6 +1,5 @@
-import Error from './Error'
-import Joiner from './Joiner'
+import Login from './Login'
 import MessageInput from './MessageInput'
 import Register from './Register'
 
-export { Error, Joiner, MessageInput, Register }
+export { Login, MessageInput, Register }

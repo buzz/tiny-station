@@ -8,32 +8,61 @@ const wrapMiddlewareForSocketIO = (middleware) => (socket, next) =>
   middleware(socket.request, {}, next)
 
 class SocketIOManager {
+  io = undefined
+
   passport = undefined
 
-  handlers = []
+  passportAuthenticate = undefined
 
-  constructor(passport, redis, streamInfoFetcher) {
+  redis = undefined
+
+  streamInfoFetcher = undefined
+
+  mailer = undefined
+
+  handlers = undefined
+
+  constructor(passport, redis, streamInfoFetcher, mailer) {
     this.passport = passport
-    this.handlers = [
-      new StreamInfoDispatcher(streamInfoFetcher),
-      new ChatManager(redis),
-      new UserManager(redis),
-    ]
+    this.passportAuthenticate = wrapMiddlewareForSocketIO(
+      passport.authenticate('jwt', { failWithError: true, session: false })
+    )
+    this.redis = redis
+    this.streamInfoFetcher = streamInfoFetcher
+    this.mailer = mailer
+
+    this.handlers = [StreamInfoDispatcher, ChatManager, UserManager].map(
+      (Handler) => new Handler(this)
+    )
   }
 
   start(server) {
-    const socketIO = socketio(server, {
+    this.io = socketio(server, {
       serveClient: false, // don't serve client lib
     })
 
-    socketIO.use(wrapMiddlewareForSocketIO(this.passport.initialize()))
+    this.io.use(wrapMiddlewareForSocketIO(this.passport.initialize()))
 
-    // wrapMiddlewareForSocketIO(passport.authenticate('jwt', { session: false })),
-
-    socketIO.on('connection', (socket) => {
+    this.io.on('connection', (socket) => {
       console.log('[SocketIOManager] client connect')
-      this.handlers.forEach((h) => h.handleClientConnect(socketIO, socket))
+      this.handlers.forEach((h) => h.handleClientConnect(socket))
     })
+  }
+
+  getIOSocket() {
+    return this.io
+  }
+
+  getStreamInfoFetcher() {
+    return this.streamInfoFetcher
+  }
+
+  getRedis() {
+    return this.redis
+  }
+
+  getMailer() {
+    return this.mailer
   }
 }
 

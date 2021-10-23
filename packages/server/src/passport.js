@@ -10,18 +10,19 @@ const setupPassport = (redis) => {
         secretOrKey: process.env.JWT_SECRET,
         algorithms: ['HS256'],
       },
-      (jwtPayload, done) => {
-        console.log('[passport-jwt] verify user')
-        try {
-          const user = redis.findUser(jwtPayload.email)
-          if (!user) {
-            return done(null, false)
-          }
-          return done(null, user)
-        } catch (error) {
-          return done(error, false)
-        }
-      }
+      (jwtPayload, done) =>
+        redis
+          // eslint-disable-next-line no-underscore-dangle
+          .findUser(jwtPayload.user._id)
+          .then((user) => {
+            if (!user || !user.ver) {
+              done(null, false)
+            }
+            done(null, user)
+          })
+          .catch((err) => {
+            done(err, false)
+          })
     )
   )
 

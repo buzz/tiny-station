@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import SocketIOContext from '../SocketIOContext'
 
 const useStreamInfo = () => {
-  const socket = useContext(SocketIOContext)
+  const [socket] = useContext(SocketIOContext)
   const [listeners, setListeners] = useState()
   const [listenUrl, setListenUrl] = useState()
   const [streamStart, setSteamStart] = useState()
@@ -10,25 +10,27 @@ const useStreamInfo = () => {
   const [streamOnline, setStreamOnline] = useState('unknown')
 
   useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('stream:request')
+    if (socket) {
+      socket.on('connect', () => {
+        socket.emit('stream:request')
 
-      socket.on('stream:info', (info) => {
-        if (info.listenUrl) {
-          setListeners(info.listeners)
-          setListenUrl(info.listenUrl)
-          setSteamStart(new Date(info.streamStart))
-          setStreamTitle(info.title)
-          setStreamOnline('online')
-        } else {
-          setListeners(undefined)
-          setListenUrl(undefined)
-          setSteamStart(undefined)
-          setStreamTitle(undefined)
-          setStreamOnline('offline')
-        }
+        socket.on('stream:info', (info) => {
+          if (info.listenUrl) {
+            setListeners(info.listeners)
+            setListenUrl(info.listenUrl)
+            setSteamStart(new Date(info.streamStart))
+            setStreamTitle(info.title)
+            setStreamOnline('online')
+          } else {
+            setListeners(undefined)
+            setListenUrl(undefined)
+            setSteamStart(undefined)
+            setStreamTitle(undefined)
+            setStreamOnline('offline')
+          }
+        })
       })
-    })
+    }
   }, [socket])
 
   return {

@@ -21,13 +21,9 @@ class StreamInfoFetcher extends EventEmitter {
 
   startPolling(immediatePoll = false) {
     if (!this.pollingEnabled) {
-      console.log('[StreamInfoFetcher] polling started')
-
       this.pollingEnabled = true
 
       if (immediatePoll) {
-        console.log('[StreamInfoFetcher] immediate poll')
-
         if (this.timeoutID) {
           clearTimeout(this.timeoutID)
         }
@@ -37,8 +33,6 @@ class StreamInfoFetcher extends EventEmitter {
   }
 
   stopPolling() {
-    console.log('[StreamInfoFetcher] polling stopped')
-
     this.pollingEnabled = false
   }
 
@@ -48,12 +42,9 @@ class StreamInfoFetcher extends EventEmitter {
 
   pollIcecast() {
     if (!this.pollingEnabled) {
-      console.log('[StreamInfoFetcher] polling but disabled...')
       this.createPollTimeout()
       return
     }
-
-    console.log('[StreamInfoFetcher] polling now...')
 
     const newStreamInfo = {}
 
@@ -70,8 +61,6 @@ class StreamInfoFetcher extends EventEmitter {
     fetchPromise
       .then(({ icestats: { source } }) => {
         if (!source) {
-          console.log('[StreamInfoFetcher] polling result: stream offline')
-
           if (Object.prototype.hasOwnProperty.call(this.streamInfo, 'listenUrl')) {
             this.streamInfo = newStreamInfo
             this.emit('update', this.streamInfo)
@@ -93,16 +82,12 @@ class StreamInfoFetcher extends EventEmitter {
           this.streamInfo.title !== newStreamInfo.title ||
           this.streamInfo.streamStart.getTime() !== newStreamInfo.streamStart.getTime()
         ) {
-          console.log('[StreamInfoFetcher] polling result: updated info')
-
           this.streamInfo = newStreamInfo
           this.emit('update', this.streamInfo)
-        } else {
-          console.log('[StreamInfoFetcher] polling result: old info')
         }
       })
       .catch((error) => {
-        console.log('[StreamInfoFetcher] polling error')
+        console.error('[StreamInfoFetcher] polling error')
         console.error(error)
         this.streamInfo = {}
         this.emit('update', this.streamInfo)

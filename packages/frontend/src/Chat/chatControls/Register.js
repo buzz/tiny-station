@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import style from './chatControls.sss'
 
 const Register = ({ connectState, register }) => {
@@ -6,26 +7,26 @@ const Register = ({ connectState, register }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [notifChecked, setNotifChecked] = useState(true)
 
   const filledCompletely = nickname && email && password && passwordConfirm
 
-  const onKeyDown = (ev) => {
-    if (ev.key === 'Enter' && filledCompletely) {
-      ev.preventDefault()
-      register(nickname, email, password, passwordConfirm)
+  const submit = (ev) => {
+    ev.preventDefault()
+    if (filledCompletely) {
+      register(nickname, email, password, passwordConfirm, notifChecked)
     }
   }
 
   return (
     <>
-      <form className={style.registerForm}>
+      <form className={style.registerForm} onSubmit={submit}>
         <input
           autoComplete="off"
           autoCorrect="off"
           disabled={connectState !== 'registerForm'}
           maxLength="16"
           onChange={(ev) => setNickname(ev.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Nickname"
           spellCheck="false"
           type="text"
@@ -37,7 +38,6 @@ const Register = ({ connectState, register }) => {
           disabled={connectState !== 'registerForm'}
           maxLength="200"
           onChange={(ev) => setEmail(ev.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Email"
           spellCheck="false"
           type="text"
@@ -48,7 +48,6 @@ const Register = ({ connectState, register }) => {
           disabled={connectState !== 'registerForm'}
           maxLength="16"
           onChange={(ev) => setPassword(ev.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Password"
           type="password"
           value={password}
@@ -58,23 +57,30 @@ const Register = ({ connectState, register }) => {
           disabled={connectState !== 'registerForm'}
           maxLength="16"
           onChange={(ev) => setPasswordConfirm(ev.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Password confirmation"
           type="password"
           value={passwordConfirm}
         />
-        <button
-          disabled={!filledCompletely || connectState !== 'registerForm'}
-          type="button"
-          onClick={() => register(nickname, email, password, passwordConfirm)}
-        >
+        <label htmlFor="notifCheckedRegist">
+          <input
+            type="checkbox"
+            checked={notifChecked}
+            id="notifCheckedRegist"
+            onChange={() => setNotifChecked((c) => !c)}
+          />
+          Stream notifications
+        </label>
+        <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
           Register
         </button>
       </form>
-      <p className={style.registerExplanation}>
-        Registering will allow you to write in the chat and receive email notifications when the
-        stream comes online.
-      </p>
+      <div className={style.registerExplanation}>
+        <p>Register to</p>
+        <ul>
+          <li>Write in the chat</li>
+          <li>Receive an email when the stream starts</li>
+        </ul>
+      </div>
     </>
   )
 }

@@ -1,53 +1,49 @@
 import { useEffect, useState } from 'react'
 
-const Joiner = ({ joinChat, nickname, showRegisterForm }) => {
-  const [joinNickname, setJoinNickname] = useState('')
+const Login = ({ login, nickname, showRegisterForm }) => {
+  const [loginNickname, setLoginNickname] = useState('')
   const [password, setPassword] = useState('')
 
   useEffect(() => {
-    setJoinNickname(nickname)
+    setLoginNickname(nickname)
   }, [nickname])
 
-  const onKeyDown = (ev) => {
-    if (ev.key === 'Enter' && joinNickname && password) {
+  const submit = (ev) => {
+    ev.preventDefault()
+    if (loginNickname && password) {
       ev.preventDefault()
-      joinChat(joinNickname)
+      login(loginNickname, password)
     }
   }
 
   return (
-    <>
+    <form onSubmit={submit}>
       <input
         autoComplete="off"
         autoCorrect="off"
         maxLength="16"
-        onChange={(ev) => setJoinNickname(ev.target.value)}
-        onKeyDown={onKeyDown}
+        onChange={(ev) => setLoginNickname(ev.target.value)}
         placeholder="Nickname"
         spellCheck="false"
         type="text"
-        value={joinNickname}
+        value={loginNickname}
       />
       <input
+        autoComplete="current-password"
         maxLength="16"
         onChange={(ev) => setPassword(ev.target.value)}
-        onKeyDown={onKeyDown}
         placeholder="Password"
         type="password"
         value={password}
       />
-      <button
-        disabled={!joinNickname || !password}
-        type="button"
-        onClick={() => joinChat(joinNickname)}
-      >
+      <button disabled={!loginNickname || !password} type="submit">
         Login
       </button>
       <button type="button" onClick={() => showRegisterForm()}>
         Register
       </button>
-    </>
+    </form>
   )
 }
 
-export default Joiner
+export default Login

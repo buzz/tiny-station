@@ -1,37 +1,28 @@
-import { Error, Joiner, MessageInput, Register } from './chatControls'
+import { Login, MessageInput, Register } from './chatControls'
 import MessagePane from './MessagePane'
 import useChatConnection from './useChatConnection'
 import style from './Chat.sss'
 
-const Chat = () => {
+const Chat = ({ setModalMessage }) => {
   const {
-    failMessage,
     connectState,
-    exitChat,
-    joinChat,
     messages,
     nickname,
+    login,
+    logout,
     register,
-    resetError,
-    showRegisterForm,
     sendMessage,
-  } = useChatConnection()
+    showRegisterForm,
+  } = useChatConnection(setModalMessage)
 
   let chatControls
 
   switch (connectState) {
     case 'connected':
-      chatControls = (
-        <MessageInput exitChat={exitChat} nickname={nickname} sendMessage={sendMessage} />
-      )
+      chatControls = <MessageInput logout={logout} nickname={nickname} sendMessage={sendMessage} />
       break
     case 'disconnected':
-      chatControls = (
-        <Joiner joinChat={joinChat} nickname={nickname} showRegisterForm={showRegisterForm} />
-      )
-      break
-    case 'failed':
-      chatControls = <Error failMessage={failMessage} resetError={resetError} />
+      chatControls = <Login login={login} nickname={nickname} showRegisterForm={showRegisterForm} />
       break
     case 'registerForm':
     case 'registering':
@@ -41,10 +32,12 @@ const Chat = () => {
   }
 
   return (
-    <div className={style.chat}>
-      <MessagePane messages={messages} />
-      <div className={style.chatControls}>{chatControls}</div>
-    </div>
+    <>
+      <div className={style.chat}>
+        <MessagePane messages={messages} />
+        <div className={style.chatControls}>{chatControls}</div>
+      </div>
+    </>
   )
 }
 
