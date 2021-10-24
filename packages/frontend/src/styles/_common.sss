@@ -5,15 +5,12 @@
 
 .iconButton
   color: $color-navbar-base
-  border: none
+  border: none !important
   background-color: transparent
   padding: 0
 
-  &:focus
-    border: none
-
   &[disabled]
-    color: $color-navbar-disabled
+    color: $color-navbar-muted
 
   &:not([disabled]):hover
     color: $color-navbar-highlight
