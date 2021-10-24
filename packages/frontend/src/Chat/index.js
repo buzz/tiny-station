@@ -23,7 +23,15 @@ const Chat = ({ setModalMessage }) => {
       chatControls = <MessageInput logout={logout} nickname={nickname} sendMessage={sendMessage} />
       break
     case 'disconnected':
-      chatControls = <Login login={login} nickname={nickname} showRegisterForm={showRegisterForm} />
+    case 'connecting':
+      chatControls = (
+        <Login
+          connectState={connectState}
+          login={login}
+          nickname={nickname}
+          showRegisterForm={showRegisterForm}
+        />
+      )
       break
     case 'registerForm':
     case 'registering':
@@ -38,7 +46,7 @@ const Chat = ({ setModalMessage }) => {
     <>
       <div className={style.chat}>
         <MessagePane messages={messages} />
-        <div className={style.chatControls}>{chatControls}</div>
+        {chatControls}
       </div>
     </>
   )

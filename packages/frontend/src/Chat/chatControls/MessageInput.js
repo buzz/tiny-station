@@ -13,13 +13,12 @@ const MessageInput = ({ logout, nickname, sendMessage }) => {
   }
 
   return (
-    <>
-      <div className={style.label}>{nickname}</div>
-      <form onSubmit={submit}>
+    <form className={style.messageInputForm} onSubmit={submit}>
+      <div>
+        <div>{nickname}</div>
         <input
           autoComplete="off"
           autoCorrect="off"
-          className={style.messageInput}
           maxLength="500"
           onChange={(ev) => setMessage(ev.target.value)}
           placeholder="Type your message…"
@@ -27,14 +26,16 @@ const MessageInput = ({ logout, nickname, sendMessage }) => {
           type="text"
           value={message}
         />
+      </div>
+      <div>
         <button disabled={message.length < 1} type="submit">
           Send
         </button>
         <button type="button" onClick={logout}>
           Logout
         </button>
-      </form>
-    </>
+      </div>
+    </form>
   )
 }
 

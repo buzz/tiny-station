@@ -19,8 +19,8 @@ const Register = ({ connectState, register, showLoginForm }) => {
   }
 
   return (
-    <>
-      <form className={style.registerForm} onSubmit={submit}>
+    <div className={style.registerForm}>
+      <form onSubmit={submit}>
         <input
           autoComplete="off"
           autoCorrect="off"
@@ -70,21 +70,23 @@ const Register = ({ connectState, register, showLoginForm }) => {
           />
           Stream notifications
         </label>
-        <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
-          Register
-        </button>
-        <button type="button" onClick={showLoginForm}>
-          Back
-        </button>
+        <div className={style.buttons}>
+          <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
+            Register
+          </button>
+          <button type="button" onClick={showLoginForm}>
+            Back
+          </button>
+        </div>
       </form>
       <div className={style.registerExplanation}>
-        <p>Register to</p>
+        <p>Create an account to</p>
         <ul>
-          <li>Write in the chat</li>
-          <li>Receive an email when the stream starts</li>
+          <li>write in the chat</li>
+          <li>receive email notifications when the stream starts</li>
         </ul>
       </div>
-    </>
+    </div>
   )
 }
 

@@ -21,7 +21,7 @@ body
   height: 100%
   text-shadow: 0 1px 0 rgb(0 0 0 / 50%)
 
-  @media (max-width: 600px)
+  @media (max-width: $breakpoint-sm)
     &
       font-size: $font-size-base-small-viewport
 
@@ -31,18 +31,14 @@ body
   align-items: center
   display: flex
   flex-direction: column
+  gap: 0.67rem
   height: 100%
   margin: 0 auto
   max-width: $max-width
-  padding: 0 0.67rem
+  padding: 0.67rem
 
   > *
-    margin: 0.67rem 0 0.67rem
-    padding: 0.5rem 1rem
     width: 100%
-
-    &:last-child
-      margin: 0 0 0.67rem
 
 // Elements
 
@@ -52,6 +48,7 @@ button, input[type=text], input[type=password]
   color: $color-input-base
   font-size: $font-size-small
   padding: 0.2rem 0.4rem
+  white-space: nowrap
 
   &:disabled
     border: 1px solid $color-input-border-muted

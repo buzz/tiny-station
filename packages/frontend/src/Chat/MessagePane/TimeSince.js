@@ -4,15 +4,18 @@ const timeSince = (date) => {
   const seconds = Math.floor((new Date() - date) / 1000)
   let interval = seconds / 31536000
   if (interval > 1) {
-    return `${Math.floor(interval)} years ago`
+    const years = Math.floor(interval)
+    return `${years} year${years === 1 ? '' : 's'} ago`
   }
   interval = seconds / 2592000
   if (interval > 1) {
-    return `${Math.floor(interval)} months ago`
+    const months = Math.floor(interval)
+    return `${months} month${months === 1 ? '' : 's'} ago`
   }
   interval = seconds / 86400
   if (interval > 1) {
-    return `${Math.floor(interval)} days ago`
+    const days = Math.floor(interval)
+    return `${days} day${days === 1 ? '' : 's'} ago`
   }
   interval = seconds / 3600
   if (interval > 1) {

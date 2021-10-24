@@ -9,81 +9,80 @@ const useChatConnection = (setModalMessage) => {
   const [connectState, setConnectState] = useState('disconnected')
   const [nickname, setNickname] = useState('')
   const [messages, setMessages] = useState({})
-  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_NICKNAME])
+  const [cookies, setCookie, removeCookie] = useCookies([COOKIE_NICKNAME, process.env.COOKIE_TOKEN])
 
-  useEffect(
-    () => {
-      if (socket) {
-        socket.on('connect', () => {
-          // Verify JWT if present
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {
+        // Verify JWT if present
+        if (cookies[process.env.COOKIE_TOKEN]) {
           socket.emit('user:verify-jwt')
+        }
 
-          socket.on('user:verify-jwt-success', (newNickname) => {
-            setNickname(newNickname)
-            setConnectState('connected')
-          })
-
-          socket.on('user:verify-jwt-fail', () => {
-            setConnectState('disconnected')
-          })
-
-          socket.on('user:login-success', (newNickname, token) => {
-            setNickname(newNickname)
-            setCookie(COOKIE_NICKNAME, newNickname, {
-              path: '/',
-            })
-            setCookie(process.env.COOKIE_TOKEN, token, {
-              path: '/',
-            })
-            socketReconnect()
-          })
-
-          socket.on('user:login-fail', (msg) => {
-            setConnectState('disconnected')
-            setModalMessage(msg)
-          })
-
-          socket.on('user:register-success', (msg) => {
-            setModalMessage(msg)
-            setConnectState('disconnected')
-          })
-
-          socket.on('user:register-fail', (msg) => {
-            setModalMessage(msg)
-            setConnectState('registerForm')
-          })
-
-          socket.on('user:kick', (errorMsg) => {
-            setConnectState('disconnected')
-            setModalMessage(errorMsg)
-          })
-
-          socket.on('chat:message', (uuid, timestamp, senderNickname, msg) => {
-            setMessages((oldMessages) => ({
-              ...oldMessages,
-              [uuid]: [timestamp, senderNickname, msg],
-            }))
-          })
-
-          socket.on('chat:push-messages', (pushMessages) => {
-            const newMessages = pushMessages.reduce(
-              (acc, [uuid, timestamp, senderNickname, msg]) => ({
-                ...acc,
-                [uuid]: [timestamp, senderNickname, msg],
-              }),
-              {}
-            )
-
-            setMessages((oldMessages) => ({
-              ...oldMessages,
-              ...newMessages,
-            }))
-          })
+        socket.on('user:verify-jwt-success', (newNickname) => {
+          setNickname(newNickname)
+          setConnectState('connected')
         })
-      }
-    },
-    [socket] // eslint-disable-line react-hooks/exhaustive-deps
-  )
+
+        socket.on('user:verify-jwt-fail', () => {
+          setConnectState('disconnected')
+        })
+
+        socket.on('user:login-success', (newNickname, token) => {
+          setNickname(newNickname)
+          setCookie(COOKIE_NICKNAME, newNickname, {
+            path: '/',
+          })
+          setCookie(process.env.COOKIE_TOKEN, token, {
+            path: '/',
+          })
+          socketReconnect()
+        })
+
+        socket.on('user:login-fail', (msg) => {
+          setConnectState('disconnected')
+          setModalMessage(msg)
+        })
+
+        socket.on('user:register-success', (msg) => {
+          setModalMessage(msg)
+          setConnectState('disconnected')
+        })
+
+        socket.on('user:register-fail', (msg) => {
+          setModalMessage(msg)
+          setConnectState('registerForm')
+        })
+
+        socket.on('user:kick', (errorMsg) => {
+          setConnectState('disconnected')
+          setModalMessage(errorMsg)
+        })
+
+        socket.on('chat:message', (uuid, timestamp, senderNickname, msg) => {
+          setMessages((oldMessages) => ({
+            ...oldMessages,
+            [uuid]: [timestamp, senderNickname, msg],
+          }))
+        })
+
+        socket.on('chat:push-messages', (pushMessages) => {
+          const newMessages = pushMessages.reduce(
+            (acc, [uuid, timestamp, senderNickname, msg]) => ({
+              ...acc,
+              [uuid]: [timestamp, senderNickname, msg],
+            }),
+            {}
+          )
+
+          setMessages((oldMessages) => ({
+            ...oldMessages,
+            ...newMessages,
+          }))
+        })
+      })
+    }
+  }, [cookies, socket, setCookie, setModalMessage, socketReconnect])
 
   // Set remembered nickname
   useEffect(() => {

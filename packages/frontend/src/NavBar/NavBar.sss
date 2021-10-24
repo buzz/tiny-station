@@ -2,27 +2,17 @@
 
 .navbar
   align-items: center
-  background: linear-gradient(180deg, color($color-navbar-bg tint(5%)) 0%, $color-navbar-bg 100%)
+  background: linear-gradient(180deg, color($color-panel-bg tint(5%)) 0%, $color-panel-bg 100%)
   border-bottom: 1px solid black
   border-radius: $border-radius-default
   box-shadow: $box-shadow-default
   color: $color-navbar-base
   display: flex
   flex-shrink: 0
+  gap: 1rem
   overflow: hidden
+  padding: 0.5rem 1rem
   white-space: nowrap
-
-  > *
-    margin-right: 1rem
-
-    &:last-child
-      margin-right: 0
-
-  .fill
-    flex-grow: 1
-
-  .playButton
-    margin-right: 0.5rem
 
   .title
     overflow: hidden
@@ -35,8 +25,12 @@
     transform: translateY(2px)
 
   .listenersLabel
-    font-size: $font-size-base
+    color: $color-navbar-muted
+    font-size: $font-size-small
     margin-left: 0.1rem
+
+  .fill
+    flex-grow: 1
 
 /* volume control */
 
@@ -71,7 +65,7 @@
     background-color: $color-navbar-base
 
   :global(.rc-slider-handle)
-    background-color: $color-navbar-bg
+    background-color: $color-panel-bg
     border-color: $color-navbar-base
 
   :global(.rc-slider-handle:active),

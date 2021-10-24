@@ -33,8 +33,8 @@ const NavBar = () => {
       {streamState === 'playing' ? (
         <OnlineCounter streamOnline={streamOnline} streamStart={streamStart} />
       ) : undefined}
-      <div className={style.fill} />
       {streamOnline === 'online' ? <ListenerCount listeners={listeners} /> : undefined}
+      <div className={style.fill} />
       <button className={styleCommon.iconButton} onClick={onToggleMuted} type="button">
         <FontAwesomeIcon icon={faCog} />
       </button>

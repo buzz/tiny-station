@@ -1,7 +1,7 @@
 @import '../styles/_vars.sss'
 
 .chat
-  background: linear-gradient(179deg, color($color-navbar-bg tint(9%)) 0%, $color-navbar-bg 100%)
+  background: linear-gradient(179deg, $color-panel-bg-bright 0%, $color-panel-bg 100%)
   border-radius: $border-radius-default
   box-shadow: $box-shadow-default
   color: $color-base
@@ -9,15 +9,9 @@
   flex-direction: column
   flex-grow: 1
   overflow: hidden
+  padding-top: 0.75rem
 
-  .chatControls
-    align-items: center
-    display: flex
-    justify-content: center
-    margin-top: 1.5rem
-
-    > *, > form > *
-      margin-right: 0.5rem
-
-      &:last-child
-        margin-right: 0
+  > *:nth-child(2)
+    background: linear-gradient(180deg, $color-panel-bg-dark 0%, color($color-panel-bg-dark l(+3%)) 100%)
+    margin-top: 0.67rem
+    padding: 1rem 1rem 0.8rem
