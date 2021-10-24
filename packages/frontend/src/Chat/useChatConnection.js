@@ -109,6 +109,9 @@ const useChatConnection = (setModalMessage) => {
       socket.emit('user:register', registerNickname, email, password, passwordConfirm, notif)
       setConnectState('registering')
     },
+    showLoginForm: () => {
+      setConnectState('disconnected')
+    },
     showRegisterForm: () => {
       setConnectState('registerForm')
     },

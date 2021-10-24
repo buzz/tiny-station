@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import style from './chatControls.sss'
 
-const Register = ({ connectState, register }) => {
+const Register = ({ connectState, register, showLoginForm }) => {
   const [nickname, setNickname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -72,6 +72,9 @@ const Register = ({ connectState, register }) => {
         </label>
         <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
           Register
+        </button>
+        <button type="button" onClick={showLoginForm}>
+          Back
         </button>
       </form>
       <div className={style.registerExplanation}>

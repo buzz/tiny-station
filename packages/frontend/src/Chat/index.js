@@ -12,6 +12,7 @@ const Chat = ({ setModalMessage }) => {
     logout,
     register,
     sendMessage,
+    showLoginForm,
     showRegisterForm,
   } = useChatConnection(setModalMessage)
 
@@ -26,7 +27,9 @@ const Chat = ({ setModalMessage }) => {
       break
     case 'registerForm':
     case 'registering':
-      chatControls = <Register connectState={connectState} register={register} />
+      chatControls = (
+        <Register showLoginForm={showLoginForm} connectState={connectState} register={register} />
+      )
       break
     default:
   }

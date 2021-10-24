@@ -4,7 +4,6 @@ import style from './Modal.sss'
 const Modal = ({ modalAction, modalMessage, setModalMessage }) => {
   const onClick = () => {
     if (modalAction === 'reload') {
-      console.log(process.env.BASE_URL)
       window.location = process.env.BASE_URL
     } else {
       setModalMessage()
