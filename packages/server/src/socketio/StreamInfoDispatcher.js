@@ -6,42 +6,26 @@ class StreamInfoDispatcher extends AbstractHandler {
   constructor(manager) {
     super(manager)
 
-    this.getStreamInfoFetcher().on('update', (info) => this.onInfoUpdate(info))
+    this.getStreamInfoHandler().on('update', (info) => this.onInfoUpdate(info))
+    this.getStreamInfoHandler().on('listeners', (count) => this.onListenersUpdate(count))
   }
 
   handleClientConnect(socket) {
     socket.join(STREAM_INFO_ROOM)
 
-    const streamInfoFetcher = this.getStreamInfoFetcher()
-
     socket.on('stream:request', () => {
-      socket.emit('stream:info', streamInfoFetcher.getStreamInfo())
+      const streamInfoHandler = this.getStreamInfoHandler()
+      socket.emit('stream:info', streamInfoHandler.getStreamInfo())
+      socket.emit('stream:listeners', streamInfoHandler.getListenerCount())
     })
-
-    socket.on('disconnect', () => {
-      this.checkPolling()
-    })
-
-    this.checkPolling()
-  }
-
-  // Stop/start polling
-  checkPolling() {
-    const streamInfoFetcher = this.getStreamInfoFetcher()
-    const clientsCount = this.getClientsNum(STREAM_INFO_ROOM)
-
-    if (clientsCount > 0) {
-      // Don't let the first client wait until next poll
-      const info = streamInfoFetcher.getStreamInfo()
-      const immediatePoll = clientsCount === 1 && !info.listenUrl
-      streamInfoFetcher.startPolling(immediatePoll)
-    } else {
-      streamInfoFetcher.stopPolling()
-    }
   }
 
   onInfoUpdate(info) {
     this.getIOSocket().to(STREAM_INFO_ROOM).emit('stream:info', info)
+  }
+
+  onListenersUpdate(count) {
+    this.getIOSocket().to(STREAM_INFO_ROOM).emit('stream:listeners', count)
   }
 }
 

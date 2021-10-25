@@ -15,11 +15,10 @@ const useStreamInfo = () => {
         socket.emit('stream:request')
 
         socket.on('stream:info', (info) => {
-          if (info.listenUrl) {
-            setListeners(info.listeners)
+          if (info && info.listenUrl) {
             setListenUrl(info.listenUrl)
             setSteamStart(new Date(info.streamStart))
-            setStreamTitle(info.title)
+            setStreamTitle(info.name)
             setStreamOnline('online')
           } else {
             setListeners(undefined)
@@ -28,6 +27,10 @@ const useStreamInfo = () => {
             setStreamTitle(undefined)
             setStreamOnline('offline')
           }
+        })
+
+        socket.on('stream:listeners', (count) => {
+          setListeners(count)
         })
       })
     }

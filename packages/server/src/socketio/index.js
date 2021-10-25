@@ -16,19 +16,19 @@ class SocketIOManager {
 
   redis = undefined
 
-  streamInfoFetcher = undefined
+  streamInfoHandler = undefined
 
   mailer = undefined
 
   handlers = undefined
 
-  constructor(passport, redis, streamInfoFetcher, mailer) {
+  constructor(passport, redis, streamInfoHandler, mailer) {
     this.passport = passport
     this.passportAuthenticate = wrapMiddlewareForSocketIO(
       passport.authenticate('jwt', { failWithError: true, session: false })
     )
     this.redis = redis
-    this.streamInfoFetcher = streamInfoFetcher
+    this.streamInfoHandler = streamInfoHandler
     this.mailer = mailer
 
     this.handlers = [StreamInfoDispatcher, ChatManager, UserManager].map(
@@ -53,8 +53,8 @@ class SocketIOManager {
     return this.io
   }
 
-  getStreamInfoFetcher() {
-    return this.streamInfoFetcher
+  getStreamInfoHandler() {
+    return this.streamInfoHandler
   }
 
   getRedis() {

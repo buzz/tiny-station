@@ -3,7 +3,7 @@ import http from 'http'
 
 import './dotenvConfig'
 import errorHandlers from './errorHandlers'
-import StreamInfoFetcher from './StreamInfoFetcher'
+import StreamInfoHandler from './StreamInfoHandler'
 import SocketIOManager from './socketio'
 import setupPassport from './passport'
 import Mailer from './mailer'
@@ -14,11 +14,13 @@ const PORT = 3001
 const mailer = new Mailer()
 const redis = new RedisConnection()
 const passport = setupPassport(redis)
-const streamInfoFetcher = new StreamInfoFetcher(process.env.ICECAST_URL)
-const socketIOManager = new SocketIOManager(passport, redis, streamInfoFetcher, mailer)
+const streamInfoHandler = new StreamInfoHandler(process.env.ICECAST_URL)
+const socketIOManager = new SocketIOManager(passport, redis, streamInfoHandler, mailer)
 
 const app = express()
-app.use(express.json()).use(errorHandlers)
+app.use(express.urlencoded({ extended: true }))
+app.use(errorHandlers)
+app.use('/ic', streamInfoHandler.getRouter())
 const server = http.createServer(app)
 socketIOManager.start(server)
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`))

@@ -30,8 +30,8 @@ class AbstractHandler {
     return this.manager.getIOSocket()
   }
 
-  getStreamInfoFetcher() {
-    return this.manager.getStreamInfoFetcher()
+  getStreamInfoHandler() {
+    return this.manager.getStreamInfoHandler()
   }
 
   getRedis() {
