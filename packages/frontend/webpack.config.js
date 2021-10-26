@@ -16,7 +16,7 @@ const config = {
   output: {
     path: DIST_DIR,
     publicPath: '/',
-    filename: devMode ? 'listen-app.js' : 'listen-app.[hash].js',
+    filename: devMode ? 'listen-app.js' : 'listen-app.[chunkhash].js',
   },
   mode: devMode ? 'development' : 'production',
   optimization: {
@@ -42,7 +42,7 @@ const config = {
             options: {
               modules: {
                 mode: 'local',
-                localIdentName: '[local]__[hash:base64:5]',
+                localIdentName: '[local]__[chunkhash:base64:5]',
               },
               sourceMap: devMode,
             },
@@ -92,8 +92,8 @@ const config = {
       filename: './index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      filename: devMode ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
     }),
     new FaviconsWebpackPlugin({
       logo: path.join(SRC_DIR, 'static', 'logo.svg'),
