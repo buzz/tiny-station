@@ -4,6 +4,31 @@ import https from 'https'
 import express from 'express'
 import { parse as parseDate } from 'date-format-parse'
 
+const fetchStatus = (url) =>
+  new Promise((resolve, reject) =>
+    (url.startsWith('https://') ? https : http)
+      .get(`${url}status-json.xsl`, (res) => {
+        if (res.statusCode !== 200) {
+          reject(new Error('Failed to fetch status'))
+        }
+
+        let body = ''
+        res.on('data', (chunk) => {
+          body += chunk
+        })
+        res.on('end', () => {
+          try {
+            resolve(JSON.parse(body))
+          } catch (err) {
+            reject(err.message)
+          }
+        })
+      })
+      .on('error', (err) => {
+        reject(err)
+      })
+  )
+
 class StreamInfoHandler extends EventEmitter {
   icecastUrl = undefined
 
@@ -11,12 +36,13 @@ class StreamInfoHandler extends EventEmitter {
 
   streamInfo = undefined
 
-  clients = undefined
+  listenerCount = 0
 
   constructor(icecastUrl) {
     super()
     this.icecastUrl = icecastUrl
     this.router = this.createRouter()
+    this.fetchInfo()
   }
 
   createRouter() {
@@ -27,7 +53,7 @@ class StreamInfoHandler extends EventEmitter {
         console.log('mount-add', req.body)
 
         try {
-          this.clients = new Set()
+          this.listenerCount = 0
           setTimeout(() => this.fetchInfo())
         } catch {
           // ignore
@@ -40,7 +66,7 @@ class StreamInfoHandler extends EventEmitter {
         console.log('mount-remove', req.body)
 
         this.streamInfo = undefined
-        this.clients = undefined
+        this.listenerCount = 0
         this.emit('update', this.streamInfo)
         this.emit('listeners', this.getListenerCount())
 
@@ -52,7 +78,7 @@ class StreamInfoHandler extends EventEmitter {
 
         try {
           if (req.body.action === 'listener_add') {
-            this.clients.add(parseInt(req.body.client, 10))
+            this.listenerCount += 1
             this.emit('listeners', this.getListenerCount())
           }
         } catch {
@@ -69,7 +95,7 @@ class StreamInfoHandler extends EventEmitter {
 
         try {
           if (req.body.action === 'listener_remove') {
-            this.clients.delete(parseInt(req.body.client, 10))
+            this.listenerCount -= 1
             this.emit('listeners', this.getListenerCount())
           }
         } catch {
@@ -81,18 +107,7 @@ class StreamInfoHandler extends EventEmitter {
   }
 
   fetchInfo() {
-    new Promise((resolve) =>
-      (this.icecastUrl.startsWith('https://') ? https : http).get(
-        `${this.icecastUrl}status-json.xsl`,
-        (res) => {
-          let body = ''
-          res.on('data', (chunk) => {
-            body += chunk
-          })
-          res.on('end', () => resolve(JSON.parse(body)))
-        }
-      )
-    )
+    fetchStatus(this.icecastUrl)
       .then(({ icestats: { source } }) => {
         if (source) {
           const streamSource = Array.isArray(source) ? source[0] : source
@@ -102,14 +117,18 @@ class StreamInfoHandler extends EventEmitter {
             name: streamSource.server_name,
             streamStart: parseDate(source.stream_start, 'DD/MMM/YYYY:HH:mm:ss ZZ'),
           }
-          this.emit('update', this.streamInfo)
+          this.listenerCount = parseInt(source.listeners, 10)
         }
       })
       .catch((error) => {
         console.error('[StreamInfoFetcher] polling error')
         console.error(error)
         this.streamInfo = {}
+        this.listenerCount = 0
+      })
+      .finally(() => {
         this.emit('update', this.streamInfo)
+        this.emit('listeners', this.getListenerCount())
       })
   }
 
@@ -123,7 +142,7 @@ class StreamInfoHandler extends EventEmitter {
 
   getListenerCount() {
     try {
-      return this.clients.size
+      return this.listenerCount
     } catch {
       return 0
     }
