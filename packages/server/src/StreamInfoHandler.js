@@ -1,8 +1,12 @@
 import { EventEmitter } from 'events'
 import http from 'http'
 import https from 'https'
+import util from 'util'
+
 import express from 'express'
 import { parse as parseDate } from 'date-format-parse'
+
+const log = util.debuglog('listen-app:StreamInfoHandler')
 
 const fetchStatus = (url) =>
   new Promise((resolve, reject) =>
@@ -50,7 +54,7 @@ class StreamInfoHandler extends EventEmitter {
       .Router()
 
       .post('/mount-add', (req, res) => {
-        console.log('mount-add', req.body)
+        log('mount-add', req.body)
 
         try {
           this.listenerCount = 0
@@ -63,7 +67,7 @@ class StreamInfoHandler extends EventEmitter {
       })
 
       .post('/mount-remove', (req, res) => {
-        console.log('mount-remove', req.body)
+        log('mount-remove', req.body)
 
         this.streamInfo = undefined
         this.listenerCount = 0
@@ -74,7 +78,7 @@ class StreamInfoHandler extends EventEmitter {
       })
 
       .post('/listener-add', (req, res) => {
-        console.log('listener-add', req.body)
+        log('listener-add', req.body)
 
         try {
           if (req.body.action === 'listener_add') {
@@ -91,7 +95,7 @@ class StreamInfoHandler extends EventEmitter {
       })
 
       .post('/listener-remove', (req, res) => {
-        console.log('listener-remove', req.body)
+        log('listener-remove', req.body)
 
         try {
           if (req.body.action === 'listener_remove') {
@@ -111,7 +115,7 @@ class StreamInfoHandler extends EventEmitter {
       .then(({ icestats: { source } }) => {
         if (source) {
           const streamSource = Array.isArray(source) ? source[0] : source
-          console.log(streamSource)
+          log(streamSource)
           this.streamInfo = {
             listenUrl: StreamInfoHandler.rewriteListenUrl(streamSource.listenurl),
             name: streamSource.server_name,
@@ -121,8 +125,8 @@ class StreamInfoHandler extends EventEmitter {
         }
       })
       .catch((error) => {
-        console.error('[StreamInfoFetcher] polling error')
-        console.error(error)
+        log('polling error')
+        log(error)
         this.streamInfo = {}
         this.listenerCount = 0
       })

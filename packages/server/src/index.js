@@ -1,6 +1,7 @@
 import express from 'express'
 import http from 'http'
 import process from 'process'
+import util from 'util'
 
 import './dotenvConfig'
 import errorHandlers from './errorHandlers'
@@ -9,6 +10,8 @@ import SocketIOManager from './socketio'
 import setupPassport from './passport'
 import Mailer from './mailer'
 import RedisConnection from './redis'
+
+const log = util.debuglog('listen-app')
 
 const PORT = 3001
 
@@ -34,4 +37,4 @@ app.use(errorHandlers)
 app.use('/ic', streamInfoHandler.getRouter())
 const server = http.createServer(app)
 socketIOManager.start(server)
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+server.listen(PORT, () => log(`Listening on port ${PORT}`))

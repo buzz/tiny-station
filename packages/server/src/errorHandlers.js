@@ -1,5 +1,9 @@
+import util from 'util'
+
+const log = util.debuglog('listen-app:request')
+
 const consoleLogger = (err, req, res, next) => {
-  console.error(err.stack)
+  log(err.stack)
   next(err)
 }
 

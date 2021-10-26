@@ -44,7 +44,6 @@ class SocketIOManager {
     this.io.use(wrapMiddlewareForSocketIO(this.passport.initialize()))
 
     this.io.on('connection', (socket) => {
-      console.log('[SocketIOManager] client connect')
       this.handlers.forEach((h) => h.handleClientConnect(socket))
     })
   }

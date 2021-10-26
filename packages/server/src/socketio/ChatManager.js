@@ -1,13 +1,17 @@
+import util from 'util'
+
 import { v4 as uuidv4 } from 'uuid'
 import AbstractHandler from './AbstractHandler'
+
+const log = util.debuglog('listen-app:StreamInfoHandler')
 
 class ChatManager extends AbstractHandler {
   async handleClientConnect(socket) {
     const redis = this.getRedis()
 
-    console.log('[ChatManager] handleClientConnect')
-
     socket.on('chat:message', async (msg) => {
+      log('chat:message', msg)
+
       try {
         await this.auth(socket)
       } catch (err) {

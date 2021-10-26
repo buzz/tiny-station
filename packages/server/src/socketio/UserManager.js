@@ -1,7 +1,11 @@
+import util from 'util'
+
 import EmailValidator from 'email-validator'
 import jwt from 'jsonwebtoken'
 
 import AbstractHandler from './AbstractHandler'
+
+const log = util.debuglog('listen-app:UserManager')
 
 const confirmationText = (token) => `Hey there!
 
@@ -17,7 +21,8 @@ class UserManager extends AbstractHandler {
     const redis = this.getRedis()
 
     socket.on('user:verify-jwt', async () => {
-      console.log('[UserManager] user:verify-jwt')
+      log('user:verify-jwt')
+
       try {
         await this.auth(socket)
       } catch (err) {
@@ -29,7 +34,7 @@ class UserManager extends AbstractHandler {
     })
 
     socket.on('user:login', async (nickname, password) => {
-      console.log(`[UserManager] user:login ${nickname}`)
+      log(`user:login ${nickname}`)
 
       const email = await redis.getEmail(nickname)
       if (typeof email !== 'string') {
@@ -48,6 +53,8 @@ class UserManager extends AbstractHandler {
     })
 
     socket.on('user:register', async (nickname, email, password, passwordConfirm, notif) => {
+      log(`user:register ${nickname} ${email}`)
+
       if (!nickname || !email || !password || !passwordConfirm) {
         socket.emit('user-register:fail', 'Bad form data.')
         return
@@ -110,6 +117,8 @@ class UserManager extends AbstractHandler {
     })
 
     socket.on('user:verify', async (token) => {
+      log(`user:verify ${token}`)
+
       if (await redis.verifyUser(token)) {
         socket.emit('user:verify-success')
       } else {
