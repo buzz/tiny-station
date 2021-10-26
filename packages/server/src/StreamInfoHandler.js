@@ -41,6 +41,8 @@ class StreamInfoHandler extends EventEmitter {
 
         this.streamInfo = undefined
         this.clients = undefined
+        this.emit('update', this.streamInfo)
+        this.emit('listeners', this.getListenerCount())
 
         res.send()
       })
