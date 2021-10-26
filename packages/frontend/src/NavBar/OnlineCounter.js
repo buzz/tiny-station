@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-solid-svg-icons'
 
-import styleCommon from '../styles/_common.sss'
 import style from './NavBar.sss'
 
 const getTimeSince = (startTime) => {
@@ -56,9 +54,9 @@ const OnlineCounter = ({ streamOnline, streamStart }) => {
   const timeSinceLabel = streamOnline === 'online' ? timeSince : undefined
 
   return (
-    <span className={style.onlineSince} title={timeSinceText}>
-      <FontAwesomeIcon className={classNames(styleCommon.icon, style.labelIcon)} icon={faClock} />
-      {timeSinceLabel}
+    <span title={timeSinceText}>
+      <FontAwesomeIcon className={style.counterIcon} icon={faClock} />
+      <span className={style.counterLabel}>{timeSinceLabel}</span>
     </span>
   )
 }

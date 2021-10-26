@@ -32,17 +32,15 @@
     .counters
       align-items: center
       display: flex
+      font-size: $font-size-small
       gap: 1rem
 
-      .onlineSince
-        color: $color-navbar-muted
-        font-family: Courier New ,Courier ,Lucida Sans Typewriter, Lucida Typewriter, monospace
-        font-size: $font-size-small
-        transform: translateY(2px)
+      .counterIcon
+        margin-right: 0.4rem
 
-      .labelIcon
-        font-size: 90%
-        margin-right: 0.2rem
+      .counterLabel
+        color: $color-navbar-muted
+        font-family: $font-family-tt
 
   .fill
     flex-grow: 1
@@ -59,10 +57,8 @@
         flex-direction: column
         gap: 0
 
-.listenersLabel
-  color: $color-navbar-muted
-  font-size: $font-size-small
-  margin-left: 0.1rem
+        .counterIcon
+          margin-right: 0.2rem !important
 
 /* volume control */
 
