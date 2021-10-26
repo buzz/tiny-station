@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 import style from './chatControls.sss'
 
@@ -47,9 +49,11 @@ const Login = ({ connectState, login, nickname, showRegisterForm }) => {
       </div>
       <div>
         <button disabled={btnLoginDisabled} type="submit">
+          <FontAwesomeIcon icon={faSignInAlt} fixedWidth />
           Login
         </button>
         <button disabled={inputsDisabled} type="button" onClick={() => showRegisterForm()}>
+          <FontAwesomeIcon icon={faUserPlus} fixedWidth />
           New account
         </button>
       </div>

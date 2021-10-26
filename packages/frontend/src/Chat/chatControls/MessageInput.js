@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+
 import style from './chatControls.sss'
 
 const MessageInput = ({ logout, nickname, sendMessage }) => {
@@ -29,9 +32,11 @@ const MessageInput = ({ logout, nickname, sendMessage }) => {
       </div>
       <div>
         <button disabled={message.length < 1} type="submit">
+          <FontAwesomeIcon icon={faEnvelope} fixedWidth />
           Send
         </button>
         <button type="button" onClick={logout}>
+          <FontAwesomeIcon icon={faSignOutAlt} fixedWidth />
           Logout
         </button>
       </div>

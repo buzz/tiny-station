@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 import style from './chatControls.sss'
 
@@ -72,9 +74,11 @@ const Register = ({ connectState, register, showLoginForm }) => {
         </label>
         <div className={style.buttons}>
           <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
+            <FontAwesomeIcon icon={faUserPlus} fixedWidth />
             Register
           </button>
           <button type="button" onClick={showLoginForm}>
+            <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
             Back
           </button>
         </div>
