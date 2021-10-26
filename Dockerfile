@@ -40,4 +40,4 @@ VOLUME /listen-app/frontend
 
 USER listen-app
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

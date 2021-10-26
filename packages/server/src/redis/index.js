@@ -16,6 +16,10 @@ class RedisConnection {
     })
   }
 
+  async quit() {
+    return this.redis.quit()
+  }
+
   /* User */
 
   async nicknameExists(nickname) {

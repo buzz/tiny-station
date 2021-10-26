@@ -1,5 +1,6 @@
 import express from 'express'
 import http from 'http'
+import process from 'process'
 
 import './dotenvConfig'
 import errorHandlers from './errorHandlers'
@@ -16,6 +17,16 @@ const redis = new RedisConnection()
 const passport = setupPassport(redis)
 const streamInfoHandler = new StreamInfoHandler(process.env.ICECAST_URL)
 const socketIOManager = new SocketIOManager(passport, redis, streamInfoHandler, mailer)
+
+const shutdown = () => {
+  console.log('Received signal. Exiting...')
+  redis.quit(() => {
+    process.exit(0)
+  })
+}
+
+process.on('SIGINT', shutdown)
+process.on('SIGTERM', shutdown)
 
 const app = express()
 app.use(express.urlencoded({ extended: true }))
