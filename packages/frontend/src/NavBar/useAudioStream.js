@@ -1,55 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import IcecastMetadataPlayer from 'icecast-metadata-player'
 
 const useAudioStream = (src) => {
   const [volume, setVolume] = useState(1.0)
   const [muted, setMuted] = useState(false)
   const [streamState, setStreamState] = useState('stopped')
+  const playerRef = useRef()
   const audioRef = useRef()
 
   const stopStream = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.src = 'about:dummy'
-      audioRef.current.pause()
-      setTimeout(() => {
-        audioRef.current.load() // Force streaming to stop
-      })
+    if (playerRef.current) {
+      playerRef.current.stop()
     }
   }, [])
 
   const startStream = useCallback(() => {
-    if (!audioRef.current) {
+    if (!playerRef.current) {
       audioRef.current = new Audio()
-      audioRef.current.setAttribute('src', src)
-      audioRef.current.volume = volume
-      audioRef.current.muted = muted
-      audioRef.current.play()
+      playerRef.current = new IcecastMetadataPlayer(src, {
+        audioElement: audioRef.current,
+        metadataTypes: [],
+      })
 
-      audioRef.current.addEventListener('playing', () => {
-        setStreamState('playing')
-      })
-      audioRef.current.addEventListener('loadstart', () => {
-        setStreamState('loading')
-      })
-      audioRef.current.addEventListener('error', () => {
-        if (audioRef.current && audioRef.current.src === 'about:dummy') {
-          audioRef.current = undefined
-          setStreamState('stopped')
-          return
-        }
-        setStreamState('error')
-        // TODO: hande error
-      })
-      audioRef.current.addEventListener('ended', () => {
-        stopStream()
-      })
-      audioRef.current.addEventListener('abort', () => {
-        setStreamState('stopped')
-      })
-      audioRef.current.addEventListener('pause', () => {
-        setStreamState('stopped')
-      })
+      playerRef.current.addEventListener('play', () => setStreamState('playing'))
+      playerRef.current.addEventListener('load', () => setStreamState('loading'))
+      playerRef.current.addEventListener('streamEnd', () => setStreamState('stopped'))
+      playerRef.current.addEventListener('stop', () => setStreamState('stopped'))
+      playerRef.current.addEventListener('error', () => setStreamState('error'))
     }
-  }, [src, volume, muted, stopStream])
+
+    playerRef.current.play()
+  }, [src])
 
   useEffect(() => () => stopStream(), [stopStream])
 

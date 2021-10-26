@@ -82,6 +82,9 @@ const config = {
       listenApp: path.join(SRC_DIR),
     },
     extensions: ['.js'],
+    fallback: {
+      util: require.resolve('util/'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
