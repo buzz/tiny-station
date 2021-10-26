@@ -113,7 +113,7 @@ class StreamInfoHandler extends EventEmitter {
           const streamSource = Array.isArray(source) ? source[0] : source
           console.log(streamSource)
           this.streamInfo = {
-            listenUrl: streamSource.listenurl,
+            listenUrl: StreamInfoHandler.rewriteListenUrl(streamSource.listenurl),
             name: streamSource.server_name,
             streamStart: parseDate(source.stream_start, 'DD/MMM/YYYY:HH:mm:ss ZZ'),
           }
@@ -146,6 +146,10 @@ class StreamInfoHandler extends EventEmitter {
     } catch {
       return 0
     }
+  }
+
+  static rewriteListenUrl(urlString) {
+    return urlString.replace('http://', 'https://')
   }
 }
 
