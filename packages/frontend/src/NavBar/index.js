@@ -1,6 +1,4 @@
 import { useCallback } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog } from '@fortawesome/free-solid-svg-icons'
 
 import useAudioStream from './useAudioStream'
 import useStreamInfo from './useStreamInfo'
@@ -10,7 +8,6 @@ import StreamButton from './StreamButton'
 import StreamTitle from './StreamTitle'
 import VolumeControl from './VolumeControl'
 import style from './NavBar.sss'
-import styleCommon from '../styles/_common.sss'
 
 const NavBar = () => {
   const { listenUrl, listeners, streamOnline, streamStart, streamTitle } = useStreamInfo()
@@ -29,15 +26,16 @@ const NavBar = () => {
         startStream={startStream}
         stopStream={stopStream}
       />
-      <StreamTitle streamOnline={streamOnline} streamTitle={streamTitle} />
-      {streamState === 'playing' ? (
-        <OnlineCounter streamOnline={streamOnline} streamStart={streamStart} />
-      ) : undefined}
-      {streamOnline === 'online' ? <ListenerCount listeners={listeners} /> : undefined}
+      <div className={style.titleCounter}>
+        <StreamTitle streamOnline={streamOnline} streamTitle={streamTitle} />
+        <div className={style.counters}>
+          {streamOnline === 'online' ? <ListenerCount listeners={listeners} /> : undefined}
+          {streamState === 'playing' ? (
+            <OnlineCounter streamOnline={streamOnline} streamStart={streamStart} />
+          ) : undefined}
+        </div>
+      </div>
       <div className={style.fill} />
-      <button className={styleCommon.iconButton} onClick={onToggleMuted} type="button">
-        <FontAwesomeIcon icon={faCog} />
-      </button>
       <VolumeControl
         onToggleMuted={onToggleMuted}
         onVolumeChange={setVolume}

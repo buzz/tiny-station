@@ -8,35 +8,69 @@
   color: $color-navbar-base
   display: flex
   flex-shrink: 0
-  gap: 1rem
+  gap: 0.67rem
   overflow: hidden
   padding: 0.5rem 1rem
   white-space: nowrap
 
-  .title
-    overflow: hidden
+  .playButton
+    flex-grow: 0
+
+  .titleCounter
+    align-items: center
+    display: flex
+    flex-grow: 0
+    gap: 1rem
     text-overflow: ellipsis
+    overflow: hidden
 
-  .onlineSince
-    color: $color-navbar-muted
-    font-family: Courier New ,Courier ,Lucida Sans Typewriter, Lucida Typewriter, monospace
-    font-size: $font-size-small
-    transform: translateY(2px)
+    .title
+      align-self: normal
+      overflow: hidden
+      text-overflow: ellipsis
 
-  .listenersLabel
-    color: $color-navbar-muted
-    font-size: $font-size-small
-    margin-left: 0.1rem
+    .counters
+      align-items: center
+      display: flex
+      gap: 1rem
+
+      .onlineSince
+        color: $color-navbar-muted
+        font-family: Courier New ,Courier ,Lucida Sans Typewriter, Lucida Typewriter, monospace
+        font-size: $font-size-small
+        transform: translateY(2px)
+
+      .labelIcon
+        font-size: 90%
+        margin-right: 0.2rem
 
   .fill
     flex-grow: 1
+
+  @media (max-width: $breakpoint-sm)
+    &
+      gap: 0.4rem
+
+      .playButton
+        font-size: 112%
+
+      .titleCounter
+        align-items: flex-start
+        flex-direction: column
+        gap: 0
+
+.listenersLabel
+  color: $color-navbar-muted
+  font-size: $font-size-small
+  margin-left: 0.1rem
 
 /* volume control */
 
 .volumeControl
   align-items: center
   display: flex
-  width: 7rem
+  flex-grow: 0.25
+  max-width: 10rem
 
 .muteButton
   text-align: left
