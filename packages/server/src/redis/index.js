@@ -110,7 +110,7 @@ class RedisConnection {
   /* Chat */
 
   async getMessages() {
-    const res = await this.redis.zrange(MESSAGES_KEY, '-inf', '+inf', 'BYSCORE', 'WITHSCORES')
+    const res = await this.redis.zrangebyscore(MESSAGES_KEY, '-inf', '+inf', 'WITHSCORES')
 
     const messages = []
     while (res.length) {
