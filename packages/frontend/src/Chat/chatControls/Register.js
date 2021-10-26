@@ -12,6 +12,7 @@ const Register = ({ connectState, register, showLoginForm }) => {
   const [notifChecked, setNotifChecked] = useState(true)
 
   const filledCompletely = nickname && email && password && passwordConfirm
+  const btnsDisabled = !filledCompletely || connectState !== 'registerForm'
 
   const submit = (ev) => {
     ev.preventDefault()
@@ -73,11 +74,11 @@ const Register = ({ connectState, register, showLoginForm }) => {
           Stream notifications
         </label>
         <div className={style.buttons}>
-          <button disabled={!filledCompletely || connectState !== 'registerForm'} type="submit">
+          <button disabled={btnsDisabled} type="submit">
             <FontAwesomeIcon icon={faUserPlus} fixedWidth />
             Register
           </button>
-          <button type="button" onClick={showLoginForm}>
+          <button disabled={btnsDisabled} type="button" onClick={showLoginForm}>
             <FontAwesomeIcon icon={faArrowLeft} fixedWidth />
             Back
           </button>

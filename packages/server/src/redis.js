@@ -64,7 +64,11 @@ class RedisConnection {
   async deleteUser(email) {
     const userKey = getUserKey(email)
     const nickname = await this.redis.hget(userKey, 'nickname')
-    return this.redis.pipeline().del(userKey).rem(getNicknameKey(nickname)).exec()
+    return this.redis.pipeline().del(userKey).del(getNicknameKey(nickname)).exec()
+  }
+
+  deleteToken(token) {
+    return this.redis.del(getTokenKey(token))
   }
 
   async verifyUser(token) {

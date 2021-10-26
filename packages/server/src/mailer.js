@@ -10,7 +10,7 @@ class Mailer {
       secure: process.env.SMTP_SECURE === 'true',
       tls: {
         // do not fail on invalid certs
-        rejectUnauthorized: process.env.SMTP_IGNORE_INVALID_CERT === 'true',
+        rejectUnauthorized: process.env.SMTP_IGNORE_INVALID_CERT !== 'true',
       },
     }
 

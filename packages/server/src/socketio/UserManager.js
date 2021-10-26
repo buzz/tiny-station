@@ -107,9 +107,11 @@ class UserManager extends AbstractHandler {
           'user:register-success',
           "Check your inbox and click the link in the confirmation mail. It's valid for one hour."
         )
-      } catch {
+      } catch (err) {
         try {
+          console.error('Failed to send mail:', err)
           await redis.deleteUser(email)
+          await redis.deleteToken(token)
         } finally {
           socket.emit('user:register-fail', 'Failed to send confirmation mail. Try again later…')
         }
