@@ -17,7 +17,7 @@ WORKDIR /listen-app
 COPY --from=build /listen-app/package.json .
 COPY --from=build /listen-app/packages/frontend/dist ./packages/frontend/dist
 COPY --from=build /listen-app/packages/server/package.json ./packages/server/
-COPY --from=build /listen-app/packages/server/dist ./packages/server/dist
+COPY --from=build /listen-app/packages/server/src ./packages/server/src
 COPY entrypoint.sh /
 RUN set -xe && \
   addgroup -S listen-app && \

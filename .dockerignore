@@ -9,4 +9,3 @@
 LICENSE.txt
 Dockerfile
 packages/frontend/dist
-packages/server/dist

@@ -1,8 +1,8 @@
-import socketio from 'socket.io'
+import { Server as SocketIOServer } from 'socket.io'
 
-import ChatManager from './ChatManager'
-import StreamInfoDispatcher from './StreamInfoDispatcher'
-import UserManager from './UserManager'
+import ChatManager from './ChatManager.js'
+import StreamInfoDispatcher from './StreamInfoDispatcher.js'
+import UserManager from './UserManager.js'
 
 const wrapMiddlewareForSocketIO = (middleware) => (socket, next) =>
   middleware(socket.request, {}, next)
@@ -36,8 +36,8 @@ class SocketIOManager {
     )
   }
 
-  start(server) {
-    this.io = socketio(server, {
+  start(httpServer) {
+    this.io = new SocketIOServer(httpServer, {
       serveClient: false, // don't serve client lib
     })
 

@@ -23,19 +23,17 @@
     "url": "https://github.com/buzz/listen-app.git"
   },
   "scripts": {
-    "build": "yarn frontend:build && yarn server:build",
+    "build": "yarn frontend:build",
     "frontend:build": "yarn workspace frontend build",
     "frontend:dev": "yarn workspace frontend dev",
     "format": "prettier --write \"*.js\" \"packages/**/*.js\"",
     "lint": "eslint .",
-    "server:build": "yarn workspace server build",
     "server:dev": "yarn workspace server dev",
     "server:start": "yarn workspace server start",
     "start": "yarn server:start"
   },
   "eslintIgnore": [
-    "/packages/frontend/dist",
-    "/packages/server/dist"
+    "/packages/frontend/dist"
   ],
   "devDependencies": {
     "@babel/core": "^7.15.8",

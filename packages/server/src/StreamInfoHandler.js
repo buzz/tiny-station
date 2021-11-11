@@ -8,10 +8,13 @@ import { parse as parseDate } from 'date-format-parse'
 
 const log = util.debuglog('listen-app:StreamInfoHandler')
 
-const fetchStatus = (url) =>
-  new Promise((resolve, reject) =>
-    (url.startsWith('https://') ? https : http)
-      .get(`${url}status-json.xsl`, (res) => {
+const fetchStatus = (baseUrl) =>
+  new Promise((resolve, reject) => {
+    const httpLib = baseUrl.startsWith('https://') ? https : http
+    const url = `${baseUrl}status-json.xsl`
+
+    httpLib
+      .get(url, (res) => {
         if (res.statusCode !== 200) {
           reject(new Error('Failed to fetch status'))
         }
@@ -31,7 +34,7 @@ const fetchStatus = (url) =>
       .on('error', (err) => {
         reject(err)
       })
-  )
+  })
 
 class StreamInfoHandler extends EventEmitter {
   icecastUrl = undefined

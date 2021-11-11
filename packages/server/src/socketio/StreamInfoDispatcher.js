@@ -1,4 +1,4 @@
-import AbstractHandler from './AbstractHandler'
+import AbstractHandler from './AbstractHandler.js'
 
 const STREAM_INFO_ROOM = 'streamInfo'
 

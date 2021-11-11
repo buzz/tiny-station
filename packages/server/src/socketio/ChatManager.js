@@ -1,7 +1,7 @@
 import util from 'util'
 
 import { v4 as uuidv4 } from 'uuid'
-import AbstractHandler from './AbstractHandler'
+import AbstractHandler from './AbstractHandler.js'
 
 const log = util.debuglog('listen-app:StreamInfoHandler')
 

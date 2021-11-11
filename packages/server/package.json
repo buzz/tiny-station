@@ -2,10 +2,10 @@
   "name": "server",
   "description": "Server for stream listener",
   "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "build": "babel --delete-dir-on-start --out-dir dist src",
-    "dev": "NODE_DEBUG=listen-app* nodemon --exec babel-node src/index.js",
-    "start": "NODE_ENV=production node dist/index.js"
+    "dev": "NODE_DEBUG=listen-app* nodemon --exec node src/index.js",
+    "start": "NODE_ENV=production node src/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -22,8 +22,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/node": "^7.15.8",
     "nodemon": "^2.0.14"
   }
 }

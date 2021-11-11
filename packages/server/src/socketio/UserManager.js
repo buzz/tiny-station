@@ -3,7 +3,7 @@ import util from 'util'
 import EmailValidator from 'email-validator'
 import jwt from 'jsonwebtoken'
 
-import AbstractHandler from './AbstractHandler'
+import AbstractHandler from './AbstractHandler.js'
 
 const log = util.debuglog('listen-app:UserManager')
 
