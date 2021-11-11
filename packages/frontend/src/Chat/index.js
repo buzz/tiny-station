@@ -43,12 +43,10 @@ const Chat = ({ setModalMessage }) => {
   }
 
   return (
-    <>
-      <div className={style.chat}>
-        <MessagePane messages={messages} />
-        {chatControls}
-      </div>
-    </>
+    <div className={style.chat}>
+      <MessagePane messages={messages} />
+      {chatControls}
+    </div>
   )
 }
 

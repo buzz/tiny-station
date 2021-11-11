@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --mode development"
   },
   "dependencies": {
-    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-react": "^7.16.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
@@ -69,5 +69,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^19.0.0"
   }
 }
