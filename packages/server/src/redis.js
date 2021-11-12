@@ -3,6 +3,7 @@ import Redis from 'ioredis'
 
 const MESSAGES_KEY = 'messages'
 const SUBSCRIPTIONS_KEY = 'subs'
+const VERIFIED_KEY = 'ver'
 const getNicknameKey = (nickname) => `nickname:${nickname}`
 const getUserKey = (email) => `user:${email}`
 const getTokenKey = (token) => `token:${token}`
@@ -37,13 +38,14 @@ class RedisConnection {
 
   async findUser(email) {
     const user = await this.redis.hgetall(getUserKey(email))
+    const ver = await this.isVerified(email)
     const notif = await this.isSubscribed(email)
 
     if (user) {
       return {
         email,
         nickname: user.nickname,
-        ver: user.ver === '1',
+        ver,
         notif,
       }
     }
@@ -58,7 +60,7 @@ class RedisConnection {
 
     return this.redis
       .pipeline()
-      .hset(userKey, 'nickname', nickname, 'pwd', hashedPassword, 'ver', 0)
+      .hset(userKey, 'nickname', nickname, 'pwd', hashedPassword)
       .expire(userKey, oneHour)
       .set(getNicknameKey(nickname), email, 'EX', oneHour)
       .set(tokenKey, email, 'EX', oneHour)
@@ -68,7 +70,12 @@ class RedisConnection {
   async deleteUser(email) {
     const userKey = getUserKey(email)
     const nickname = await this.redis.hget(userKey, 'nickname')
-    return this.redis.pipeline().del(userKey).del(getNicknameKey(nickname)).exec()
+    return this.redis
+      .pipeline()
+      .del(userKey)
+      .del(getNicknameKey(nickname))
+      .srem(VERIFIED_KEY, email)
+      .exec()
   }
 
   deleteToken(token) {
@@ -85,7 +92,7 @@ class RedisConnection {
         const nickname = await this.redis.hget(userKey, 'nickname')
         await this.redis
           .pipeline()
-          .hset(userKey, 'ver', 1)
+          .sadd(VERIFIED_KEY, email)
           .persist(userKey)
           .persist(getNicknameKey(nickname))
           .del(tokenKey)
@@ -101,8 +108,8 @@ class RedisConnection {
 
   async verifyPassword(email, password) {
     try {
-      const [verified, hash] = await this.redis.hmget(getUserKey(email), 'ver', 'pwd')
-      if (verified !== '1') {
+      const [hash] = await this.redis.hmget(getUserKey(email), 'pwd')
+      if (!this.isVerified(email)) {
         return false
       }
       if (typeof hash !== 'string') {
@@ -115,18 +122,26 @@ class RedisConnection {
     }
   }
 
+  async isVerified(email) {
+    return (await this.redis.sismember(VERIFIED_KEY, email)) === 1
+  }
+
   /* Email notifications */
 
-  async subscribe(email) {
+  subscribe(email) {
     return this.redis.sadd(SUBSCRIPTIONS_KEY, email)
   }
 
-  async unsubscribe(email) {
+  unsubscribe(email) {
     return this.redis.srem(SUBSCRIPTIONS_KEY, email)
   }
 
   async isSubscribed(email) {
     return (await this.redis.sismember(SUBSCRIPTIONS_KEY, email)) === 1
+  }
+
+  getSubscribedEmails() {
+    return this.redis.sinter(SUBSCRIPTIONS_KEY, VERIFIED_KEY)
   }
 
   /* Chat */
