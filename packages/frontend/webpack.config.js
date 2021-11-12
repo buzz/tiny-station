@@ -42,7 +42,7 @@ const config = {
             options: {
               modules: {
                 mode: 'local',
-                localIdentName: '[local]__[chunkhash:base64:5]',
+                localIdentName: '[local]__[hash:base64:5]',
               },
               sourceMap: devMode,
             },
