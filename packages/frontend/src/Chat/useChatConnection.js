@@ -27,6 +27,9 @@ const useChatConnection = (setModal) => {
         })
 
         socket.on('user:verify-jwt-fail', () => {
+          setCookie(process.env.COOKIE_TOKEN, undefined, {
+            path: '/',
+          })
           setConnectState('disconnected')
         })
 
@@ -67,6 +70,9 @@ const useChatConnection = (setModal) => {
 
         socket.on('user:kick', (errorMsg) => {
           setConnectState('disconnected')
+          setCookie(process.env.COOKIE_TOKEN, undefined, {
+            path: '/',
+          })
           setModal({ content: errorMsg })
         })
 
@@ -119,8 +125,8 @@ const useChatConnection = (setModal) => {
       setConnectState('disconnected')
       socketReconnect()
     },
-    register: (registerNickname, email, password, passwordConfirm, notif) => {
-      socket.emit('user:register', registerNickname, email, password, passwordConfirm, notif)
+    register: (registerNickname, email, password, passwordConfirm, regNotif) => {
+      socket.emit('user:register', registerNickname, email, password, passwordConfirm, regNotif)
       setConnectState('registering')
     },
     showLoginForm: () => {
