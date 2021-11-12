@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
+import UserContext from '../../contexts/UserContext'
 import style from './chatControls.sss'
 
-const Register = ({ connectState, register, showLoginForm }) => {
+const Register = () => {
+  const { connectState, register, showLoginForm } = useContext(UserContext)
+
   const [nickname, setNickname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

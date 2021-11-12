@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
+import ChatContext from '../../contexts/ChatContext'
 import Message from './Message'
 import style from './MessagePane.sss'
 
@@ -16,7 +17,9 @@ const sortUUidsByTimestamp = (messages) =>
     return 0
   })
 
-const MessagePane = ({ messages }) => {
+const MessagePane = () => {
+  const { messages } = useContext(ChatContext)
+
   const uuidsSorted = sortUUidsByTimestamp(messages)
   const scrollToRef = useRef()
 

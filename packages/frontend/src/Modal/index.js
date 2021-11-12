@@ -1,29 +1,35 @@
+import { useContext } from 'react'
 import ReactModal from 'react-modal'
+
+import ModalContext from '../contexts/ModalContext'
 import style from './Modal.sss'
 
-const Modal = ({ modal, setModal }) => {
+const Modal = () => {
+  const [setModal, modal] = useContext(ModalContext)
+  const { action, btnLabel, content } = modal
+
   const onClick = () => {
-    if (modal.action) {
-      modal.action()
+    if (action) {
+      action()
     } else {
       setModal({})
     }
   }
 
-  const modalContent = typeof modal.content === 'string' ? <p>{modal.content}</p> : modal.content
+  const modalContent = typeof content === 'string' ? <p>{content}</p> : content
 
   return (
     <ReactModal
       className={style.contentWrapper}
       contentLabel="Message"
-      isOpen={modal && modal.content !== undefined}
+      isOpen={content !== undefined}
       overlayClassName={style.overlay}
       shouldCloseOnOverlayClick={false}
     >
       <div className={style.content}>
         {modalContent}
         <button type="button" onClick={onClick}>
-          {modal && modal.btnLabel ? modal.btnLabel : 'Close'}
+          {btnLabel || 'Close'}
         </button>
       </div>
     </ReactModal>

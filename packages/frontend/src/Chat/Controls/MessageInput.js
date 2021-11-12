@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCog, faEnvelope, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 
+import ChatContext from '../../contexts/ChatContext'
+import ModalContext from '../../contexts/ModalContext'
+import UserContext from '../../contexts/UserContext'
+import Settings from '../../Settings'
 import style from './chatControls.sss'
 
-const MessageInput = ({ logout, nickname, sendMessage, showSettings }) => {
+const MessageInput = () => {
+  const [setModal] = useContext(ModalContext)
+  const { sendMessage } = useContext(ChatContext)
+  const { logout, nickname } = useContext(UserContext)
   const [message, setMessage] = useState('')
 
   const submit = (ev) => {
@@ -14,6 +21,8 @@ const MessageInput = ({ logout, nickname, sendMessage, showSettings }) => {
       setMessage('')
     }
   }
+
+  const showSettings = () => setModal({ content: <Settings /> })
 
   return (
     <form className={style.messageInputForm} onSubmit={submit}>

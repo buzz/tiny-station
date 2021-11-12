@@ -4,10 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import StreamInfoContext from '../contexts/StreamInfoContext'
+import UserContext from '../contexts/UserContext'
 import style from './Settings.sss'
 
-const Settings = ({ deleteAccount, notif, updateNotif }) => {
+const Settings = () => {
+  const { deleteAccount, notif, updateNotif } = useContext(UserContext)
   const { listenUrl } = useContext(StreamInfoContext)
+
   const [settingsNotif, setSettingsNotif] = useState(notif)
   const [deleteConfirm, setDeleteConfirm] = useState(0)
 

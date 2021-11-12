@@ -1,15 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import SocketIOContext from '../contexts/SocketIOContext'
+
+import ModalContext from './ModalContext'
+import SocketIOContext from './SocketIOContext'
 
 const COOKIE_NICKNAME = 'listen-app-nickname'
 
-const useChatConnection = (setModal) => {
+const UserContext = React.createContext()
+
+const UserProvider = ({ children }) => {
+  const [setModal] = useContext(ModalContext)
   const [socket, socketReconnect] = useContext(SocketIOContext)
+
   const [connectState, setConnectState] = useState('disconnected')
   const [nickname, setNickname] = useState('')
   const [notif, setNotif] = useState()
-  const [messages, setMessages] = useState({})
   const [cookies, setCookie, removeCookie] = useCookies([COOKIE_NICKNAME, process.env.COOKIE_TOKEN])
 
   useEffect(() => {
@@ -75,28 +80,6 @@ const useChatConnection = (setModal) => {
           })
           setModal({ content: errorMsg })
         })
-
-        socket.on('chat:message', (uuid, timestamp, senderNickname, msg) => {
-          setMessages((oldMessages) => ({
-            ...oldMessages,
-            [uuid]: [timestamp, senderNickname, msg],
-          }))
-        })
-
-        socket.on('chat:push-messages', (pushMessages) => {
-          const newMessages = pushMessages.reduce(
-            (acc, [uuid, timestamp, senderNickname, msg]) => ({
-              ...acc,
-              [uuid]: [timestamp, senderNickname, msg],
-            }),
-            {}
-          )
-
-          setMessages((oldMessages) => ({
-            ...oldMessages,
-            ...newMessages,
-          }))
-        })
       })
     }
   }, [cookies, socket, setCookie, setModal, socketReconnect])
@@ -108,40 +91,42 @@ const useChatConnection = (setModal) => {
     }
   }, [connectState, cookies])
 
-  return {
-    connectState,
-    deleteAccount: () => {
-      socket.emit('user:delete')
-    },
-    messages,
-    nickname,
-    notif,
-    login: (loginNickname, pwd) => {
-      socket.emit('user:login', loginNickname, pwd)
-      setConnectState('connecting')
-    },
-    logout: () => {
-      removeCookie(process.env.COOKIE_TOKEN)
-      setConnectState('disconnected')
-      socketReconnect()
-    },
-    register: (registerNickname, email, password, passwordConfirm, regNotif) => {
-      socket.emit('user:register', registerNickname, email, password, passwordConfirm, regNotif)
-      setConnectState('registering')
-    },
-    showLoginForm: () => {
-      setConnectState('disconnected')
-    },
-    showRegisterForm: () => {
-      setConnectState('registerForm')
-    },
-    sendMessage: (message) => {
-      socket.emit('chat:message', message)
-    },
-    updateNotif: (val) => {
-      socket.emit('user:update-notif', val)
-    },
-  }
+  const value = useMemo(
+    () => ({
+      connectState,
+      deleteAccount: () => {
+        socket.emit('user:delete')
+      },
+      nickname,
+      notif,
+      login: (loginNickname, pwd) => {
+        socket.emit('user:login', loginNickname, pwd)
+        setConnectState('connecting')
+      },
+      logout: () => {
+        removeCookie(process.env.COOKIE_TOKEN)
+        setConnectState('disconnected')
+        socketReconnect()
+      },
+      register: (registerNickname, email, password, passwordConfirm, regNotif) => {
+        socket.emit('user:register', registerNickname, email, password, passwordConfirm, regNotif)
+        setConnectState('registering')
+      },
+      showLoginForm: () => {
+        setConnectState('disconnected')
+      },
+      showRegisterForm: () => {
+        setConnectState('registerForm')
+      },
+      updateNotif: (val) => {
+        socket.emit('user:update-notif', val)
+      },
+    }),
+    [connectState, nickname, notif, removeCookie, socket, socketReconnect]
+  )
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
-export default useChatConnection
+export default UserContext
+export { UserProvider }

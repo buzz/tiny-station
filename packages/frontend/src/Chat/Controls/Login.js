@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
+import UserContext from '../../contexts/UserContext'
 import style from './chatControls.sss'
 
-const Login = ({ connectState, login, nickname, showRegisterForm }) => {
+const Login = () => {
+  const { connectState, login, nickname, showRegisterForm } = useContext(UserContext)
+
   const [loginNickname, setLoginNickname] = useState('')
   const [password, setPassword] = useState('')
 

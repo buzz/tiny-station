@@ -1,4 +1,6 @@
 import { useContext, useEffect } from 'react'
+
+import ModalContext from './contexts/ModalContext'
 import SocketIOContext from './contexts/SocketIOContext'
 
 const getVerificationToken = () => {
@@ -14,7 +16,8 @@ const getVerificationToken = () => {
   return undefined
 }
 
-const CheckVerificationToken = ({ children, setModal }) => {
+const CheckVerificationToken = ({ children }) => {
+  const [setModal] = useContext(ModalContext)
   const [socket] = useContext(SocketIOContext)
 
   useEffect(() => {

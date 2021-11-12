@@ -10,8 +10,7 @@ import VolumeControl from './VolumeControl'
 import style from './NavBar.sss'
 
 const NavBar = () => {
-  const { listenUrl, listeners, streamOnline, streamStart, streamTitle } =
-    useContext(StreamInfoContext)
+  const { listenUrl, streamOnline, streamStart, streamTitle } = useContext(StreamInfoContext)
 
   const { setVolume, setMuted, streamState, startStream, stopStream, volume, muted } =
     useAudioStream(listenUrl)
@@ -31,7 +30,7 @@ const NavBar = () => {
       <div className={style.titleCounter}>
         <StreamTitle streamOnline={streamOnline} streamTitle={streamTitle} />
         <div className={style.counters}>
-          {streamOnline === 'online' ? <ListenerCount listeners={listeners} /> : undefined}
+          {streamOnline === 'online' ? <ListenerCount /> : undefined}
           {streamState === 'playing' ? (
             <OnlineCounter streamOnline={streamOnline} streamStart={streamStart} />
           ) : undefined}
