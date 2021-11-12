@@ -156,7 +156,9 @@ class StreamInfoHandler extends EventEmitter {
   }
 
   static rewriteListenUrl(urlString) {
-    return urlString.replace('http://', 'https://')
+    return process.env.NODE_ENV === 'production'
+      ? urlString.replace('http://', 'https://')
+      : urlString
   }
 }
 
