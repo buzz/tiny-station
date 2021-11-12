@@ -17,7 +17,7 @@ const getVerificationToken = () => {
 }
 
 const CheckVerificationToken = ({ children }) => {
-  const [setModal] = useContext(ModalContext)
+  const { pushModal } = useContext(ModalContext)
   const [socket] = useContext(SocketIOContext)
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const CheckVerificationToken = ({ children }) => {
         socket.emit('user:verify', token)
 
         socket.on('user:verify-success', () => {
-          setModal({
+          pushModal({
             action: () => {
               window.location = process.env.BASE_URL
             },
@@ -37,11 +37,11 @@ const CheckVerificationToken = ({ children }) => {
         })
 
         socket.on('user:verify-fail', () => {
-          setModal({ content: 'Email verification failed.' })
+          pushModal({ content: 'Email verification failed.' })
         })
       })
     }
-  }, [socket, setModal])
+  }, [socket, pushModal])
 
   return children
 }

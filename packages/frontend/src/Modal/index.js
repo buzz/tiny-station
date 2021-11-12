@@ -5,14 +5,14 @@ import ModalContext from '../contexts/ModalContext'
 import style from './Modal.sss'
 
 const Modal = () => {
-  const [setModal, modal] = useContext(ModalContext)
-  const { action, btnLabel, content } = modal
+  const { currentModal, popModal } = useContext(ModalContext)
+  const { action, btnLabel, content } = currentModal || {}
 
   const onClick = () => {
     if (action) {
       action()
     } else {
-      setModal({})
+      popModal()
     }
   }
 
@@ -22,7 +22,7 @@ const Modal = () => {
     <ReactModal
       className={style.contentWrapper}
       contentLabel="Message"
-      isOpen={content !== undefined}
+      isOpen={currentModal !== undefined}
       overlayClassName={style.overlay}
       shouldCloseOnOverlayClick={false}
     >

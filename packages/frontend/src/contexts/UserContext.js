@@ -9,7 +9,7 @@ const COOKIE_NICKNAME = 'listen-app-nickname'
 const UserContext = React.createContext()
 
 const UserProvider = ({ children }) => {
-  const [setModal] = useContext(ModalContext)
+  const { pushModal } = useContext(ModalContext)
   const [socket, socketReconnect] = useContext(SocketIOContext)
 
   const [connectState, setConnectState] = useState('disconnected')
@@ -52,16 +52,16 @@ const UserProvider = ({ children }) => {
 
         socket.on('user:login-fail', (msg) => {
           setConnectState('disconnected')
-          setModal({ content: msg })
+          pushModal({ content: msg })
         })
 
         socket.on('user:register-success', (msg) => {
-          setModal({ content: msg })
+          pushModal({ content: msg })
           setConnectState('disconnected')
         })
 
         socket.on('user:register-fail', (msg) => {
-          setModal({ content: msg })
+          pushModal({ content: msg })
           setConnectState('registerForm')
         })
 
@@ -78,11 +78,13 @@ const UserProvider = ({ children }) => {
           setCookie(process.env.COOKIE_TOKEN, undefined, {
             path: '/',
           })
-          setModal({ content: errorMsg })
+          if (errorMsg) {
+            pushModal({ content: errorMsg })
+          }
         })
       })
     }
-  }, [cookies, socket, setCookie, setModal, socketReconnect])
+  }, [cookies, socket, setCookie, pushModal, socketReconnect])
 
   // Set remembered nickname
   useEffect(() => {

@@ -9,7 +9,7 @@ import Settings from '../../Settings'
 import style from './chatControls.sss'
 
 const MessageInput = () => {
-  const [setModal] = useContext(ModalContext)
+  const { pushModal } = useContext(ModalContext)
   const { sendMessage } = useContext(ChatContext)
   const { logout, nickname } = useContext(UserContext)
   const [message, setMessage] = useState('')
@@ -22,7 +22,7 @@ const MessageInput = () => {
     }
   }
 
-  const showSettings = () => setModal({ content: <Settings /> })
+  const showSettings = () => pushModal({ content: <Settings /> })
 
   return (
     <form className={style.messageInputForm} onSubmit={submit}>
