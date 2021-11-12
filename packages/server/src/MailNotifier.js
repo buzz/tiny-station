@@ -52,7 +52,7 @@ class MailNotifier {
   }
 
   onInfoUpdate(info) {
-    log('streaminfo update', info, NOTIFY_DELAY)
+    log('onInfoUpdate', info)
 
     this.clear()
     if (info) {
