@@ -13,6 +13,8 @@ const SocketIOProvider = ({ children }) => {
     setSocket(null)
   }, [socket])
 
+  const value = useMemo(() => [socket, reconnect], [socket, reconnect])
+
   useEffect(() => {
     if (!socket) {
       const extraHeaders = cookies[process.env.COOKIE_TOKEN]
@@ -27,11 +29,7 @@ const SocketIOProvider = ({ children }) => {
     }
   }, [cookies, socket])
 
-  return (
-    <SocketIOContext.Provider value={useMemo(() => [socket, reconnect], [socket, reconnect])}>
-      {children}
-    </SocketIOContext.Provider>
-  )
+  return <SocketIOContext.Provider value={value}>{children}</SocketIOContext.Provider>
 }
 
 export default SocketIOContext

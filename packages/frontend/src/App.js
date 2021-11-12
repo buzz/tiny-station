@@ -5,7 +5,8 @@ import Chat from './Chat'
 import CheckVerificationToken from './CheckVerificationToken'
 import Modal from './Modal'
 import NavBar from './NavBar'
-import { SocketIOProvider } from './SocketIOContext'
+import { SocketIOProvider } from './contexts/SocketIOContext'
+import { StreamInfoProvider } from './contexts/StreamInfoContext'
 
 const App = () => {
   const [modal, setModal] = useState({})
@@ -13,11 +14,13 @@ const App = () => {
   return (
     <CookiesProvider>
       <SocketIOProvider>
-        <CheckVerificationToken setModal={setModal}>
-          <NavBar />
-          <Chat setModal={setModal} />
-          <Modal modal={modal} setModal={setModal} />
-        </CheckVerificationToken>
+        <StreamInfoProvider>
+          <CheckVerificationToken setModal={setModal}>
+            <NavBar />
+            <Chat setModal={setModal} />
+            <Modal modal={modal} setModal={setModal} />
+          </CheckVerificationToken>
+        </StreamInfoProvider>
       </SocketIOProvider>
     </CookiesProvider>
   )

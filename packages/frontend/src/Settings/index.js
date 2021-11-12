@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Switch from 'react-switch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
+import StreamInfoContext from '../contexts/StreamInfoContext'
 import style from './Settings.sss'
 
 const Settings = ({ deleteAccount, notif, updateNotif }) => {
+  const { listenUrl } = useContext(StreamInfoContext)
   const [settingsNotif, setSettingsNotif] = useState(notif)
   const [deleteConfirm, setDeleteConfirm] = useState(0)
 
@@ -26,6 +28,12 @@ const Settings = ({ deleteAccount, notif, updateNotif }) => {
     }
   }
 
+  const listenUrlLink = listenUrl ? (
+    <a href={listenUrl}>{listenUrl}</a>
+  ) : (
+    <em>Stream currently offline</em>
+  )
+
   return (
     <>
       <h2>Settings</h2>
@@ -39,6 +47,13 @@ const Settings = ({ deleteAccount, notif, updateNotif }) => {
             }}
           />
           <span>Send me email notifications when the stream starts</span>
+        </div>
+        <div className={style.row}>
+          <div>
+            Use this URL directly in your media player:
+            <br />
+            {listenUrlLink}
+          </div>
         </div>
         <button type="button" onClick={deleteAccountClick}>
           <FontAwesomeIcon icon={faTrash} fixedWidth />

@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import SocketIOContext from './SocketIOContext'
+import SocketIOContext from './contexts/SocketIOContext'
 
 const getVerificationToken = () => {
   const urlSearchParams = new URLSearchParams(window.location.search)

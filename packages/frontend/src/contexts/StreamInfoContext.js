@@ -1,7 +1,9 @@
-import { useContext, useEffect, useState } from 'react'
-import SocketIOContext from '../SocketIOContext'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import SocketIOContext from './SocketIOContext'
 
-const useStreamInfo = () => {
+const StreamInfoContext = React.createContext()
+
+const StreamInfoProvider = ({ children }) => {
   const [socket] = useContext(SocketIOContext)
   const [listeners, setListeners] = useState()
   const [listenUrl, setListenUrl] = useState()
@@ -36,13 +38,19 @@ const useStreamInfo = () => {
     }
   }, [socket])
 
-  return {
-    listeners,
-    listenUrl,
-    streamOnline,
-    streamStart,
-    streamTitle,
-  }
+  const value = useMemo(
+    () => ({
+      listeners,
+      listenUrl,
+      streamOnline,
+      streamStart,
+      streamTitle,
+    }),
+    [listeners, listenUrl, streamOnline, streamStart, streamTitle]
+  )
+
+  return <StreamInfoContext.Provider value={value}>{children}</StreamInfoContext.Provider>
 }
 
-export default useStreamInfo
+export default StreamInfoContext
+export { StreamInfoProvider }

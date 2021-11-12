@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import SocketIOContext from '../SocketIOContext'
+import SocketIOContext from '../contexts/SocketIOContext'
 
 const COOKIE_NICKNAME = 'listen-app-nickname'
 
