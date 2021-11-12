@@ -1,27 +1,29 @@
 import ReactModal from 'react-modal'
 import style from './Modal.sss'
 
-const Modal = ({ modalAction, modalMessage, setModalMessage }) => {
+const Modal = ({ modal, setModal }) => {
   const onClick = () => {
-    if (modalAction === 'reload') {
-      window.location = process.env.BASE_URL
+    if (modal.action) {
+      modal.action()
     } else {
-      setModalMessage()
+      setModal({})
     }
   }
+
+  const modalContent = typeof modal.content === 'string' ? <p>{modal.content}</p> : modal.content
 
   return (
     <ReactModal
       className={style.contentWrapper}
       contentLabel="Message"
-      isOpen={modalMessage !== undefined}
+      isOpen={modal && modal.content !== undefined}
       overlayClassName={style.overlay}
       shouldCloseOnOverlayClick={false}
     >
       <div className={style.content}>
-        <p>{modalMessage}</p>
+        {modalContent}
         <button type="button" onClick={onClick}>
-          Close
+          {modal && modal.btnLabel ? modal.btnLabel : 'Close'}
         </button>
       </div>
     </ReactModal>

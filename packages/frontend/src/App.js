@@ -8,20 +8,15 @@ import NavBar from './NavBar'
 import { SocketIOProvider } from './SocketIOContext'
 
 const App = () => {
-  const [modalMessage, setModalMessage] = useState()
-  const [modalAction, setModalAction] = useState()
+  const [modal, setModal] = useState({})
 
   return (
     <CookiesProvider>
       <SocketIOProvider>
-        <CheckVerificationToken setModalAction={setModalAction} setModalMessage={setModalMessage}>
+        <CheckVerificationToken setModal={setModal}>
           <NavBar />
-          <Chat setModalMessage={setModalMessage} />
-          <Modal
-            modalAction={modalAction}
-            modalMessage={modalMessage}
-            setModalMessage={setModalMessage}
-          />
+          <Chat setModal={setModal} />
+          <Modal modal={modal} setModal={setModal} />
         </CheckVerificationToken>
       </SocketIOProvider>
     </CookiesProvider>

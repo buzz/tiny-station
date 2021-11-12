@@ -30,7 +30,11 @@ class UserManager extends AbstractHandler {
         return
       }
 
-      socket.emit('user:verify-jwt-success', socket.request.user.nickname)
+      socket.emit(
+        'user:verify-jwt-success',
+        socket.request.user.nickname,
+        socket.request.user.notif
+      )
     })
 
     socket.on('user:login', async (nickname, password) => {
@@ -49,7 +53,7 @@ class UserManager extends AbstractHandler {
 
       const token = UserManager.createJWT(nickname, email)
 
-      socket.emit('user:login-success', nickname, token)
+      socket.emit('user:login-success', nickname, token, await redis.isSubscribed(email))
     })
 
     socket.on('user:register', async (nickname, email, password, passwordConfirm, notif) => {
@@ -95,10 +99,14 @@ class UserManager extends AbstractHandler {
       const token = UserManager.generateVerificationToken()
 
       try {
-        await redis.addUser(email, cleanNickname, password, token, notif)
+        await redis.addUser(email, cleanNickname, password, token)
       } catch (err) {
         socket.emit('user:register-fail', err.message)
         return
+      }
+
+      if (notif) {
+        await redis.subscribe(email)
       }
 
       try {
@@ -112,6 +120,7 @@ class UserManager extends AbstractHandler {
           console.error('Failed to send mail:', err)
           await redis.deleteUser(email)
           await redis.deleteToken(token)
+          await redis.unsubscribe(email)
         } finally {
           socket.emit('user:register-fail', 'Failed to send confirmation mail. Try again later…')
         }
@@ -126,6 +135,41 @@ class UserManager extends AbstractHandler {
       } else {
         socket.emit('user:verify-fail')
       }
+    })
+
+    socket.on('user:delete', async () => {
+      log('user:delete')
+
+      try {
+        await this.auth(socket)
+      } catch (err) {
+        socket.emit('user:kick', 'Connection lost. Please relogin.')
+        return
+      }
+
+      await redis.deleteUser(socket.request.user.email)
+      await redis.unsubscribe(socket.request.user.email)
+
+      socket.emit('user:delete-success')
+    })
+
+    socket.on('user:update-notif', async (val) => {
+      log(`user:update-notif ${val}`)
+
+      try {
+        await this.auth(socket)
+      } catch (err) {
+        socket.emit('user:kick', 'Connection lost. Please relogin.')
+        return
+      }
+
+      if (val) {
+        await redis.subscribe(socket.request.user.email)
+      } else {
+        await redis.unsubscribe(socket.request.user.email)
+      }
+
+      socket.emit('user:update-notif-success', val)
     })
   }
 

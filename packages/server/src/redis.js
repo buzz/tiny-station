@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import Redis from 'ioredis'
 
 const MESSAGES_KEY = 'messages'
+const SUBSCRIPTIONS_KEY = 'subs'
 const getNicknameKey = (nickname) => `nickname:${nickname}`
 const getUserKey = (email) => `user:${email}`
 const getTokenKey = (token) => `token:${token}`
@@ -36,17 +37,20 @@ class RedisConnection {
 
   async findUser(email) {
     const user = await this.redis.hgetall(getUserKey(email))
+    const notif = await this.isSubscribed(email)
+
     if (user) {
       return {
+        email,
         nickname: user.nickname,
         ver: user.ver === '1',
-        notif: user.notif === '1',
+        notif,
       }
     }
     return null
   }
 
-  async addUser(email, nickname, password, token, notif) {
+  async addUser(email, nickname, password, token) {
     const userKey = getUserKey(email)
     const tokenKey = getTokenKey(token)
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -54,7 +58,7 @@ class RedisConnection {
 
     return this.redis
       .pipeline()
-      .hset(userKey, 'nickname', nickname, 'pwd', hashedPassword, 'ver', 0, 'notif', notif ? 1 : 0)
+      .hset(userKey, 'nickname', nickname, 'pwd', hashedPassword, 'ver', 0)
       .expire(userKey, oneHour)
       .set(getNicknameKey(nickname), email, 'EX', oneHour)
       .set(tokenKey, email, 'EX', oneHour)
@@ -109,6 +113,20 @@ class RedisConnection {
     } catch {
       return false
     }
+  }
+
+  /* Email notifications */
+
+  async subscribe(email) {
+    return this.redis.sadd(SUBSCRIPTIONS_KEY, email)
+  }
+
+  async unsubscribe(email) {
+    return this.redis.srem(SUBSCRIPTIONS_KEY, email)
+  }
+
+  async isSubscribed(email) {
+    return (await this.redis.sismember(SUBSCRIPTIONS_KEY, email)) === 1
   }
 
   /* Chat */

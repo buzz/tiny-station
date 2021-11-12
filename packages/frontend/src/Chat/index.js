@@ -1,26 +1,45 @@
+import { useCallback } from 'react'
+
+import Settings from '../Settings'
 import { Login, MessageInput, Register } from './chatControls'
 import MessagePane from './MessagePane'
 import useChatConnection from './useChatConnection'
 import style from './Chat.sss'
 
-const Chat = ({ setModalMessage }) => {
+const Chat = ({ setModal }) => {
   const {
     connectState,
-    messages,
-    nickname,
+    deleteAccount,
     login,
     logout,
+    messages,
+    nickname,
+    notif,
     register,
     sendMessage,
     showLoginForm,
     showRegisterForm,
-  } = useChatConnection(setModalMessage)
+    updateNotif,
+  } = useChatConnection(setModal)
 
   let chatControls
 
+  const showSettings = useCallback(() => {
+    setModal({
+      content: <Settings deleteAccount={deleteAccount} notif={notif} updateNotif={updateNotif} />,
+    })
+  }, [deleteAccount, notif, setModal, updateNotif])
+
   switch (connectState) {
     case 'connected':
-      chatControls = <MessageInput logout={logout} nickname={nickname} sendMessage={sendMessage} />
+      chatControls = (
+        <MessageInput
+          logout={logout}
+          nickname={nickname}
+          sendMessage={sendMessage}
+          showSettings={showSettings}
+        />
+      )
       break
     case 'disconnected':
     case 'connecting':
