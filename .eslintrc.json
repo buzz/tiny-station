@@ -9,9 +9,5 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
-  "plugins": ["prettier"],
-  "root": true,
-  "rules": {
-    "prettier/prettier": "error"
-  }
+  "root": true
 }

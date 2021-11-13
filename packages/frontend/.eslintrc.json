@@ -4,15 +4,10 @@
     "es2021": true
   },
   "extends": ["airbnb", "plugin:prettier/recommended"],
-  "plugins": ["prettier", "react-hooks"],
+  "plugins": ["react-hooks"],
   "rules": {
     "jsx-a11y/anchor-is-valid": "off",
-    "react/jsx-filename-extension": [
-      "error",
-      {
-        "extensions": [".js"]
-      }
-    ],
+    "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
     "react/prop-types": "off",
     "react/function-component-definition": [
       "error",

@@ -17,6 +17,7 @@
     "css-loader": "^6.4.0",
     "cssnano": "^5.0.8",
     "dotenv-webpack": "^7.0.3",
+    "eslint-config-airbnb": "^19.0.0",
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -71,7 +72,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "eslint-config-airbnb": "^19.0.0"
-  }
+  "devDependencies": {}
 }
