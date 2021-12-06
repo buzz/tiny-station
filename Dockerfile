@@ -37,6 +37,7 @@ RUN set -xe && \
 
 EXPOSE 3001
 VOLUME /listen-app/frontend
+ENV NODE_ENV production
 
 USER listen-app
 
