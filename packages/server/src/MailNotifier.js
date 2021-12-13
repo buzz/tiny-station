@@ -34,13 +34,13 @@ class MailNotifier {
 
     const emails = await this.redis.getSubscribedEmails()
     await Promise.all(
-      emails.map((email) => {
-        return this.mailer.send(
+      emails.map((email) =>
+        this.mailer.send(
           email,
           `Stream is live now! ${this.info.name}`,
           notificationText(this.info.name, this.info.listenUrl)
         )
-      })
+      )
     )
   }
 
@@ -55,7 +55,7 @@ class MailNotifier {
     log('onInfoUpdate', info)
 
     this.clear()
-    if (info) {
+    if (info && typeof info.name === 'string' && !info.name.includes('__TEST__')) {
       this.info = info
       this.notifyTimeout = setTimeout(() => this.notify(), NOTIFY_DELAY)
     }
