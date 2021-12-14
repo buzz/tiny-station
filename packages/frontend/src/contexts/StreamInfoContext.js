@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import SocketIOContext from './SocketIOContext'
 
+const setPageTitle = (streamName) => {
+  document.title = streamName || 'Stream offline'
+}
+
 const StreamInfoContext = React.createContext()
 
 const StreamInfoProvider = ({ children }) => {
@@ -22,12 +26,14 @@ const StreamInfoProvider = ({ children }) => {
             setSteamStart(new Date(info.streamStart))
             setStreamTitle(info.name)
             setStreamOnline('online')
+            setPageTitle(info.name)
           } else {
             setListeners(undefined)
             setListenUrl(undefined)
             setSteamStart(undefined)
             setStreamTitle(undefined)
             setStreamOnline('offline')
+            setPageTitle(undefined)
           }
         })
 
