@@ -9,9 +9,17 @@
   flex-direction: column
   flex-grow: 1
   overflow: hidden
-  padding-top: 0.75rem
+  padding-top: $margin-base
 
   > *:nth-child(2)
     background: linear-gradient(180deg, $color-panel-bg-dark 0%, color($color-panel-bg-dark l(+3%)) 100%)
-    margin-top: 0.67rem
-    padding: 1rem 1rem 0.8rem
+    margin-top: $margin-base
+    padding: $padding-vert $padding-horiz
+
+  @media (max-width: $breakpoint-sm)
+    &
+      padding-top: $margin-base-mq-sm
+
+      > *:nth-child(2)
+        margin-top: $margin-base-mq-sm
+        padding: $padding-vert-mq-sm $padding-horiz-mq-sm

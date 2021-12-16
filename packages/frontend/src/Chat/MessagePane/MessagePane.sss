@@ -5,7 +5,7 @@
   flex-direction: column
   flex-grow: 1
   overflow: hidden auto
-  padding: 0 1rem
+  padding: 0 $padding-horiz
 
   table.messageTable
     border-collapse: collapse
@@ -43,3 +43,18 @@
         font-style: italic
         text-align: right
         white-space: nowrap
+
+  @media (max-width: $breakpoint-sm)
+    &
+      padding: 0 $padding-horiz-mq-sm
+
+      table.messageTable
+
+        tr.message > td
+          padding: 0.25rem 0.5rem 0.25rem 0
+
+          &:first-child
+            padding-left: 0.2rem
+
+          &:last-child
+            padding-right: 0.2rem

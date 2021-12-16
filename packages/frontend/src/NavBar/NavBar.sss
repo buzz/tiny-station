@@ -8,9 +8,9 @@
   color: $color-navbar-base
   display: flex
   flex-shrink: 0
-  gap: 0.67rem
+  gap: $margin-base
   overflow: hidden
-  padding: 0.5rem 1rem
+  padding: $padding-vert $padding-horiz
   white-space: nowrap
 
   .playButton
@@ -47,7 +47,8 @@
 
   @media (max-width: $breakpoint-sm)
     &
-      gap: 0.4rem
+      gap: $margin-base-mq-sm
+      padding: $padding-vert-mq-sm $padding-horiz-mq-sm
 
       .playButton
         font-size: 112%

@@ -2,17 +2,16 @@
 
 .loginForm
   display: flex
+  flex-wrap: wrap
   justify-content: center
-  gap: 0.5rem
+  gap: $gap-controls
 
   > *
     display: flex
-    gap: 0.5rem
+    gap: $gap-controls-mq-sm
 
   @media (max-width: $breakpoint-sm)
     &
-      justify-content: center
-      flex-wrap: wrap
 
       > *:first-child
         justify-content: center
@@ -26,7 +25,7 @@
   form
     display: flex
     flex-direction: column
-    gap: 0.5rem
+    gap: $gap-controls
     justify-content: center
 
     input
@@ -34,7 +33,7 @@
 
     .buttons
       display: flex
-      gap: 0.5rem
+      gap: $gap-controls
 
       button
         flex-grow: 1
@@ -49,6 +48,10 @@
 
       form
         margin-right: 0
+        gap: $gap-controls-mq-sm
+
+      .buttons
+        gap: $gap-controls-mq-sm
 
     .registerExplanation
       max-width: 80%
@@ -56,11 +59,11 @@
 .messageInputForm
   align-items: center
   display: flex
-  gap: 0.5rem
+  gap: $gap-controls
 
   > div
     display: flex
-    gap: 0.5rem
+    gap: $gap-controls
 
     input
       flex-grow: 1
@@ -71,8 +74,10 @@
   @media (max-width: $breakpoint-sm)
     &
       flex-wrap: wrap
+      gap: $gap-controls-mq-sm
 
       > div
+        gap: $gap-controls-mq-sm
 
         &:first-child
           flex-wrap: wrap
