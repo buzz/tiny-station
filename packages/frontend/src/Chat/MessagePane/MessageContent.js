@@ -1,7 +1,6 @@
 import LinkifyIt from 'linkify-it'
 import tlds from 'tlds'
 
-import TimeSince from './TimeSince'
 import style from './MessagePane.sss'
 
 const linkify = new LinkifyIt()
@@ -37,19 +36,7 @@ const MessageContent = ({ text }) => {
     elems.push(text.substring(lastIndex))
   }
 
-  return elems.length === 1 ? elems[0] : elems
+  return <span className={style.text}>{elems.length === 1 ? elems[0] : elems}</span>
 }
 
-const Message = ({ message: [timestamp, nickname, text], elementRef }) => (
-  <tr className={style.message} ref={elementRef}>
-    <td className={style.nickname}>{nickname}</td>
-    <td className={style.text}>
-      <MessageContent text={text} />
-    </td>
-    <td className={style.time} title={new Date(timestamp).toLocaleString()}>
-      <TimeSince timestamp={timestamp} />
-    </td>
-  </tr>
-)
-
-export default Message
+export default MessageContent

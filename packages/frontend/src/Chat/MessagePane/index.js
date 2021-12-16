@@ -1,9 +1,8 @@
 import { useContext, useEffect, useRef } from 'react'
-import SimpleBar from 'simplebar-react'
-import 'simplebar/dist/simplebar.min.css'
 
 import ChatContext from '../../contexts/ChatContext'
-import Message from './Message'
+import MessageContent from './MessageContent'
+import TimeSince from './TimeSince'
 import style from './MessagePane.sss'
 
 const sortUUidsByTimestamp = (messages) =>
@@ -17,6 +16,14 @@ const sortUUidsByTimestamp = (messages) =>
     return 0
   })
 
+const Message = ({ message: [timestamp, nickname, text], elementRef }) => (
+  <div className={style.message} ref={elementRef}>
+    <TimeSince timestamp={timestamp} />
+    <span className={style.nickname}>{nickname}:</span>
+    <MessageContent text={text} />
+  </div>
+)
+
 const MessagePane = () => {
   const { messages } = useContext(ChatContext)
 
@@ -27,22 +34,18 @@ const MessagePane = () => {
     if (scrollToRef.current) {
       scrollToRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  })
+  }, [uuidsSorted])
 
   return (
-    <SimpleBar className={style.messagePane}>
-      <table className={style.messageTable}>
-        <tbody>
-          {uuidsSorted.map((uuid, idx) =>
-            idx === uuidsSorted.length - 1 ? (
-              <Message message={messages[uuid]} key={uuid} elementRef={scrollToRef} />
-            ) : (
-              <Message message={messages[uuid]} key={uuid} />
-            )
-          )}
-        </tbody>
-      </table>
-    </SimpleBar>
+    <div className={style.messagePane}>
+      {uuidsSorted.map((uuid, idx) =>
+        idx === uuidsSorted.length - 1 ? (
+          <Message message={messages[uuid]} key={uuid} elementRef={scrollToRef} />
+        ) : (
+          <Message message={messages[uuid]} key={uuid} />
+        )
+      )}
+    </div>
   )
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import style from './MessagePane.sss'
 
 const timeSince = (date) => {
   const seconds = Math.floor((new Date() - date) / 1000)
@@ -43,7 +44,11 @@ const TimeSince = ({ timestamp }) => {
     }
   }, [timestamp])
 
-  return output
+  return (
+    <span className={style.time} title={new Date(timestamp).toLocaleString()}>
+      {output}
+    </span>
+  )
 }
 
 export default TimeSince

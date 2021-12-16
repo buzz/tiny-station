@@ -1,60 +1,45 @@
 @import '../../styles/_vars.sss'
 
 .messagePane
-  display: flex
   flex-direction: column
   flex-grow: 1
+  font-size: $font-size-small
+  height: 100%
   overflow: hidden auto
-  padding: 0 $padding-horiz
+  padding: 0 0.35rem 0 0.75rem
+  width: 100%
 
-  table.messageTable
-    border-collapse: collapse
-    font-size: $font-size-small
-    width: 100%
+  .message
+    clear: both
+    padding: 0.4rem 0.3rem
 
-    tr.message
+    &:last-child
+      margin-bottom: 0
 
-      &:last-child
-        margin-bottom: 0
+    &:nth-child(even)
+      background-color: rgba(0 0 0 / 6%)
 
-      &:nth-child(even)
-        background-color: rgba(0 0 0 / 6%)
+    .time
+      color: $color-muted
+      float: right
+      font-style: italic
+      white-space: nowrap
+      padding: 0 0 $padding-vert $padding-horiz
 
-      > td
-        padding: 0.4rem 0.75rem 0.4rem 0
-        vertical-align: top
-
-        &:first-child
-          padding-left: 0.5rem
-
-        &:last-child
-          padding-right: 0.5rem
-
-      .nickname
-        color: $color-muted
-        font-weight: bold
-        white-space: nowrap
-
-      .text
-        width: 80%
-
-      .time
-        color: $color-muted
-        font-style: italic
-        text-align: right
-        white-space: nowrap
+    .nickname
+      color: $color-muted
+      font-weight: bold
+      padding-right: 0.5rem
 
   @media (max-width: $breakpoint-sm)
     &
-      padding: 0 $padding-horiz-mq-sm
+      padding: 0 0.15rem 0 0.5rem
 
-      table.messageTable
+      .message
+        padding: 0.25rem 0.2rem
 
-        tr.message > td
-          padding: 0.25rem 0.5rem 0.25rem 0
+        .time
+          padding: 0 0 $padding-vert-mq-sm $padding-horiz-mq-sm
 
-          &:first-child
-            padding-left: 0.2rem
-
-          &:last-child
-            padding-right: 0.2rem
+        .nickname
+          padding-right: 0.35rem
