@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import IcecastMetadataPlayer from 'icecast-metadata-player'
 
+import ModalContext from '../contexts/ModalContext'
+
 const useAudioStream = (src) => {
+  const { pushModal } = useContext(ModalContext)
   const [volume, setVolume] = useState(1.0)
   const [muted, setMuted] = useState(false)
   const [streamState, setStreamState] = useState('stopped')
@@ -26,11 +29,16 @@ const useAudioStream = (src) => {
       playerRef.current.addEventListener('load', () => setStreamState('loading'))
       playerRef.current.addEventListener('streamEnd', () => setStreamState('stopped'))
       playerRef.current.addEventListener('stop', () => setStreamState('stopped'))
-      playerRef.current.addEventListener('error', () => setStreamState('error'))
+      playerRef.current.addEventListener('error', (ev) => {
+        pushModal({
+          content: `Could not play stream! Error message: "${ev.detail[0].message}", URL: "${src}"`,
+        })
+        setStreamState('error')
+      })
     }
 
     playerRef.current.play()
-  }, [src])
+  }, [pushModal, src])
 
   useEffect(() => () => stopStream(), [stopStream])
 
