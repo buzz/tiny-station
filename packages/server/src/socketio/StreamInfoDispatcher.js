@@ -16,7 +16,6 @@ class StreamInfoDispatcher extends AbstractHandler {
     socket.on('stream:request', () => {
       const streamInfoHandler = this.getStreamInfoHandler()
       socket.emit('stream:info', streamInfoHandler.getStreamInfo())
-      socket.emit('stream:listeners', streamInfoHandler.getListenerCount())
     })
   }
 

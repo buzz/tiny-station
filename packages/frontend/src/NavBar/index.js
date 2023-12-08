@@ -6,6 +6,7 @@ import ListenerCount from './ListenerCount'
 import OnlineCounter from './OnlineCounter'
 import StreamButton from './StreamButton'
 import StreamTitle from './StreamTitle'
+import StreamUrl from './StreamUrl'
 import VolumeControl from './VolumeControl'
 import style from './NavBar.sss'
 
@@ -37,6 +38,7 @@ const NavBar = () => {
         </div>
       </div>
       <div className={style.fill} />
+      {streamOnline === 'online' ? <StreamUrl streamUrl={listenUrl} /> : undefined}
       <VolumeControl
         onToggleMuted={onToggleMuted}
         onVolumeChange={setVolume}

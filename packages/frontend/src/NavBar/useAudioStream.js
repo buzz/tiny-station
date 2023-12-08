@@ -19,8 +19,11 @@ const useAudioStream = (src) => {
 
   const startStream = useCallback(() => {
     if (!playerRef.current) {
+      // Force https, otherwise browser would block request
+      const playerSrc = window.location.protocol === 'https:' ? src.replace('http://', 'https://') : src
+
       audioRef.current = new Audio()
-      playerRef.current = new IcecastMetadataPlayer(src, {
+      playerRef.current = new IcecastMetadataPlayer(playerSrc, {
         audioElement: audioRef.current,
         metadataTypes: [],
       })
@@ -31,7 +34,7 @@ const useAudioStream = (src) => {
       playerRef.current.addEventListener('stop', () => setStreamState('stopped'))
       playerRef.current.addEventListener('error', (ev) => {
         pushModal({
-          content: `Could not play stream! Error message: "${ev.detail[0].message}", URL: "${src}"`,
+          content: `Could not play stream! Error message: "${ev.detail[0].message}", URL: "${playerSrc}"`,
         })
         setStreamState('error')
       })

@@ -22,6 +22,7 @@ const StreamInfoProvider = ({ children }) => {
 
         socket.on('stream:info', (info) => {
           if (info && info.listenUrl) {
+            setListeners(info.listeners)
             setListenUrl(info.listenUrl)
             setSteamStart(new Date(info.streamStart))
             setStreamTitle(info.name)
@@ -36,10 +37,10 @@ const StreamInfoProvider = ({ children }) => {
             setPageTitle(undefined)
           }
         })
+      })
 
-        socket.on('stream:listeners', (count) => {
-          setListeners(count)
-        })
+      socket.on('stream:listeners', (count) => {
+        setListeners(count)
       })
     }
   }, [socket])

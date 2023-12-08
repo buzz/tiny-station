@@ -33,7 +33,7 @@ socketIOManager.start(server)
 const shutdown = async () => {
   console.log('Received signal. Exiting...')
   mailNotifier.clear()
-  await server.close()
+  server.close()
   await redis.quit()
   console.log('Graceful shutdown finished.')
   process.exit(0)

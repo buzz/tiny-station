@@ -8,6 +8,8 @@ import { parse as parseDate } from 'date-format-parse'
 
 const log = util.debuglog('listen-app:StreamInfoHandler')
 
+const POLL_INTERVAL = 30 // seconds
+
 const fetchStatus = (baseUrl) =>
   new Promise((resolve, reject) => {
     const httpLib = baseUrl.startsWith('https://') ? https : http
@@ -43,7 +45,7 @@ class StreamInfoHandler extends EventEmitter {
 
   streamInfo = undefined
 
-  listenerCount = 0
+  streamPollTimeout = undefined
 
   constructor(icecastUrl) {
     super()
@@ -58,84 +60,69 @@ class StreamInfoHandler extends EventEmitter {
 
       .post('/mount-add', (req, res) => {
         log('mount-add', req.body)
-
-        try {
-          this.listenerCount = 0
-          setTimeout(() => this.fetchInfo())
-        } catch {
-          // ignore
-        }
-
+        this.streamPollTimeout = setTimeout(() => this.fetchInfo())
         res.send()
       })
 
       .post('/mount-remove', (req, res) => {
         log('mount-remove', req.body)
 
+        if (this.streamPollTimeout) {
+          clearTimeout(this.streamPollTimeout)
+        }
         this.streamInfo = undefined
-        this.listenerCount = 0
         this.emit('update', this.streamInfo)
-        this.emit('listeners', this.getListenerCount())
-
-        res.send()
-      })
-
-      .post('/listener-add', (req, res) => {
-        log('listener-add', req.body)
-
-        try {
-          if (req.body.action === 'listener_add') {
-            this.listenerCount += 1
-            this.emit('listeners', this.getListenerCount())
-          }
-        } catch {
-          // ignore
-        }
-
-        res
-          .set('icecast-auth-user', 1) // Allow all listeners
-          .send()
-      })
-
-      .post('/listener-remove', (req, res) => {
-        log('listener-remove', req.body)
-
-        try {
-          if (req.body.action === 'listener_remove') {
-            this.listenerCount -= 1
-            this.emit('listeners', this.getListenerCount())
-          }
-        } catch {
-          // ignore
-        }
 
         res.send()
       })
   }
 
   fetchInfo() {
+    const streamInfoOld = this.streamInfo
+
     fetchStatus(this.icecastUrl)
       .then(({ icestats: { source } }) => {
         if (source) {
           const streamSource = Array.isArray(source) ? source[0] : source
           log(streamSource)
           this.streamInfo = {
-            listenUrl: StreamInfoHandler.rewriteListenUrl(streamSource.listenurl),
+            listenUrl: streamSource.listenurl,
             name: streamSource.server_name,
             streamStart: parseDate(source.stream_start, 'DD/MMM/YYYY:HH:mm:ss ZZ'),
+            listeners: source.listeners,
           }
-          this.listenerCount = parseInt(source.listeners, 10)
         }
       })
       .catch((error) => {
         log('polling error')
         log(error)
-        this.streamInfo = {}
-        this.listenerCount = 0
+        this.streamInfo = undefined
       })
       .finally(() => {
-        this.emit('update', this.streamInfo)
-        this.emit('listeners', this.getListenerCount())
+        if (
+          streamInfoOld === undefined ||
+          (this.streamInfo !== undefined &&
+            streamInfoOld.listenUrl !== this.streamInfo.listenUrl &&
+            streamInfoOld.name !== this.streamInfo.name &&
+            streamInfoOld.streamStart !== this.streamInfo.streamStart)
+        ) {
+          this.emit('update', this.streamInfo)
+        }
+
+        if (this.streamInfo === undefined) {
+          this.emit('listeners', 0)
+        } else if (
+          streamInfoOld === undefined ||
+          streamInfoOld.listeners !== this.streamInfo.listeners
+        ) {
+          this.emit('listeners', this.streamInfo.listeners)
+        }
+
+        if (this.streamInfo !== undefined) {
+          this.streamPollTimeout = setTimeout(() => this.fetchInfo(), POLL_INTERVAL * 1000)
+        } else if (this.streamPollTimeout) {
+          clearTimeout(this.streamPollTimeout)
+        }
       })
   }
 
@@ -145,20 +132,6 @@ class StreamInfoHandler extends EventEmitter {
 
   getStreamInfo() {
     return this.streamInfo
-  }
-
-  getListenerCount() {
-    try {
-      return this.listenerCount
-    } catch {
-      return 0
-    }
-  }
-
-  static rewriteListenUrl(urlString) {
-    return process.env.NODE_ENV === 'production'
-      ? urlString.replace('http://', 'https://')
-      : urlString
   }
 }
 
