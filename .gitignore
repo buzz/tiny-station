@@ -1,8 +1,11 @@
 *~
 .DS_Store
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 /TODO.txt
-/.env
+*.local
+.vscode/*
+!.vscode/extensions.json
+dist
+logs
+*.log
+pnpm-debug.log*

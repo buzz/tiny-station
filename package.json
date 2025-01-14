@@ -4,9 +4,6 @@
   "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "keywords": [
     "icecast",
     "stream",
@@ -23,14 +20,14 @@
     "url": "https://github.com/buzz/listen-app.git"
   },
   "scripts": {
-    "build": "yarn frontend:build",
-    "frontend:build": "yarn workspace frontend build",
-    "frontend:dev": "yarn workspace frontend dev",
+    "build": "pnpm run frontend:build",
+    "frontend:build": "pnpm run --filter frontend build",
+    "frontend:dev": "pnpm run --filter frontend dev",
     "format": "prettier --write \"*.js\" \"packages/**/*.js\"",
     "lint": "eslint .",
-    "server:dev": "yarn workspace server dev",
-    "server:start": "yarn workspace server start",
-    "start": "yarn server:start"
+    "server:dev": "pnpm run --filter server dev",
+    "server:start": "pnpm run --filter server start",
+    "start": "pnpm run server:start"
   },
   "eslintIgnore": [
     "/packages/frontend/dist"
@@ -40,12 +37,15 @@
     "@babel/eslint-parser": "^7.15.8",
     "@babel/plugin-transform-runtime": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
-    "eslint": "<8.0.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.4.1"
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.1",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2"
   },
   "dependencies": {
     "@babel/preset-react": "^7.14.5"
