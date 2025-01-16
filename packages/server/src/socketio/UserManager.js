@@ -10,7 +10,7 @@ const log = util.debuglog('listen-app:UserManager')
 const confirmationText = (token) => `Hey there!
 
 Open this link to confirm your email:
-${process.env.BASE_URL}?token=${token}
+${process.env.VITE_BASE_URL}?token=${token}
 
 If it wasn't you who registered, please just ignore this message.
 `

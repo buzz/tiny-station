@@ -11,7 +11,7 @@ This is to let you know that a stream went live right now.
 Stream title: ${title}
 
 You can listen and chat here:
-${process.env.BASE_URL}
+${process.env.VITE_BASE_URL}
 
 Use this URL directly in your media player:
 ${listenUrl}

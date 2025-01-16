@@ -1,0 +1,174 @@
+:root {
+  --base-lightness: 80%;
+  --color-base: hsl(0, 0%, var(--base-lightness));
+  --color-link: hsl(0, 0%, 99%);
+  --color-muted: var(--color-base);
+  --color-highlight: var(--color-base);
+
+  --bg-lightness: 8%;
+  --color-bg: hsl(0, 0%, var(--bg-lightness));
+  --color-panel-bg: hsl(0, 0%, calc(var(--bg-lightness) + 15%));
+  --color-panel-bg-bright: hsl(0, 0%, calc(var(--bg-lightness) + 20%));
+  --color-panel-bg-dark: hsl(0, 0%, calc(var(--bg-lightness) + 22%));
+
+  --color-navbar-base: hsl(0, 0%, calc(var(--base-lightness) + 12%));
+  --color-navbar-muted: var(--color-base);
+  --color-navbar-highlight: hsl(0, 0%, calc(var(--base-lightness) - 3%));
+  --color-navbar-disabled: hsl(0, 0%, calc(var(--base-lightness) - 28%));
+
+  --color-input-base: var(--color-base);
+  --color-input-muted: hsl(0, 0%, calc(var(--base-lightness) - 30%));
+  --color-input-border: hsl(0, 0%, calc(var(--base-lightness) - 16%));
+  --color-input-border-muted: var(--color-input-muted);
+  --color-input-border-highlight: hsl(0, 0%, calc(var(--base-lightness) + 18%));
+
+  --margin-base: 0.67rem;
+  --margin-base-mq-sm: 0.33rem;
+  --padding-horiz: 1rem;
+  --padding-horiz-mq-sm: 0.67rem;
+  --padding-vert: 0.5rem;
+  --padding-vert-mq-sm: 0.33rem;
+  --gap-controls: 0.5rem;
+  --gap-controls-mq-sm: 0.33rem;
+
+  --border-radius-sm: 0.15rem;
+  --border-radius-default: 0.2rem;
+  --font-size-base: 20px;
+  --font-size-base-small-viewport: calc(0.8 * var(--font-size-base));
+  --font-size-small: 80%;
+  --box-shadow-default: 0 0 6px rgb(0 0 0 / 40%);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-tt: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace;
+
+  --breakpoint-sm: 600px;
+}
+
+:root {
+  --max-width: 960px;
+}
+
+html {
+  height: 100%;
+
+  * {
+    box-sizing: border-box;
+    outline: none !important;
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-base);
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+
+  @media (max-width: var(--breakpoint-sm)) {
+    & {
+      font-size: var(--font-size-base-small-viewport);
+    }
+  }
+}
+
+/* Layout */
+
+#root {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-base);
+  height: 100%;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding: var(--margin-base);
+
+  @media (max-width: var(--breakpoint-sm)) {
+    & {
+      gap: var(--margin-base-mq-sm);
+      padding: var(--margin-base-mq-sm);
+    }
+  }
+
+  > * {
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+  }
+}
+
+/* Element */
+
+button,
+input[type='text'],
+input[type='password'] {
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-input-base);
+  font-size: var(--font-size-small);
+  padding: 0.2rem 0.4rem;
+  white-space: nowrap;
+
+  &:disabled {
+    border: 1px solid var(--color-input-border-muted);
+    color: var(--color-input-muted);
+  }
+
+  &:focus {
+    border: 1px solid var(--color-input-border-highlight);
+  }
+}
+
+input[type='text'],
+input[type='password'] {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 10rem;
+}
+
+input[type='checkbox'] {
+  margin-right: 0.5rem;
+}
+
+button {
+  background-color: rgba(255, 255, 255, 0.05);
+
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  > svg {
+    margin-right: 0.2rem;
+  }
+}
+
+ul {
+  padding-left: 1.5rem;
+}
+
+label {
+  font-size: var(--font-size-small);
+}
+
+a {
+  color: var(--color-link);
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 9999px;
+  opacity: 0;
+}

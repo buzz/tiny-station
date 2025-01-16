@@ -1,0 +1,33 @@
+.chat {
+  background: linear-gradient(179deg, var(--color-panel-bg-bright) 0%, var(--color-panel-bg) 100%);
+  border-radius: var(--border-radius-default);
+  box-shadow: var(--box-shadow-default);
+  color: var(--color-base);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  padding-top: var(--margin-base);
+  padding-right: 0.2rem;
+
+  > *:nth-child(2) {
+    background: linear-gradient(
+      180deg,
+      var(--color-panel-bg-dark) 0%,
+      color(var(--color-panel-bg-dark) l(+3%)) 100%
+    );
+    margin-top: var(--margin-base);
+    padding: var(--padding-vert) var(--padding-horiz);
+  }
+
+  @media (max-width: var(--breakpoint-sm)) {
+    & {
+      padding-top: var(--margin-base-mq-sm);
+
+      > *:nth-child(2) {
+        margin-top: var(--margin-base-mq-sm);
+        padding: var(--padding-vert-mq-sm) var(--padding-horiz-mq-sm);
+      }
+    }
+  }
+}

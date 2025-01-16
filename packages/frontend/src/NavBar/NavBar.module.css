@@ -1,0 +1,135 @@
+.navbar {
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    hsl(0, 0%, calc(var(--bg-lightness) + 19%)) 0%,
+    var(--color-panel-bg) 100%
+  );
+  border-radius: var(--border-radius-default);
+  box-shadow: var(--box-shadow-default);
+  color: var(--color-navbar-base);
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--margin-base);
+  overflow: hidden;
+  padding: var(--padding-vert) var(--padding-horiz);
+  white-space: nowrap;
+
+  .playButton {
+    flex-grow: 0;
+  }
+
+  .titleCounter {
+    align-items: center;
+    display: flex;
+    flex-grow: 0;
+    gap: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    .title {
+      align-self: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .counters {
+      align-items: center;
+      display: flex;
+      font-size: var(--font-size-small);
+      gap: 1rem;
+
+      .counterIcon {
+        margin-right: 0.4rem;
+      }
+
+      .counterLabel {
+        color: var(--color-navbar-muted);
+        font-family: var(--font-family-tt);
+      }
+    }
+  }
+
+  .fill {
+    flex-grow: 1;
+  }
+
+  .streamUrl {
+    font-size: var(--font-size-small);
+  }
+
+  @media (max-width: var(--breakpoint-sm)) {
+    & {
+      gap: var(--margin-base-mq-sm);
+      padding: var(--padding-vert-mq-sm) var(--padding-horiz-mq-sm);
+
+      .playButton {
+        font-size: 112%;
+      }
+
+      .titleCounter {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+
+        .counterIcon {
+          margin-right: 0.2rem !important;
+        }
+      }
+    }
+  }
+}
+
+/* volume control */
+
+.volumeControl {
+  align-items: center;
+  display: flex;
+  flex-grow: 0.25;
+  max-width: 10rem;
+}
+
+.muteButton {
+  text-align: left;
+  width: 1.5rem;
+}
+
+.volumeSlider {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  min-width: 3rem;
+
+  &:global(.rc-slider-disabled) {
+    background-color: transparent;
+
+    :global(.rc-slider-rail),
+    :global(.rc-slider-track) {
+      background-color: var(--color-navbar-disabled);
+    }
+
+    :global(.rc-slider-handle) {
+      background-color: var(--color-navbar-disabled);
+      border-color: var(--color-navbar-disabled);
+    }
+  }
+
+  :global(.rc-slider-rail) {
+    background-color: var(--color-navbar-base);
+  }
+
+  :global(.rc-slider-track) {
+    background-color: var(--color-navbar-base);
+  }
+
+  :global(.rc-slider-handle) {
+    background-color: var(--color-panel-bg);
+    border-color: var(--color-navbar-base);
+  }
+
+  :global(.rc-slider-handle:active),
+  :global(.rc-slider-handle:focus),
+  :global(.rc-slider-handle:hover) {
+    box-shadow: none;
+    border-color: var(--color-navbar-base);
+  }
+}

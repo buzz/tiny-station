@@ -1,0 +1,28 @@
+.overlay {
+  background-color: rgb(0 0 0 / 75%);
+  inset: 0;
+  position: fixed;
+
+  .contentWrapper {
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    overflow: auto;
+    position: absolute;
+
+    .content {
+      background-color: var(--color-panel-bg);
+      border-radius: var(--border-radius-default);
+      color: var(--color-navbar-base);
+      margin: 1.5rem;
+      padding: 1.5rem;
+
+      > *:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}

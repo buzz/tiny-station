@@ -1,0 +1,14 @@
+.iconButton {
+  color: var(--color-navbar-base);
+  border: none !important;
+  background-color: transparent;
+  padding: 0;
+
+  &[disabled] {
+    color: var(--color-navbar-muted);
+  }
+
+  &:not([disabled]):hover {
+    color: var(--color-navbar-highlight);
+  }
+}

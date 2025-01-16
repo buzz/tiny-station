@@ -1,0 +1,54 @@
+.messagePane {
+  flex-direction: column;
+  flex-grow: 1;
+  font-size: var(--font-size-small);
+  height: 100%;
+  overflow: hidden auto;
+  padding: 0 0.35rem 0 0.75rem;
+  width: 100%;
+
+  .message {
+    clear: both;
+    padding: 0.4rem 0.3rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:nth-child(even) {
+      background-color: rgba(0, 0, 0, 6%);
+    }
+
+    .time {
+      color: var(--color-muted);
+      float: right;
+      font-style: italic;
+      white-space: nowrap;
+      padding: 0 0 var(--padding-vert) var(--padding-horiz);
+    }
+
+    .nickname {
+      color: var(--color-muted);
+      font-weight: bold;
+      padding-right: 0.5rem;
+    }
+  }
+
+  @media (max-width: var(--breakpoint-sm)) {
+    & {
+      padding: 0 0.15rem 0 0.5rem;
+
+      .message {
+        padding: 0.25rem 0.2rem;
+
+        .time {
+          padding: 0 0 var(--padding-vert-mq-sm) var(--padding-horiz-mq-sm);
+        }
+
+        .nickname {
+          padding-right: 0.35rem;
+        }
+      }
+    }
+  }
+}
