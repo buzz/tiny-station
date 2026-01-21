@@ -12,6 +12,7 @@ const setupPassport = (redis) => {
       },
       (jwtPayload, done) =>
         redis
+
           // eslint-disable-next-line no-underscore-dangle
           .findUser(jwtPayload.user._id)
           .then((user) => {

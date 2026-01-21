@@ -14,7 +14,7 @@ class ChatManager extends AbstractHandler {
 
       try {
         await this.auth(socket)
-      } catch (err) {
+      } catch {
         socket.emit('user:kick', 'Connection lost. Please relogin.')
         return
       }

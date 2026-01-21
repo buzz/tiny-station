@@ -25,7 +25,7 @@ class UserManager extends AbstractHandler {
 
       try {
         await this.auth(socket)
-      } catch (err) {
+      } catch {
         socket.emit('user:kick')
         return
       }
@@ -142,7 +142,7 @@ class UserManager extends AbstractHandler {
 
       try {
         await this.auth(socket)
-      } catch (err) {
+      } catch {
         socket.emit('user:kick', 'Connection lost. Please relogin.')
         return
       }
@@ -158,7 +158,7 @@ class UserManager extends AbstractHandler {
 
       try {
         await this.auth(socket)
-      } catch (err) {
+      } catch {
         socket.emit('user:kick', 'Connection lost. Please relogin.')
         return
       }

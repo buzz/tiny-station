@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import IcecastMetadataPlayer from 'icecast-metadata-player'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import ModalContext from '../contexts/ModalContext'
 
@@ -20,7 +20,8 @@ const useAudioStream = (src) => {
   const startStream = useCallback(() => {
     if (!playerRef.current) {
       // Force https, otherwise browser would block request
-      const playerSrc = window.location.protocol === 'https:' ? src.replace('http://', 'https://') : src
+      const playerSrc =
+        window.location.protocol === 'https:' ? src.replace('http://', 'https://') : src
 
       audioRef.current = new Audio()
       playerRef.current = new IcecastMetadataPlayer(playerSrc, {

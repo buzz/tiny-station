@@ -1,9 +1,9 @@
 import dotenv from 'dotenv'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const baseDir = path.resolve(import.meta.dirname, '..', '..', '..')
 
 dotenv.config({
-  path: path.resolve(__dirname, '..', '..', '..', '.env'),
+  debug: true,
+  path: [path.join(baseDir, '.env.local'), path.join(baseDir, '.env')],
 })
