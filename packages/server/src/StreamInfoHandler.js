@@ -4,7 +4,6 @@ import https from 'https'
 import util from 'util'
 
 import express from 'express'
-import { parse as parseDate } from 'date-format-parse'
 
 const log = util.debuglog('listen-app:StreamInfoHandler')
 
@@ -88,7 +87,7 @@ class StreamInfoHandler extends EventEmitter {
           this.streamInfo = {
             listenUrl: streamSource.listenurl,
             name: streamSource.server_name,
-            streamStart: parseDate(source.stream_start, 'DD/MMM/YYYY:HH:mm:ss ZZ'),
+            streamStart: new Date(source.stream_start_iso8601),
             listeners: source.listeners,
           }
         }
