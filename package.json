@@ -23,7 +23,7 @@
     "build": "pnpm run frontend:build",
     "frontend:build": "pnpm run --filter frontend build",
     "frontend:dev": "pnpm run --filter frontend dev",
-    "format": "prettier --write \"*.js\" \"packages/**/*.js\"",
+    "format": "pnpm run --filter frontend format && pnpm run --filter server format",
     "lint": "pnpm run --filter frontend lint && pnpm run --filter server lint",
     "lint:fix": "pnpm run --filter frontend lint --fix && pnpm run --filter server lint --fix",
     "server:dev": "pnpm run --filter server dev",
