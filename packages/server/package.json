@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@listen-app/server",
   "description": "Server for stream listener",
   "version": "0.1.0",
   "type": "module",

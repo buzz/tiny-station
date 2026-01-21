@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "private": true,
+  "type": "module",
   "keywords": [
     "icecast",
     "stream",
@@ -20,7 +21,7 @@
     "url": "https://github.com/buzz/listen-app.git"
   },
   "scripts": {
-    "build": "pnpm run frontend:build",
+    "build": "pnpm run typescript:build && pnpm run frontend:build",
     "frontend:build": "pnpm run --filter frontend build",
     "frontend:dev": "pnpm run --filter frontend dev",
     "format": "prettier --write packages",
@@ -28,7 +29,11 @@
     "lint:fix": "eslint --fix .",
     "server:dev": "pnpm run --filter server dev",
     "server:start": "pnpm run --filter server start",
-    "start": "pnpm run server:start"
+    "start": "pnpm run server:start",
+    "ts:check": "tsc --build --emitDeclarationOnly",
+    "ts:build": "tsc -b",
+    "ts:clean": "tsc -b --clean",
+    "ts:dev": "tsc -b -w"
   },
   "eslintIgnore": [
     "/packages/frontend/dist"
@@ -36,6 +41,7 @@
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^2.7.2",
     "@eslint/js": "^9.39.2",
+    "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.16.1",
@@ -43,12 +49,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^62.0.0",
-    "globals": "^15.14.0",
-    "prettier": "^3.4.1",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.20.0"
-  },
-  "dependencies": {
-    "@babel/preset-react": "^7.14.5"
+    "globals": "^17.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.53.1"
   }
 }

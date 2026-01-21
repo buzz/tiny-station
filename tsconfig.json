@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.root.tsbuildinfo",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
+  },
+  "include": ["eslint.config.js"],
+  "files": [],
+  "references": [
+    { "path": "./packages/common" },
+    { "path": "./packages/frontend" },
+    { "path": "./packages/server" }
+  ]
+}
