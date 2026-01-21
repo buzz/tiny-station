@@ -128,8 +128,8 @@ importers:
         specifier: ^0.2.7
         version: 0.2.7
       dotenv:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^16.4.7
+        version: 16.4.7
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -1527,9 +1527,9 @@ packages:
   dom-align@1.12.4:
     resolution: {integrity: sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==}
 
-  dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -4183,7 +4183,7 @@ snapshots:
 
   dom-align@1.12.4: {}
 
-  dotenv@10.0.0: {}
+  dotenv@16.4.7: {}
 
   dunder-proto@1.0.1:
     dependencies:
