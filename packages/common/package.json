@@ -1,0 +1,15 @@
+{
+  "name": "@listen-app/common",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "devDependencies": {
+    "@socket.io/component-emitter": "^3.1.2"
+  }
+}
