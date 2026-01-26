@@ -9,7 +9,7 @@ interface ServerEvents extends EventsMap {
   'stream:info': (info: StreamInfo | null) => void
   'stream:listeners': (count: number) => void
   'user:delete-success': () => void
-  'user:kick': (errorMessage: string) => void
+  'user:kick': (errorMessage?: string) => void
   'user:login-fail': (message: string) => void
   'user:login-success': (newNickname: string, token: string, newNotif: boolean) => void
   'user:register-fail': (message: string) => void
@@ -20,18 +20,19 @@ interface ServerEvents extends EventsMap {
 }
 
 interface ClientEvents extends EventsMap {
-  'chat:message': (text: string) => void
-  'user:delete': () => void
-  'user:login': (nickname: string, password: string) => void
+  'chat:message': (text: string) => Promise<void>
+  'user:delete': () => Promise<void>
+  'user:login': (nickname: string, password: string) => Promise<void>
   'user:register': (
     nickname: string,
     email: string,
     password: string,
     passwordConfirm: string,
     notif: boolean
-  ) => void
-  'user:update-notif': (notif: boolean) => void
-  'user:verify-jwt': () => void
+  ) => Promise<void>
+  'user:update-notif': (notif: boolean) => Promise<void>
+  'user:verify': (token: string) => Promise<void>
+  'user:verify-jwt': () => Promise<void>
 }
 
 export type { ClientEvents, ServerEvents }

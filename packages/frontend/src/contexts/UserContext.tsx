@@ -40,7 +40,7 @@ function UserProvider({ children }: PropsWithChildren) {
   }, [cookies, socket])
 
   const handleUserKick = useCallback(
-    (errorMessage: string) => {
+    (errorMessage: string | undefined) => {
       setLoginState('loggedOut')
       setCookie(import.meta.env.VITE_COOKIE_TOKEN, undefined, {
         path: '/',

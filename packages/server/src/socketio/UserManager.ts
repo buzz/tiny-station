@@ -1,22 +1,23 @@
-import util from 'util'
+import { debuglog } from 'node:util'
 
 import EmailValidator from 'email-validator'
 import jwt from 'jsonwebtoken'
 
 import AbstractHandler from './AbstractHandler.js'
+import type { Socket } from './SocketIOManager.js'
 
-const log = util.debuglog('listen-app:UserManager')
+const log = debuglog('listen-app:UserManager')
 
-const confirmationText = (token) => `Hey there!
+const confirmationText = (token: string, baseUrl: string) => `Hey there!
 
 Open this link to confirm your email:
-${process.env.VITE_BASE_URL}?token=${token}
+${baseUrl}?token=${token}
 
 If it wasn't you who registered, please just ignore this message.
 `
 
 class UserManager extends AbstractHandler {
-  handleClientConnect(socket) {
+  handleClientConnect(socket: Socket) {
     const mailer = this.getMailer()
     const redis = this.getRedis()
 
@@ -100,8 +101,8 @@ class UserManager extends AbstractHandler {
 
       try {
         await redis.addUser(email, cleanNickname, password, token)
-      } catch (err) {
-        socket.emit('user:register-fail', err.message)
+      } catch (error) {
+        socket.emit('user:register-fail', error.message)
         return
       }
 
@@ -115,9 +116,9 @@ class UserManager extends AbstractHandler {
           'user:register-success',
           "Check your inbox and click the link in the confirmation mail. It's valid for one hour."
         )
-      } catch (err) {
+      } catch (error) {
         try {
-          console.error('Failed to send mail:', err)
+          console.error('Failed to send mail:', error)
           await redis.deleteUser(email)
           await redis.deleteToken(token)
           await redis.unsubscribe(email)
@@ -163,14 +164,14 @@ class UserManager extends AbstractHandler {
         return
       }
 
-      if (val) {
-        await redis.subscribe(socket.request.user.email)
-      } else {
-        await redis.unsubscribe(socket.request.user.email)
-      }
+      await (val
+        ? redis.subscribe(socket.request.user.email)
+        : redis.unsubscribe(socket.request.user.email))
 
       socket.emit('user:update-notif-success', val)
     })
+
+    return Promise.resolve()
   }
 
   static generateVerificationToken() {
@@ -183,8 +184,13 @@ class UserManager extends AbstractHandler {
     return token
   }
 
-  static createJWT(nickname, email) {
-    return jwt.sign({ user: { _id: email, nickname } }, process.env.JWT_SECRET)
+  static createJWT(nickname: string, email: string) {
+    const jwtSecret = process.env.JWT_SECRET
+    if (!jwtSecret) {
+      throw new Error('JWT_SECRET not set')
+    }
+
+    return jwt.sign({ user: { _id: email, nickname } }, jwtSecret)
   }
 }
 

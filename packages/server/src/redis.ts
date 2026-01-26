@@ -1,18 +1,21 @@
 import bcrypt from 'bcrypt'
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
+
+import type { ChatMessage } from '@listen-app/common'
 
 const MESSAGES_KEY = 'messages'
 const SUBSCRIPTIONS_KEY = 'subs'
 const VERIFIED_KEY = 'ver'
-const getNicknameKey = (nickname) => `nickname:${nickname}`
-const getUserKey = (email) => `user:${email}`
-const getTokenKey = (token) => `token:${token}`
+
+const getNicknameKey = (nickname: string) => `nickname:${nickname}`
+const getUserKey = (email: string) => `user:${email}`
+const getTokenKey = (token: string) => `token:${token}`
 
 class RedisConnection {
-  redis = undefined
+  private redis: Redis
 
-  constructor() {
-    this.redis = new Redis(process.env.REDIS_URL, {
+  constructor(redisUrl: string) {
+    this.redis = new Redis(redisUrl, {
       keyPrefix: 'listen-app:',
       showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
     })
@@ -24,35 +27,38 @@ class RedisConnection {
 
   /* User */
 
-  async nicknameExists(nickname) {
+  async nicknameExists(nickname: string) {
     return (await this.redis.exists(getNicknameKey(nickname))) === 1
   }
 
-  async emailExists(email) {
+  async emailExists(email: string) {
     return (await this.redis.exists(getUserKey(email))) === 1
   }
 
-  getEmail(nickname) {
+  getEmail(nickname: string) {
     return this.redis.get(getNicknameKey(nickname))
   }
 
-  async findUser(email) {
+  async findUser(email: string) {
     const user = await this.redis.hgetall(getUserKey(email))
+
+    // hgetall returns `{}` for missing key
+    if (Object.keys(user).length === 0) {
+      return null
+    }
+
     const ver = await this.isVerified(email)
     const notif = await this.isSubscribed(email)
 
-    if (user) {
-      return {
-        email,
-        nickname: user.nickname,
-        ver,
-        notif,
-      }
+    return {
+      email,
+      nickname: user.nickname,
+      ver,
+      notif,
     }
-    return null
   }
 
-  async addUser(email, nickname, password, token) {
+  async addUser(email: string, nickname: string, password: string, token: string) {
     const userKey = getUserKey(email)
     const tokenKey = getTokenKey(token)
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -67,9 +73,14 @@ class RedisConnection {
       .exec()
   }
 
-  async deleteUser(email) {
+  async deleteUser(email: string) {
     const userKey = getUserKey(email)
     const nickname = await this.redis.hget(userKey, 'nickname')
+
+    if (!nickname) {
+      return
+    }
+
     return this.redis
       .pipeline()
       .del(userKey)
@@ -78,11 +89,11 @@ class RedisConnection {
       .exec()
   }
 
-  deleteToken(token) {
+  deleteToken(token: string) {
     return this.redis.del(getTokenKey(token))
   }
 
-  async verifyUser(token) {
+  async verifyUser(token: string) {
     try {
       const tokenKey = getTokenKey(token)
       const email = await this.redis.get(tokenKey)
@@ -90,6 +101,11 @@ class RedisConnection {
       if (email) {
         const userKey = getUserKey(email)
         const nickname = await this.redis.hget(userKey, 'nickname')
+
+        if (!nickname) {
+          return false
+        }
+
         await this.redis
           .pipeline()
           .sadd(VERIFIED_KEY, email)
@@ -106,37 +122,40 @@ class RedisConnection {
     return false
   }
 
-  async verifyPassword(email, password) {
+  async verifyPassword(email: string, password: string) {
     try {
       const [hash] = await this.redis.hmget(getUserKey(email), 'pwd')
-      if (!this.isVerified(email)) {
+
+      if (!(await this.isVerified(email))) {
         return false
       }
+
       if (typeof hash !== 'string') {
         return false
       }
 
-      return bcrypt.compare(password, hash)
+      return await bcrypt.compare(password, hash)
     } catch {
-      return false
+      // Skip
     }
+    return false
   }
 
-  async isVerified(email) {
+  async isVerified(email: string) {
     return (await this.redis.sismember(VERIFIED_KEY, email)) === 1
   }
 
   /* Email notifications */
 
-  subscribe(email) {
+  subscribe(email: string) {
     return this.redis.sadd(SUBSCRIPTIONS_KEY, email)
   }
 
-  unsubscribe(email) {
+  unsubscribe(email: string) {
     return this.redis.srem(SUBSCRIPTIONS_KEY, email)
   }
 
-  async isSubscribed(email) {
+  async isSubscribed(email: string) {
     return (await this.redis.sismember(SUBSCRIPTIONS_KEY, email)) === 1
   }
 
@@ -146,21 +165,36 @@ class RedisConnection {
 
   /* Chat */
 
-  async getMessages() {
+  async getMessages(): Promise<ChatMessage[]> {
     const res = await this.redis.zrangebyscore(MESSAGES_KEY, '-inf', '+inf', 'WITHSCORES')
 
     const messages = []
-    while (res.length) {
-      const timestamp = parseInt(res.pop(), 10)
-      const [uuid, senderNickname, msg] = JSON.parse(res.pop())
-      messages.push([uuid, timestamp, senderNickname, msg])
+
+    while (res.length > 0) {
+      const timestampString = res.pop()
+      if (!timestampString) {
+        throw new Error('Expected timestamp')
+      }
+      const jsonData = res.pop()
+      if (!jsonData) {
+        throw new Error('Expected JSON data')
+      }
+
+      const timestamp = Number.parseInt(timestampString, 10)
+      const [uuid, senderNickname, message] = JSON.parse(jsonData) as [string, string, string]
+
+      messages.push({ uuid, timestamp, senderNickname, message })
     }
 
     return messages
   }
 
-  storeMessage(uuid, timestamp, nickname, cleanMsg) {
-    return this.redis.zadd(MESSAGES_KEY, timestamp, JSON.stringify([uuid, nickname, cleanMsg]))
+  storeMessage({ uuid, timestamp, senderNickname, message }: ChatMessage) {
+    return this.redis.zadd(
+      MESSAGES_KEY,
+      String(timestamp),
+      JSON.stringify([uuid, senderNickname, message])
+    )
   }
 }
 

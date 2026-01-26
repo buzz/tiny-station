@@ -7,7 +7,10 @@
     "outDir": "dist",
     "rootDir": "src",
     "allowImportingTsExtensions": false,
-    "noEmit": false
+    "noEmit": false,
+    "paths": {
+      "#*": ["./src/*"]
+    }
   },
   "include": ["src", "eslint.config.js"],
   "references": [{ "path": "../common" }]
