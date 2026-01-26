@@ -2,6 +2,18 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import type { NextFunction, Request, Response } from 'express'
 
+import {
+  type LoginData,
+  LoginSchema,
+  type RegisterData,
+  RegisterSchema,
+  type UpdateNotificationsData,
+  UpdateNotificationsSchema,
+  type VerifyEmailData,
+  VerifyEmailSchema,
+} from '@listen-app/common'
+
+import { validateRequestBody } from '#validationMiddleware.js'
 import type AuthService from '#AuthService.js'
 import type { Config } from '#config.js'
 
@@ -48,24 +60,8 @@ function createAuthRoutes(
 ): ReturnType<typeof express.Router> {
   const jwtMiddleware = createJwtMiddleware(config.jwtSecret)
 
-  router.post('/register', async (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { nickname, email, password, passwordConfirm, notif } = req.body
-
-    if (
-      !nickname ||
-      !email ||
-      !password ||
-      !passwordConfirm ||
-      typeof notif !== 'boolean' ||
-      typeof nickname !== 'string' ||
-      typeof email !== 'string' ||
-      typeof password !== 'string' ||
-      typeof passwordConfirm !== 'string'
-    ) {
-      res.status(400).json({ error: 'Bad form data.' })
-      return
-    }
+  router.post('/register', validateRequestBody(RegisterSchema), async (req, res) => {
+    const { nickname, email, password, passwordConfirm, notif } = req.body as RegisterData
 
     try {
       await authService.register(nickname, email, password, passwordConfirm, notif)
@@ -79,14 +75,8 @@ function createAuthRoutes(
     }
   })
 
-  router.post('/login', async (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { nickname, password } = req.body
-
-    if (!nickname || !password || typeof nickname !== 'string' || typeof password !== 'string') {
-      res.status(400).json({ error: 'Bad form data.' })
-      return
-    }
+  router.post('/login', validateRequestBody(LoginSchema), async (req, res) => {
+    const { nickname, password } = req.body as LoginData
 
     try {
       const result = await authService.login(nickname, password)
@@ -97,14 +87,8 @@ function createAuthRoutes(
     }
   })
 
-  router.post('/verify', async (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { token } = req.body
-
-    if (!token || typeof token !== 'string') {
-      res.status(400).json({ error: 'Bad form data.' })
-      return
-    }
+  router.post('/verify', validateRequestBody(VerifyEmailSchema), async (req, res) => {
+    const { token } = req.body as VerifyEmailData
 
     try {
       const result = await authService.verifyEmail(token)
@@ -137,23 +121,22 @@ function createAuthRoutes(
     }
   })
 
-  router.put('/user/notifications', jwtMiddleware, async (req, res) => {
-    const user = (req as Request & { user: UserData }).user
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { subscribed } = req.body
+  router.put(
+    '/user/notifications',
+    jwtMiddleware,
+    validateRequestBody(UpdateNotificationsSchema),
+    async (req, res) => {
+      const user = (req as Request & { user: UserData }).user
+      const { subscribed } = req.body as UpdateNotificationsData
 
-    if (typeof subscribed !== 'boolean') {
-      res.status(400).json({ error: 'Bad form data.' })
-      return
+      try {
+        await authService.updateNotifications(user.email, subscribed)
+        res.status(200).json({ message: 'Notification preferences updated', subscribed })
+      } catch {
+        res.status(500).json({ error: 'Failed to update notification preferences' })
+      }
     }
-
-    try {
-      await authService.updateNotifications(user.email, subscribed)
-      res.status(200).json({ message: 'Notification preferences updated', subscribed })
-    } catch {
-      res.status(500).json({ error: 'Failed to update notification preferences' })
-    }
-  })
+  )
 
   return router
 }

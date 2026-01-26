@@ -6,10 +6,14 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
   "devDependencies": {
     "@socket.io/component-emitter": "^3.1.2"
+  },
+  "dependencies": {
+    "zod": "catalog:"
   }
 }

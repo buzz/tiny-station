@@ -21,7 +21,7 @@
     "url": "https://github.com/buzz/listen-app.git"
   },
   "scripts": {
-    "build": "pnpm run typescript:build && pnpm run frontend:build",
+    "build": "pnpm run ts:build && pnpm run frontend:build",
     "frontend:build": "pnpm run --filter frontend build",
     "frontend:dev": "pnpm run --filter frontend dev",
     "format": "prettier --write packages",

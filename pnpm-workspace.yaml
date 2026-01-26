@@ -2,3 +2,6 @@ packages:
   - packages/common
   - packages/frontend
   - packages/server
+
+catalog:
+  zod: ^4.3.6

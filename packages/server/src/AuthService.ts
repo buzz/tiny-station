@@ -1,6 +1,5 @@
 import { debuglog } from 'node:util'
 
-import EmailValidator from 'email-validator'
 import jwt from 'jsonwebtoken'
 
 import type { Config } from '#config.js'
@@ -33,27 +32,11 @@ class AuthService {
   ) {
     log(`register ${nickname} ${email}`)
 
-    if (!nickname || !email || !password || !passwordConfirm) {
-      throw new Error('Bad form data.')
-    }
-
-    const cleanNickname = nickname.trim()
-
-    if (!cleanNickname || cleanNickname.length > 16) {
-      throw new Error('Bad nickname.')
-    }
-
-    if (!EmailValidator.validate(email)) {
-      throw new Error('Not a valid email address.')
-    }
-
     if (password !== passwordConfirm) {
       throw new Error('Passwords do not match.')
     }
 
-    if (password.length < 6) {
-      throw new Error('Password needs to be at least 6 characters long.')
-    }
+    const cleanNickname = nickname.trim()
 
     if (await this.redis.nicknameExists(cleanNickname)) {
       throw new Error('The nickname is not available.')

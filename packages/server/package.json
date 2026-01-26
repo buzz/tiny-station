@@ -10,13 +10,13 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
-    "email-validator": "^2.0.4",
     "express": "^5.2.1",
     "ioredis": "^5.9.2",
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^7.0.12",
     "socket.io": "^4.8.3",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@listen-app/common": "link:../common",

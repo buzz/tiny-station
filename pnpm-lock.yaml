@@ -4,6 +4,12 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    zod:
+      specifier: ^4.3.6
+      version: 4.3.6
+
 importers:
 
   .:
@@ -52,6 +58,10 @@ importers:
         version: 8.53.1(eslint@9.39.2)(typescript@5.9.3)
 
   packages/common:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 4.3.6
     devDependencies:
       '@socket.io/component-emitter':
         specifier: ^3.1.2
@@ -135,9 +145,6 @@ importers:
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
-      email-validator:
-        specifier: ^2.0.4
-        version: 2.0.4
       express:
         specifier: ^5.2.1
         version: 5.2.1
@@ -156,6 +163,9 @@ importers:
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
+      zod:
+        specifier: 'catalog:'
+        version: 4.3.6
     devDependencies:
       '@listen-app/common':
         specifier: link:../common
@@ -1563,10 +1573,6 @@ packages:
 
   electron-to-chromium@1.5.267:
     resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
-
-  email-validator@2.0.4:
-    resolution: {integrity: sha512-gYCwo7kh5S3IDyZPLZf6hSS0MnZT8QmJFqYvbqlDZSbwdZlY6QZWxJ4i/6UhITOJ4XzyI647Bm2MXKCLqnJ4nQ==}
-    engines: {node: '>4.0'}
 
   encodeurl@2.0.0:
     resolution: {integrity: sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg==}
@@ -4373,8 +4379,6 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.267: {}
-
-  email-validator@2.0.4: {}
 
   encodeurl@2.0.0: {}
 
