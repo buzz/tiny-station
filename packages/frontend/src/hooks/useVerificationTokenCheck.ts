@@ -22,7 +22,7 @@ function useVerificationTokenCheck() {
   const handleUserVerifySuccess = useCallback(() => {
     pushModal({
       action: () => {
-        globalThis.location.assign(import.meta.env.VITE_BASE_URL)
+        globalThis.location.assign(import.meta.env.APP_BASE_URL)
       },
       content: 'Email was verified. You can login now.',
     })

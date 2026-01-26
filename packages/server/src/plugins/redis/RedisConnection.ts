@@ -3,6 +3,9 @@ import { Redis } from 'ioredis'
 
 import type { ChatMessage } from '@listen-app/common'
 
+import { REDIS_KEY_PREFIX } from '#constants.js'
+import type { Config } from '#plugins/config.js'
+
 const MESSAGES_KEY = 'messages'
 const SUBSCRIPTIONS_KEY = 'subs'
 const VERIFIED_KEY = 'ver'
@@ -14,14 +17,14 @@ const getTokenKey = (token: string) => `token:${token}`
 class RedisConnection {
   private redis: Redis
 
-  constructor(redisUrl: string) {
-    this.redis = new Redis(redisUrl, {
-      keyPrefix: 'listen-app:',
-      showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+  constructor(config: Config) {
+    this.redis = new Redis(config.redisUrl, {
+      keyPrefix: `${REDIS_KEY_PREFIX}:`,
+      showFriendlyErrorStack: config.isDebug,
     })
   }
 
-  async quit() {
+  quit() {
     return this.redis.quit()
   }
 

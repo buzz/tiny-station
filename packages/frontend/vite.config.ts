@@ -14,6 +14,9 @@ export default defineConfig({
         ws: true,
         rewriteWsOrigin: true,
       },
+      '/api': {
+        target: 'http://localhost:3001',
+      },
     },
   },
   envDir: path.resolve(import.meta.dirname, '..', '..'),

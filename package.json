@@ -21,19 +21,19 @@
     "url": "https://github.com/buzz/listen-app.git"
   },
   "scripts": {
-    "build": "pnpm run ts:build && pnpm run frontend:build",
+    "build": "pnpm run server:build && pnpm run frontend:build",
     "frontend:build": "pnpm run --filter frontend build",
     "frontend:dev": "pnpm run --filter frontend dev",
     "format": "prettier --write packages",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "server:build": "pnpm --filter server exec tsc --build",
     "server:dev": "pnpm run --filter server dev",
     "server:start": "pnpm run --filter server start",
     "start": "pnpm run server:start",
     "ts:check": "tsc --build --emitDeclarationOnly",
-    "ts:build": "tsc -b",
-    "ts:clean": "tsc -b --clean",
-    "ts:dev": "tsc -b -w"
+    "ts:clean": "tsc --build --clean",
+    "ts:dev": "tsc --build --watch"
   },
   "eslintIgnore": [
     "/packages/frontend/dist"

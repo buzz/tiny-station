@@ -1,7 +1,7 @@
 import type { EventsMap } from '@socket.io/component-emitter'
 
-import type { ChatMessage } from './chat'
-import type { StreamInfo } from './stream'
+import type { ChatMessage } from './chat.js'
+import type { StreamInfo } from './stream.js'
 
 interface ServerEvents extends EventsMap {
   'chat:message': (message: ChatMessage) => void

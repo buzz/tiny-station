@@ -52,7 +52,6 @@ const config = defineConfig(
       'import-x/no-named-as-default-member': 'off',
       'import-x/first': 'error',
       'import-x/no-duplicates': 'error',
-      'import-x/no-relative-parent-imports': 'error',
       'import-x/no-unresolved': 'off', // handled by TS
 
       // --- Simple Import Sort ---
@@ -123,9 +122,16 @@ const config = defineConfig(
     },
     rules: {
       'no-console': 'off',
-      'no-underscore-dangle': ['error', { allow: ['__dirname'] }],
+      'no-underscore-dangle': [
+        'error',
+        {
+          allow: ['__dirname'],
+          allowAfterThis: true, // For private class properties
+        },
+      ],
       'import-x/extensions': ['error', 'always'],
       'unicorn/prefer-event-target': 'off',
+      'unicorn/no-process-exit': 'off',
     },
   },
 

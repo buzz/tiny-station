@@ -1,13 +1,12 @@
-import { debuglog } from 'node:util'
+import type { FastifyBaseLogger } from 'fastify'
 
 import type { StreamInfo } from '@listen-app/common'
 
-import type { Config } from '#config.js'
-import type Mailer from '#mailer.js'
-import type RedisConnection from '#redis.js'
-import type StreamInfoHandler from '#StreamInfoHandler.js'
-
-const log = debuglog('listen-app:MailNotifier')
+import { NOTIFIER_IGNORE_PATTERN } from '#constants.js'
+import type { Config } from '#plugins/config.js'
+import type Mailer from '#plugins/mailer/Mailer.js'
+import type RedisConnection from '#plugins/redis/RedisConnection.js'
+import type StreamInfoHandler from '#plugins/streamInfo/StreamInfoHandler.js'
 
 const notificationText = (title: string, listenUrl: string, baseUrl: string) => `Hey there!
 
@@ -26,48 +25,39 @@ and change email notifications under settings.
 `
 
 class MailNotifier {
-  private config: Config
-  private redis: RedisConnection
-  private mailer: Mailer
   private notifyTimeout: NodeJS.Timeout | null = null
   private info: StreamInfo | null = null
 
   constructor(
-    config: Config,
-    streamInfoHandler: StreamInfoHandler,
-    redis: RedisConnection,
-    mailer: Mailer
+    private config: Config,
+    private redis: RedisConnection,
+    private mailer: Mailer,
+    private log: FastifyBaseLogger,
+    streamInfoHandler: StreamInfoHandler
   ) {
-    this.config = config
-    this.redis = redis
-    this.mailer = mailer
-
-    this.notifyTimeout = null
-    this.info = null
-
-    streamInfoHandler.on('update', (info: StreamInfo | null) => {
+    streamInfoHandler.on('update', (info) => {
       this.onInfoUpdate(info)
     })
   }
 
   async notify() {
-    const serverInfo = this.info
-    if (!serverInfo) {
+    const { info } = this
+
+    if (!info) {
       return
     }
 
-    log('notify', this.info)
+    this.log.debug(`Notifying: name=${info.name} listenUrl=${info.listenUrl}`)
 
     const emails = await this.redis.getSubscribedEmails()
-    await Promise.all(
-      emails.map((email) => {
-        return this.mailer.send(
-          email,
-          `Stream is live now! ${serverInfo.name}`,
-          notificationText(serverInfo.name, serverInfo.listenUrl, this.config.viteBaseUrl)
-        )
-      })
-    )
+
+    for (const email of emails) {
+      await this.mailer.send(
+        email,
+        `Stream is live now! ${info.name}`,
+        notificationText(info.name, info.listenUrl, this.config.baseUrl)
+      )
+    }
   }
 
   clear() {
@@ -78,9 +68,8 @@ class MailNotifier {
   }
 
   private onInfoUpdate(info: StreamInfo | null) {
-    log('onInfoUpdate', info)
-
-    const shouldNotify = info && typeof info.name === 'string' && !info.name.includes('__TEST__')
+    const shouldNotify =
+      info && typeof info.name === 'string' && !info.name.includes(NOTIFIER_IGNORE_PATTERN)
 
     this.clear()
     if (shouldNotify) {

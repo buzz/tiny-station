@@ -3,14 +3,24 @@
   "description": "Server for stream listener",
   "version": "0.1.0",
   "type": "module",
+  "imports": {
+    "#*.js": {
+      "types": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "scripts": {
-    "dev": "NODE_DEBUG=listen-app* nodemon --exec node src/index.js",
-    "start": "NODE_ENV=production node src/index.js"
+    "dev": "nodemon --watch src --ext ts --exec node dist/index.js",
+    "start": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
+    "@fastify/error": "^4.2.0",
+    "@listen-app/common": "workspace:*",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1",
+    "fastify": "^5.7.2",
+    "fastify-plugin": "^5.1.0",
+    "fastify-type-provider-zod": "^6.1.0",
     "ioredis": "^5.9.2",
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^7.0.12",
@@ -19,9 +29,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@listen-app/common": "link:../common",
     "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^7.0.5",
     "nodemon": "^3.1.11"

@@ -1,10 +1,25 @@
-export type { ChatMessage } from './chat'
-export type { ClientEvents, ServerEvents } from './events'
-export type { LoginData, RegisterData, UpdateNotificationsData, VerifyEmailData } from './schemas'
+export type {
+  ErrorResponse,
+  LoginBody,
+  LoginResponse,
+  MessageResponse,
+  RegisterBody,
+  UpdateNotificationsBody,
+  UpdateNotificationsResponse,
+  VerifyEmailBody,
+  VerifyJwtResponse,
+} from './apiSchemas.js'
 export {
-  LoginSchema,
-  RegisterSchema,
-  UpdateNotificationsSchema,
-  VerifyEmailSchema,
-} from './schemas'
-export type { StreamInfo } from './stream'
+  errorResponseSchema,
+  loginBodySchema,
+  loginResponseSchema,
+  messageResponseSchema,
+  registerBodySchema,
+  updateNotificationsBodySchema,
+  updateNotificationsResponseSchema,
+  verifyEmailBodySchema,
+  verifyJwtResponseSchema,
+} from './apiSchemas.js'
+export type { ChatMessage } from './chat.js'
+export type { ClientEvents, ServerEvents } from './events.js'
+export type { StreamInfo } from './stream.js'

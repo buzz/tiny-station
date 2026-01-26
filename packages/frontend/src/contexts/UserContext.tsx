@@ -9,7 +9,7 @@ import useSocketIo, { useSocketEvent } from '#hooks/useSocketIo'
 const UserContext = createContext<UserContextValue | undefined>(undefined)
 
 function handleUserDeleteSuccess() {
-  globalThis.location.assign(import.meta.env.VITE_BASE_URL)
+  globalThis.location.assign(import.meta.env.APP_BASE_URL)
 }
 
 function UserProvider({ children }: PropsWithChildren) {

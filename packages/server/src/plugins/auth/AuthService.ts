@@ -1,12 +1,9 @@
-import { debuglog } from 'node:util'
-
 import jwt from 'jsonwebtoken'
+import type { FastifyBaseLogger } from 'fastify'
 
-import type { Config } from '#config.js'
-import type Mailer from '#mailer.js'
-import type RedisConnection from '#redis.js'
-
-const log = debuglog('listen-app:AuthService')
+import type { Config } from '#plugins/config.js'
+import type Mailer from '#plugins/mailer/Mailer.js'
+import type RedisConnection from '#plugins/redis/RedisConnection.js'
 
 const confirmationText = (token: string, baseUrl: string) => `Hey there!
 
@@ -20,21 +17,12 @@ class AuthService {
   constructor(
     private config: Config,
     private redis: RedisConnection,
-    private mailer: Mailer
+    private mailer: Mailer,
+    private log: FastifyBaseLogger
   ) {}
 
-  async register(
-    nickname: string,
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    notif: boolean
-  ) {
-    log(`register ${nickname} ${email}`)
-
-    if (password !== passwordConfirm) {
-      throw new Error('Passwords do not match.')
-    }
+  async register(nickname: string, email: string, password: string, notif: boolean) {
+    this.log.info(`User registered: nick=${nickname} email=${email}`)
 
     const cleanNickname = nickname.trim()
 
@@ -62,7 +50,7 @@ class AuthService {
       await this.mailer.send(
         email,
         'Listen app - Confirmation Mail',
-        confirmationText(token, this.config.viteBaseUrl)
+        confirmationText(token, this.config.baseUrl)
       )
     } catch (error) {
       console.error('Failed to send mail:', error)
@@ -74,7 +62,7 @@ class AuthService {
   }
 
   async login(nickname: string, password: string) {
-    log(`login ${nickname}`)
+    this.log.debug(`User login: ${nickname}`)
 
     const email = await this.redis.getEmail(nickname)
     if (typeof email !== 'string') {
@@ -92,29 +80,25 @@ class AuthService {
   }
 
   async verifyEmail(token: string) {
-    log(`verify ${token}`)
+    this.log.debug(`User email verify: ${token}`)
 
-    if (await this.redis.verifyUser(token)) {
-      return { success: true }
-    }
-
-    return { success: false }
+    return await this.redis.verifyUser(token)
   }
 
   async deleteUser(email: string) {
-    log(`delete ${email}`)
-
     await this.redis.deleteUser(email)
     await this.redis.unsubscribe(email)
+
+    this.log.info(`User deleted: ${email}`)
   }
 
   async updateNotifications(email: string, subscribed: boolean) {
-    log(`updateNotifications ${email} ${subscribed}`)
+    this.log.debug(`updateNotifications: email=${email} subscribed=${subscribed}`)
 
     await (subscribed ? this.redis.subscribe(email) : this.redis.unsubscribe(email))
   }
 
-  static generateVerificationToken() {
+  private static generateVerificationToken() {
     let token = ''
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     const charactersLength = characters.length
@@ -124,7 +108,7 @@ class AuthService {
     return token
   }
 
-  createJWT(nickname: string, email: string) {
+  private createJWT(nickname: string, email: string) {
     return jwt.sign({ user: { _id: email, nickname } }, this.config.jwtSecret)
   }
 }

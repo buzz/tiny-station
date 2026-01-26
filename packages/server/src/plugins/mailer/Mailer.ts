@@ -2,14 +2,12 @@ import nodemailer from 'nodemailer'
 import type { Transporter } from 'nodemailer'
 import type SMTPTransport from 'nodemailer/lib/smtp-transport/index.js'
 
-import type { Config } from '#config.js'
+import type { Config } from '#plugins/config.js'
 
 class Mailer {
-  private config: Config
   private transporter: Transporter | null = null
 
-  constructor(config: Config) {
-    this.config = config
+  constructor(private config: Config) {
     this.transporter = this.makeTransport()
   }
 

@@ -1,13 +1,9 @@
 import path from 'node:path'
 
 import dotenv from 'dotenv'
+import fastifyPlugin from 'fastify-plugin'
 
-const baseDir = path.resolve(import.meta.dirname, '..', '..', '..')
-
-dotenv.config({
-  debug: process.env.NODE_ENV !== 'production',
-  path: [path.join(baseDir, '.env.local'), path.join(baseDir, '.env')],
-})
+const baseDir = path.resolve(import.meta.dirname, '..', '..', '..', '..')
 
 function getEnvString(envVar: string, defaultValue: null): string | null
 function getEnvString(envVar: string, defaultValue?: string): string
@@ -44,8 +40,13 @@ function getEnvBoolean(envVar: string, defaultValue?: boolean): boolean {
   return ['true', 'yes', '1'].includes(val.toLowerCase())
 }
 
-function getConfig(): Config {
-  const viteBaseUrl = getEnvString('VITE_BASE_URL')
+function getConfig(isDebug: boolean): Config {
+  dotenv.config({
+    debug: isDebug,
+    path: [path.join(baseDir, '.env.local'), path.join(baseDir, '.env')],
+  })
+
+  const baseUrl = getEnvString('APP_BASE_URL')
   const icecastUrl = getEnvString('ICECAST_URL')
   const redisUrl = getEnvString('REDIS_URL')
   const jwtSecret = getEnvString('JWT_SECRET')
@@ -59,7 +60,8 @@ function getConfig(): Config {
   const smtpIgnoreInvalidCert = getEnvBoolean('SMTP_IGNORE_INVALID_CERT', false)
 
   return {
-    viteBaseUrl,
+    isDebug,
+    baseUrl,
     icecastUrl,
     redisUrl,
     jwtSecret,
@@ -75,7 +77,8 @@ function getConfig(): Config {
 }
 
 interface Config {
-  viteBaseUrl: string
+  isDebug: boolean
+  baseUrl: string
   icecastUrl: string
   redisUrl: string
   jwtSecret: string
@@ -89,5 +92,9 @@ interface Config {
   smtpIgnoreInvalidCert: boolean
 }
 
+const configPlugin = fastifyPlugin<{ isDebug: boolean }>((fastify, { isDebug }) => {
+  fastify.decorate('config', getConfig(isDebug))
+})
+
 export type { Config }
-export default getConfig
+export default configPlugin

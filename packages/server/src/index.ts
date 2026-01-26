@@ -1,54 +1,40 @@
-import http from 'node:http'
 import process from 'node:process'
-import { debuglog } from 'node:util'
 
-import express from 'express'
+import Fastify from 'fastify'
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
 
-import createAuthRoutes from './authRoutes.js'
-import AuthService from './AuthService.js'
-import getConfig from './config.js'
 import { PORT } from './constants.js'
-import errorHandlers from './errorHandlers.js'
-import Mailer from './mailer.js'
-import MailNotifier from './MailNotifier.js'
-import RedisConnection from './redis.js'
-import SocketIOManager from './socketio/SocketIOManager.js'
-import StreamInfoHandler from './StreamInfoHandler.js'
+import errorHandler from './errorHandler.js'
+import authPlugin from './plugins/auth/index.js'
+import configPlugin from './plugins/config.js'
+import mailerPlugin from './plugins/mailer/index.js'
+import mailNotifierPlugin from './plugins/mailNotifier/index.js'
+import redisPlugin from './plugins/redis/index.js'
+import socketIOPlugin from './plugins/socketIO/index.js'
+import streamInfoPlugin from './plugins/streamInfo/index.js'
 
-const log = debuglog('listen-app')
+const isDebug = process.env.NODE_ENV !== 'production'
 
-const config = getConfig()
-const mailer = new Mailer(config)
-const redis = new RedisConnection(config.redisUrl)
-const authService = new AuthService(config, redis, mailer)
-const streamInfoHandler = new StreamInfoHandler(config.icecastUrl)
-const socketIOManager = new SocketIOManager(config, redis, streamInfoHandler, mailer)
-const mailNotifier = new MailNotifier(config, streamInfoHandler, redis, mailer)
-
-const app = express()
-app.use(express.urlencoded({ extended: true }))
-app.use(errorHandlers)
-app.use('/api/auth', createAuthRoutes(config, authService))
-app.use('/ic', streamInfoHandler.getRouter())
-const server = http.createServer(app)
-socketIOManager.start(server)
-
-async function shutdown() {
-  console.log('Received signal. Exiting...')
-  mailNotifier.clear()
-  server.close()
-  await redis.quit()
-  console.log('Graceful shutdown finished.')
-  // eslint-disable-next-line unicorn/no-process-exit
-  process.exit(0)
-}
-process.on('SIGINT', () => {
-  void shutdown()
-})
-process.on('SIGTERM', () => {
-  void shutdown()
+const fastify = Fastify({
+  disableRequestLogging: !isDebug,
+  logger: { level: isDebug ? 'debug' : 'info' },
 })
 
-server.listen(PORT, () => {
-  log(`Listening on port ${PORT}`)
-})
+fastify
+  .setValidatorCompiler(validatorCompiler)
+  .setSerializerCompiler(serializerCompiler)
+  .setErrorHandler(errorHandler)
+  .register(configPlugin, { isDebug })
+  .register(mailerPlugin)
+  .register(redisPlugin)
+  .register(streamInfoPlugin)
+  .register(socketIOPlugin)
+  .register(authPlugin)
+  .register(mailNotifierPlugin)
+  .listen({ port: PORT }, (err, address) => {
+    if (err) {
+      fastify.log.error(err)
+      process.exit(1)
+    }
+    fastify.log.info(`Listening on ${address}`)
+  })

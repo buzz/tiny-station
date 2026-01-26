@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_BASE_URL: string
+  readonly APP_BASE_URL: string
   readonly VITE_COOKIE_TOKEN: string
 }
 
