@@ -2,8 +2,7 @@ import type http from 'node:http'
 
 import jwt from 'jsonwebtoken'
 import { Server } from 'socket.io'
-import type Express from 'express'
-import type { ExtendedError, Socket as SocketIOSocket } from 'socket.io'
+import type { Socket as SocketIOSocket } from 'socket.io'
 
 import type { ClientEvents, ServerEvents } from '@listen-app/common'
 
@@ -14,7 +13,6 @@ import type StreamInfoHandler from '#StreamInfoHandler.js'
 
 import ChatManager from './ChatManager.js'
 import StreamInfoDispatcher from './StreamInfoDispatcher.js'
-import UserManager from './UserManager.js'
 import type AbstractHandler from './AbstractHandler.js'
 
 class SocketIOManager {
@@ -36,9 +34,7 @@ class SocketIOManager {
     this.streamInfoHandler = streamInfoHandler
     this.mailer = mailer
 
-    this.handlers = [StreamInfoDispatcher, ChatManager, UserManager].map(
-      (Handler) => new Handler(this.config, this)
-    )
+    this.handlers = [StreamInfoDispatcher, ChatManager].map((Handler) => new Handler(this))
   }
 
   start(httpServer: http.Server) {
@@ -52,9 +48,15 @@ class SocketIOManager {
 
       if (typeof token === 'string') {
         jwt.verify(token, this.config.jwtSecret, (err, decoded) => {
-          if (err === null) {
+          if (
+            err === null &&
+            decoded &&
+            typeof decoded === 'object' &&
+            'user' in decoded &&
+            decoded.user
+          ) {
             // Auth success
-            socket.data.user = decoded.user
+            socket.data.user = decoded.user as UserData
           }
           next()
         })

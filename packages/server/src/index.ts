@@ -4,6 +4,8 @@ import { debuglog } from 'node:util'
 
 import express from 'express'
 
+import createAuthRoutes from './authRoutes.js'
+import AuthService from './AuthService.js'
 import getConfig from './config.js'
 import { PORT } from './constants.js'
 import errorHandlers from './errorHandlers.js'
@@ -18,6 +20,7 @@ const log = debuglog('listen-app')
 const config = getConfig()
 const mailer = new Mailer(config)
 const redis = new RedisConnection(config.redisUrl)
+const authService = new AuthService(config, redis, mailer)
 const streamInfoHandler = new StreamInfoHandler(config.icecastUrl)
 const socketIOManager = new SocketIOManager(config, redis, streamInfoHandler, mailer)
 const mailNotifier = new MailNotifier(config, streamInfoHandler, redis, mailer)
@@ -25,6 +28,7 @@ const mailNotifier = new MailNotifier(config, streamInfoHandler, redis, mailer)
 const app = express()
 app.use(express.urlencoded({ extended: true }))
 app.use(errorHandlers)
+app.use('/api/auth', createAuthRoutes(config, authService))
 app.use('/ic', streamInfoHandler.getRouter())
 const server = http.createServer(app)
 socketIOManager.start(server)

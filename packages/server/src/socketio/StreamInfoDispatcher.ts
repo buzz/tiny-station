@@ -1,7 +1,5 @@
 import type { StreamInfo } from '@listen-app/common'
 
-import type { Config } from '#config.js'
-
 import AbstractHandler from './AbstractHandler.js'
 import type { Socket } from './SocketIOManager.js'
 import type SocketIOManager from './SocketIOManager.js'
@@ -9,8 +7,8 @@ import type SocketIOManager from './SocketIOManager.js'
 const STREAM_INFO_ROOM = 'streamInfo'
 
 class StreamInfoDispatcher extends AbstractHandler {
-  constructor(config: Config, manager: SocketIOManager) {
-    super(config, manager)
+  constructor(manager: SocketIOManager) {
+    super(manager)
 
     this.getStreamInfoHandler().on('update', (info: StreamInfo | null) => {
       this.onInfoUpdate(info)

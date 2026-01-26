@@ -1,4 +1,3 @@
-import type { Config } from '#config.js'
 import type Mailer from '#mailer.js'
 import type RedisConnection from '#redis.js'
 import type StreamInfoHandler from '#StreamInfoHandler.js'
@@ -7,27 +6,13 @@ import type { Socket, SocketIOServer } from './SocketIOManager.js'
 import type SocketIOManager from './SocketIOManager.js'
 
 abstract class AbstractHandler {
-  private config: Config
   private manager: SocketIOManager
 
-  constructor(config: Config, manager: SocketIOManager) {
-    this.config = config
+  constructor(manager: SocketIOManager) {
     this.manager = manager
   }
 
   abstract handleClientConnect(socket: Socket): Promise<void>
-
-  auth(socket: Socket): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.manager.passportAuthenticate(socket, (err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-    })
-  }
 
   // TODO: unused?
   // getClientsNum(room) {
