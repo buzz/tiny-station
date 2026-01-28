@@ -49,7 +49,7 @@ class AuthService {
     try {
       await this.mailer.send(
         email,
-        'Listen app - Confirmation Mail',
+        'Listen App - Confirmation Mail',
         confirmationText(token, this.config.baseUrl)
       )
     } catch (error) {

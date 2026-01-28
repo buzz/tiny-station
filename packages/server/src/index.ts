@@ -5,7 +5,7 @@ import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod
 
 import { PORT } from './constants.js'
 import errorHandler from './errorHandler.js'
-import authPlugin from './plugins/auth/index.js'
+import apiPlugin from './plugins/api/index.js'
 import configPlugin from './plugins/config.js'
 import mailerPlugin from './plugins/mailer/index.js'
 import mailNotifierPlugin from './plugins/mailNotifier/index.js'
@@ -29,7 +29,7 @@ fastify
   .register(redisPlugin)
   .register(streamInfoPlugin)
   .register(socketIOPlugin)
-  .register(authPlugin)
+  .register(apiPlugin)
   .register(mailNotifierPlugin)
   .listen({ port: PORT }, (err, address) => {
     if (err) {

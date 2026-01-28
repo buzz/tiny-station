@@ -12,7 +12,7 @@ function setPageTitle(streamName?: string) {
 const StreamInfoContext = createContext<StreamInfoContextValue | undefined>(undefined)
 
 function StreamInfoProvider({ children }: PropsWithChildren) {
-  const { socket } = useSocketIO()
+  const socket = useSocketIO()
   const [listeners, setListeners] = useState<number | undefined>()
   const [listenUrl, setListenUrl] = useState<string | undefined>()
   const [streamStart, setStreamStart] = useState<Date | undefined>()

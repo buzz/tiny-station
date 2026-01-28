@@ -16,44 +16,46 @@ function hasAuthToken(auth: unknown): auth is AuthWithToken {
 }
 
 const socketIOPlugin = fastifyPlugin((fastify) => {
-  const handlers: AbstractHandler[] = [
-    new StreamInfoDispatcher(fastify.io, fastify.streamInfoHandler),
-    new ChatManager(fastify.io, fastify.redis),
-  ]
+  const io: SocketIOServer = new Server(fastify.server, { serveClient: false })
 
   fastify
-    .decorate('io', new Server(fastify.server, { serveClient: false }))
-
+    .decorate('io', io)
     .addHook('preClose', () => {
-      fastify.io.local.disconnectSockets(true)
+      io.local.disconnectSockets(true)
     })
-
     .addHook('onClose', async () => {
-      await fastify.io.close()
+      await io.close()
     })
-
     .after(() => {
+      const handlers: AbstractHandler[] = [
+        new StreamInfoDispatcher(fastify.io, fastify.streamInfoHandler),
+        new ChatManager(fastify.io, fastify.redis),
+      ]
+
       // JWT auth
-      fastify.io.use((socket, next) => {
+      io.use((socket, next) => {
         const { auth } = socket.handshake
         if (hasAuthToken(auth)) {
+          console.log('socketIO JWT auth')
           verifyJwt(auth.token, fastify.config.jwtSecret)
             .then((userData) => {
+              console.log('socketIO JWT auth: success', userData)
               socket.data.user = userData
               next()
             })
-            .catch(() => {
+            .catch((error) => {
+              console.log('socketIO JWT auth: fail', error)
               // Token verification failed
               next()
             })
         } else {
+          console.log('socketIO JWT auth: no token')
           // No token provided -> Guest
           next()
         }
       })
-
       // Pass client connection to handlers
-      fastify.io.on('connection', (socket: Socket) => {
+      io.on('connection', (socket: Socket) => {
         fastify.log.debug('SocketIO client connected')
         for (const handler of handlers) {
           void handler.handleClientConnect(socket)

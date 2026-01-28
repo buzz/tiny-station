@@ -3,9 +3,9 @@ import { use, useEffect } from 'react'
 import type { ServerEvents } from '@listen-app/common'
 
 import SocketIOContext from '#contexts/SocketIOContext'
-import type { SocketIOContextValue } from '#contexts/SocketIOContext'
+import type { Socket } from '#contexts/SocketIOContext'
 
-function useSocketIO(): SocketIOContextValue {
+function useSocketIO(): Socket {
   const ctx = use(SocketIOContext)
   if (!ctx) {
     throw new Error('useSocketIO must be used within <SocketIOProvider>')
@@ -14,7 +14,7 @@ function useSocketIO(): SocketIOContextValue {
 }
 
 function useSocketEvent<T extends string>(event: T, handler: ServerEvents[T]) {
-  const { socket } = useSocketIO()
+  const socket = useSocketIO()
 
   useEffect(() => {
     socket.on(event, handler)

@@ -1,7 +1,10 @@
-import { useCallback } from 'react'
+import { useEffect, useRef } from 'react'
+
+import { errorResponseSchema } from '@listen-app/common'
+import type { VerifyEmailBody } from '@listen-app/common'
 
 import useModal from '#hooks/useModal'
-import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
+import { callApi } from '#utils'
 
 function getVerificationToken(): string | undefined {
   const token = new URL(globalThis.location.href).searchParams.get('token')
@@ -10,31 +13,37 @@ function getVerificationToken(): string | undefined {
 
 function useVerificationTokenCheck() {
   const { pushModal } = useModal()
-  const { socket } = useSocketIO()
+  const verificationSentRef = useRef(false)
 
-  const handleConnect = useCallback(() => {
+  useEffect(() => {
+    // Prevent double sending
+    if (verificationSentRef.current) {
+      return
+    }
+
     const token = getVerificationToken()
     if (token) {
-      socket.emit('user:verify', token)
+      verificationSentRef.current = true
+      void (async () => {
+        const verifyData: VerifyEmailBody = { token }
+        const response = await callApi('/api/auth/verify', { body: verifyData })
+
+        if (response.status === 200) {
+          pushModal({
+            action: () => {
+              globalThis.location.assign(import.meta.env.VITE_BASE_URL)
+            },
+            content: 'Email was verified. You can login now.',
+          })
+        } else if (response.status === 400) {
+          const data = errorResponseSchema.parse(await response.json())
+          pushModal({ content: `Email verification failed: ${data.error}` })
+        } else {
+          pushModal({ content: 'Email verification failed.' })
+        }
+      })()
     }
-  }, [socket])
-
-  const handleUserVerifySuccess = useCallback(() => {
-    pushModal({
-      action: () => {
-        globalThis.location.assign(import.meta.env.APP_BASE_URL)
-      },
-      content: 'Email was verified. You can login now.',
-    })
   }, [pushModal])
-
-  const handleUserVerifyFail = useCallback(() => {
-    pushModal({ content: 'Email verification failed.' })
-  }, [pushModal])
-
-  useSocketEvent('connect', handleConnect)
-  useSocketEvent('user:verify-success', handleUserVerifySuccess)
-  useSocketEvent('user:verify-fail', handleUserVerifyFail)
 }
 
 export default useVerificationTokenCheck

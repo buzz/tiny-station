@@ -34,7 +34,7 @@ function makeAuthHandler(jwtSecret: string): onRequestAsyncHookHandler {
   }
 }
 
-const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
+const apiRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
   fastify,
   { authService }
 ) => {
@@ -43,7 +43,7 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
   const authHandler = makeAuthHandler(fastify.config.jwtSecret)
 
   fastify.post(
-    '/register',
+    '/auth/register',
     {
       schema: {
         body: registerBodySchema,
@@ -70,7 +70,7 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
 
   fastify.route({
     method: 'POST',
-    url: '/login',
+    url: '/auth/login',
     schema: {
       body: loginBodySchema,
       response: {
@@ -92,7 +92,7 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
   })
 
   fastify.post(
-    '/verify',
+    '/auth/verify',
     {
       schema: {
         body: verifyEmailBodySchema,
@@ -117,7 +117,7 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
   )
 
   fastify.get(
-    '/verify-jwt',
+    '/auth/verify-jwt',
     {
       onRequest: [authHandler],
       schema: {
@@ -127,10 +127,14 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
         },
       },
     },
-    withUser(({ user }) => ({
-      nickname: user.nickname,
-      email: user.id,
-    }))
+    withUser(async ({ user }) => {
+      const subscribed = await fastify.redis.isSubscribed(user._id)
+      return {
+        email: user._id,
+        nickname: user.nickname,
+        subscribed,
+      }
+    })
   )
 
   fastify.delete(
@@ -147,9 +151,8 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
     },
     withUser(async ({ user }, reply) => {
       try {
-        await authService.deleteUser(user.id)
-        await reply.status(204)
-        return { message: 'Successfully deleted account' }
+        await authService.deleteUser(user._id)
+        await reply.status(204).send({ message: 'Successfully deleted account' })
       } catch {
         await reply.status(500).send({ error: 'Failed to delete account' })
       }
@@ -173,7 +176,7 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
       const { subscribed } = body
 
       try {
-        await authService.updateNotifications(user.id, subscribed)
+        await authService.updateNotifications(user._id, subscribed)
         await reply.status(200).send({ message: 'Notification preferences updated', subscribed })
       } catch {
         await reply.status(500).send({ error: 'Failed to update notification preferences' })
@@ -182,4 +185,4 @@ const authRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
   )
 }
 
-export default authRoutes
+export default apiRoutes

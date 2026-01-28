@@ -24,7 +24,7 @@ function Register() {
   const submit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
     if (filledCompletely) {
-      register(nickname, email, password, passwordConfirm, notifChecked)
+      register({ nickname, email, password, passwordConfirm, notif: notifChecked })
     }
   }
 

@@ -37,6 +37,7 @@ const loginResponseSchema = z.object({
 const verifyJwtResponseSchema = z.object({
   nickname: z.string(),
   email: z.string(),
+  subscribed: z.boolean(),
 })
 
 const verifyEmailBodySchema = z.object({

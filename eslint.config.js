@@ -125,7 +125,7 @@ const config = defineConfig(
       'no-underscore-dangle': [
         'error',
         {
-          allow: ['__dirname'],
+          allow: ['__dirname', '_id'],
           allowAfterThis: true, // For private class properties
         },
       ],

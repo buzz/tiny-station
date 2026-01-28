@@ -1,6 +1,8 @@
 import { hasZodFastifySchemaValidationErrors } from 'fastify-type-provider-zod'
 import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
+import { UnauthorizedError } from '#utils.js'
+
 function errorHandler(
   this: FastifyInstance,
   error: FastifyError,
@@ -16,24 +18,26 @@ function errorHandler(
     })
   }
 
-  switch (error.code) {
-    case 'ENOTFOUND': {
-      statusCode = 530
-      break
-    }
-    case 'ETIMEDOUT': {
-      statusCode = 504
-      break
+  if (error.statusCode) {
+    statusCode = error.statusCode
+  } else {
+    switch (error.code) {
+      case 'ENOTFOUND': {
+        statusCode = 530
+        break
+      }
+      case 'ETIMEDOUT': {
+        statusCode = 504
+        break
+      }
     }
   }
 
-  const message = error.message || 'Internal Server Error'
-
-  if (this.config.isDebug) {
+  if (!(error instanceof UnauthorizedError)) {
     this.log.error(error)
   }
 
-  return reply.status(statusCode).send({ error: message })
+  return reply.status(statusCode).send({ error: error.message || 'Internal Server Error' })
 }
 
 export default errorHandler

@@ -46,7 +46,7 @@ function getConfig(isDebug: boolean): Config {
     path: [path.join(baseDir, '.env.local'), path.join(baseDir, '.env')],
   })
 
-  const baseUrl = getEnvString('APP_BASE_URL')
+  const baseUrl = getEnvString('VITE_BASE_URL')
   const icecastUrl = getEnvString('ICECAST_URL')
   const redisUrl = getEnvString('REDIS_URL')
   const jwtSecret = getEnvString('JWT_SECRET')
