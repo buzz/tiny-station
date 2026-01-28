@@ -8,4 +8,10 @@
 .dockerignore
 LICENSE.txt
 Dockerfile
-packages/frontend/dist
+packages/*/dist
+openspec
+.opencode
+TODO.txt
+.vscode
+docs
+AGENTS.md
