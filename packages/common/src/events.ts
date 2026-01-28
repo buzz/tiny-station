@@ -13,6 +13,7 @@ interface ServerEvents extends EventsMap {
 
 interface ClientEvents extends EventsMap {
   'chat:message': (text: string) => Promise<void>
+  'stream:request': () => void
 }
 
 export type { ClientEvents, ServerEvents }
