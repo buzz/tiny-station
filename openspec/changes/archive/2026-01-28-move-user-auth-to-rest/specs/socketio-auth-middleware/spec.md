@@ -1,6 +1,6 @@
 # Socket.IO Auth Middleware
 
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: JWT Verification at Socket.IO Handshake
 
