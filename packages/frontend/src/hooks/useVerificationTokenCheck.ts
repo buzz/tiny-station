@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import useModal from '#hooks/useModal'
-import useSocketIo, { useSocketEvent } from '#hooks/useSocketIo'
+import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 
 function getVerificationToken(): string | undefined {
   const token = new URL(globalThis.location.href).searchParams.get('token')
@@ -10,7 +10,7 @@ function getVerificationToken(): string | undefined {
 
 function useVerificationTokenCheck() {
   const { pushModal } = useModal()
-  const { socket } = useSocketIo()
+  const { socket } = useSocketIO()
 
   const handleConnect = useCallback(() => {
     const token = getVerificationToken()

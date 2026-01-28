@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react'
 
 import type { StreamInfo } from '@listen-app/common'
 
-import useSocketIo, { useSocketEvent } from '#hooks/useSocketIo'
+import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 
 function setPageTitle(streamName?: string) {
   globalThis.document.title = streamName ?? 'Stream offline'
@@ -12,7 +12,7 @@ function setPageTitle(streamName?: string) {
 const StreamInfoContext = createContext<StreamInfoContextValue | undefined>(undefined)
 
 function StreamInfoProvider({ children }: PropsWithChildren) {
-  const { socket } = useSocketIo()
+  const { socket } = useSocketIO()
   const [listeners, setListeners] = useState<number | undefined>()
   const [listenUrl, setListenUrl] = useState<string | undefined>()
   const [streamStart, setStreamStart] = useState<Date | undefined>()

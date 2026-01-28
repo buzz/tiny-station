@@ -5,16 +5,16 @@ import type { ServerEvents } from '@listen-app/common'
 import SocketIOContext from '#contexts/SocketIOContext'
 import type { SocketIOContextValue } from '#contexts/SocketIOContext'
 
-function useSocketIo(): SocketIOContextValue {
+function useSocketIO(): SocketIOContextValue {
   const ctx = use(SocketIOContext)
   if (!ctx) {
-    throw new Error('useSocketIo must be used within <SocketIOProvider>')
+    throw new Error('useSocketIO must be used within <SocketIOProvider>')
   }
   return ctx
 }
 
 function useSocketEvent<T extends string>(event: T, handler: ServerEvents[T]) {
-  const { socket } = useSocketIo()
+  const { socket } = useSocketIO()
 
   useEffect(() => {
     socket.on(event, handler)
@@ -32,4 +32,4 @@ function useSocketEvent<T extends string>(event: T, handler: ServerEvents[T]) {
 }
 
 export { useSocketEvent }
-export default useSocketIo
+export default useSocketIO

@@ -2,7 +2,7 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { io } from 'socket.io-client'
 import type { PropsWithChildren } from 'react'
-import type { Socket as SocketIoSocket } from 'socket.io-client'
+import type { Socket as SocketIOSocket } from 'socket.io-client'
 
 import type { ClientEvents, ServerEvents } from '@listen-app/common'
 
@@ -35,7 +35,7 @@ function SocketIOProvider({ children }: PropsWithChildren) {
   return <SocketIOContext value={value}>{children}</SocketIOContext>
 }
 
-type Socket = SocketIoSocket<ServerEvents, ClientEvents>
+type Socket = SocketIOSocket<ServerEvents, ClientEvents>
 
 interface SocketIOContextValue {
   socket: Socket

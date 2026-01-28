@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 
 import { COOKIE_NICKNAME } from '#constants'
 import useModal from '#hooks/useModal'
-import useSocketIo, { useSocketEvent } from '#hooks/useSocketIo'
+import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 
 const UserContext = createContext<UserContextValue | undefined>(undefined)
 
@@ -14,7 +14,7 @@ function handleUserDeleteSuccess() {
 
 function UserProvider({ children }: PropsWithChildren) {
   const { pushModal } = useModal()
-  const { socket } = useSocketIo()
+  const { socket } = useSocketIO()
 
   const [loginState, setLoginState] = useState<LoginState>('loggedOut')
   const [nicknameFromSocket, setNicknameFromSocket] = useState<string | undefined>()

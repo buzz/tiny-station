@@ -3,12 +3,12 @@ import type { PropsWithChildren } from 'react'
 
 import type { ChatMessage } from '@listen-app/common'
 
-import useSocketIo, { useSocketEvent } from '#hooks/useSocketIo'
+import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 
 const ChatContext = createContext<ChatContextValue | undefined>(undefined)
 
 function ChatProvider({ children }: PropsWithChildren) {
-  const { socket } = useSocketIo()
+  const { socket } = useSocketIO()
   const [messages, setMessages] = useState<Messages>({})
 
   const handleChatMessage = useCallback(
