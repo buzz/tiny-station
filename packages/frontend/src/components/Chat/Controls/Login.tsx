@@ -9,7 +9,7 @@ import useUser from '#hooks/useUser'
 import style from './chatControls.module.css'
 
 function Login() {
-  const { loginState, login, nickname, showRegisterForm } = useUser()
+  const { loginState, login, nickname, showRegisterForm, showForgotPasswordForm } = useUser()
 
   const [loginNickname, setLoginNickname] = useState(nickname)
   const [password, setPassword] = useState('')
@@ -69,6 +69,16 @@ function Login() {
           New account
         </button>
       </div>
+      <button
+        className={style.forgotPasswordLink}
+        disabled={inputsDisabled}
+        type="button"
+        onClick={() => {
+          showForgotPasswordForm()
+        }}
+      >
+        Forgot password?
+      </button>
     </form>
   )
 }

@@ -1,9 +1,11 @@
 export type {
   ErrorResponse,
+  ForgotPasswordBody,
   LoginBody,
   LoginResponse,
   MessageResponse,
   RegisterBody,
+  ResetPasswordBody,
   UpdateNotificationsBody,
   UpdateNotificationsResponse,
   VerifyEmailBody,
@@ -11,10 +13,12 @@ export type {
 } from './apiSchemas.js'
 export {
   errorResponseSchema,
+  forgotPasswordBodySchema,
   loginBodySchema,
   loginResponseSchema,
   messageResponseSchema,
   registerBodySchema,
+  resetPasswordBodySchema,
   updateNotificationsBodySchema,
   updateNotificationsResponseSchema,
   verifyEmailBodySchema,

@@ -110,3 +110,27 @@
     }
   }
 }
+
+.forgotPasswordLink {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.forgotPasswordInfo {
+  margin-bottom: 1rem;
+  text-align: center;
+}

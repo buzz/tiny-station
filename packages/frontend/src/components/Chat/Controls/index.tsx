@@ -1,11 +1,16 @@
+import usePasswordResetTokenCheck from '#hooks/usePasswordResetTokenCheck'
 import useUser from '#hooks/useUser'
 
+import ForgotPassword from './ForgotPassword'
 import Login from './Login'
 import MessageInput from './MessageInput'
 import Register from './Register'
+import ResetPassword from './ResetPassword'
 
 function Controls() {
   const { loginState } = useUser()
+
+  usePasswordResetTokenCheck()
 
   if (loginState === 'loggedIn') {
     return <MessageInput />
@@ -17,6 +22,14 @@ function Controls() {
 
   if (['registerForm', 'registering'].includes(loginState)) {
     return <Register />
+  }
+
+  if (['forgotPassword'].includes(loginState)) {
+    return <ForgotPassword />
+  }
+
+  if (['resetPassword'].includes(loginState)) {
+    return <ResetPassword />
   }
 
   return null

@@ -9,7 +9,13 @@ import {
   updateNotificationsResponseSchema,
   verifyJwtResponseSchema,
 } from '@listen-app/common'
-import type { LoginBody, RegisterBody, UpdateNotificationsBody } from '@listen-app/common'
+import type {
+  ForgotPasswordBody,
+  LoginBody,
+  RegisterBody,
+  ResetPasswordBody,
+  UpdateNotificationsBody,
+} from '@listen-app/common'
 
 import { COOKIE_NICKNAME } from '#constants'
 import useModal from '#hooks/useModal'
@@ -149,6 +155,52 @@ function UserProvider({ children }: PropsWithChildren) {
     [pushModal]
   )
 
+  const requestPasswordReset = useCallback(
+    async (email: string) => {
+      const resetData: ForgotPasswordBody = { email }
+      const response = await callApi('/api/auth/forgot-password', { body: resetData })
+
+      if (response.status === 200) {
+        const data = messageResponseSchema.parse(await response.json())
+        pushModal({ content: data.message })
+      } else if (response.status === 400) {
+        const data = errorResponseSchema.parse(await response.json())
+        pushModal({ content: data.error })
+      } else {
+        pushModal({ content: 'Failed to process request' })
+      }
+    },
+    [pushModal]
+  )
+
+  const resetPassword = useCallback(
+    async (token: string, password: string, passwordConfirm: string) => {
+      if (password !== passwordConfirm) {
+        pushModal({ content: 'Password confirmation does not match' })
+        return
+      }
+
+      const resetData: ResetPasswordBody = { token, password, passwordConfirm }
+      const response = await callApi('/api/auth/reset-password', { body: resetData })
+
+      if (response.status === 200) {
+        const data = messageResponseSchema.parse(await response.json())
+        pushModal({
+          action: () => {
+            globalThis.location.assign(import.meta.env.VITE_BASE_URL)
+          },
+          content: data.message,
+        })
+      } else if (response.status === 400) {
+        const data = errorResponseSchema.parse(await response.json())
+        pushModal({ content: data.error })
+      } else {
+        pushModal({ content: 'Failed to reset password' })
+      }
+    },
+    [pushModal]
+  )
+
   const handleConnect = useCallback(() => {
     const token = getCookie(cookies, import.meta.env.VITE_COOKIE_TOKEN)
     if (typeof token === 'string') {
@@ -193,11 +245,19 @@ function UserProvider({ children }: PropsWithChildren) {
         setLoginState('registering')
         await registerUser(registrationData)
       },
+      requestPasswordReset,
+      resetPassword,
+      showForgotPasswordForm: () => {
+        setLoginState('forgotPassword')
+      },
       showLoginForm: () => {
         setLoginState('loggedOut')
       },
       showRegisterForm: () => {
         setLoginState('registerForm')
+      },
+      showResetPasswordForm: () => {
+        setLoginState('resetPassword')
       },
       updateNotif: async (newNotif: boolean) => {
         const token = getCookie(cookies, import.meta.env.VITE_COOKIE_TOKEN)
@@ -215,6 +275,8 @@ function UserProvider({ children }: PropsWithChildren) {
       deleteUserAccount,
       loginUser,
       registerUser,
+      requestPasswordReset,
+      resetPassword,
       updateUserNotif,
     ]
   )
@@ -222,7 +284,14 @@ function UserProvider({ children }: PropsWithChildren) {
   return <UserContext value={value}>{children}</UserContext>
 }
 
-type LoginState = 'loggedIn' | 'loggedOut' | 'loggingIn' | 'registering' | 'registerForm'
+type LoginState =
+  | 'loggedIn'
+  | 'loggedOut'
+  | 'loggingIn'
+  | 'registering'
+  | 'registerForm'
+  | 'forgotPassword'
+  | 'resetPassword'
 
 interface UserContextValue {
   loginState: LoginState
@@ -232,8 +301,12 @@ interface UserContextValue {
   login: (nickname: string, password: string) => void
   logout: () => void
   register: (registrationData: RegisterBody) => void
+  requestPasswordReset: (email: string) => void
+  resetPassword: (token: string, password: string, passwordConfirm: string) => void
+  showForgotPasswordForm: () => void
   showLoginForm: () => void
   showRegisterForm: () => void
+  showResetPasswordForm: () => void
   updateNotif: (notif: boolean) => void
 }
 

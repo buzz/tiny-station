@@ -52,6 +52,21 @@ const updateNotificationsResponseSchema = messageResponseSchema.extend({
   subscribed: z.boolean(),
 })
 
+const forgotPasswordBodySchema = z.object({
+  email: z.email(),
+})
+
+const resetPasswordBodySchema = z
+  .object({
+    token: z.string(),
+    password: z.string().min(8),
+    passwordConfirm: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: 'Password confirmation does not match',
+    path: ['passwordConfirm'],
+  })
+
 type ErrorResponse = z.infer<typeof errorResponseSchema>
 type MessageResponse = z.infer<typeof messageResponseSchema>
 
@@ -62,13 +77,17 @@ type VerifyJwtResponse = z.infer<typeof verifyJwtResponseSchema>
 type VerifyEmailBody = z.infer<typeof verifyEmailBodySchema>
 type UpdateNotificationsBody = z.infer<typeof updateNotificationsBodySchema>
 type UpdateNotificationsResponse = z.infer<typeof updateNotificationsResponseSchema>
+type ForgotPasswordBody = z.infer<typeof forgotPasswordBodySchema>
+type ResetPasswordBody = z.infer<typeof resetPasswordBodySchema>
 
 export type {
   ErrorResponse,
+  ForgotPasswordBody,
   LoginBody,
   LoginResponse,
   MessageResponse,
   RegisterBody,
+  ResetPasswordBody,
   UpdateNotificationsBody,
   UpdateNotificationsResponse,
   VerifyEmailBody,
@@ -77,10 +96,12 @@ export type {
 
 export {
   errorResponseSchema,
+  forgotPasswordBodySchema,
   loginBodySchema,
   loginResponseSchema,
   messageResponseSchema,
   registerBodySchema,
+  resetPasswordBodySchema,
   updateNotificationsBodySchema,
   updateNotificationsResponseSchema,
   verifyEmailBodySchema,

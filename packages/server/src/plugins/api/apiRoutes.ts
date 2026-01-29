@@ -3,10 +3,12 @@ import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod'
 
 import {
   errorResponseSchema,
+  forgotPasswordBodySchema,
   loginBodySchema,
   loginResponseSchema,
   messageResponseSchema,
   registerBodySchema,
+  resetPasswordBodySchema,
   updateNotificationsBodySchema,
   updateNotificationsResponseSchema,
   verifyEmailBodySchema,
@@ -182,6 +184,57 @@ const apiRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
         await reply.status(500).send({ error: 'Failed to update notification preferences' })
       }
     })
+  )
+
+  fastify.post(
+    '/auth/forgot-password',
+    {
+      schema: {
+        body: forgotPasswordBodySchema,
+        response: {
+          200: messageResponseSchema,
+          400: errorResponseSchema,
+          429: errorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { email } = request.body
+
+      try {
+        await authService.requestPasswordReset(email)
+        const message =
+          'If an account with that email exists, a password reset link has been sent. Check your inbox.'
+        await reply.status(200).send({ message })
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to process request'
+        await reply.status(400).send({ error: message })
+      }
+    }
+  )
+
+  fastify.post(
+    '/auth/reset-password',
+    {
+      schema: {
+        body: resetPasswordBodySchema,
+        response: {
+          200: messageResponseSchema,
+          400: errorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { token, password } = request.body
+
+      try {
+        await authService.resetPassword(token, password)
+        await reply.status(200).send({ message: 'Password has been reset successfully' })
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to reset password'
+        await reply.status(400).send({ error: message })
+      }
+    }
   )
 }
 

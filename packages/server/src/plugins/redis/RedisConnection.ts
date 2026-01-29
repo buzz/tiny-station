@@ -13,6 +13,9 @@ const VERIFIED_KEY = 'ver'
 const getNicknameKey = (nickname: string) => `nickname:${nickname}`
 const getUserKey = (email: string) => `user:${email}`
 const getTokenKey = (token: string) => `token:${token}`
+const getPasswordResetKey = (token: string) => `pwdreset:${token}`
+
+const hashPassword = (password: string) => bcrypt.hash(password, 10)
 
 class RedisConnection {
   private redis: Redis
@@ -64,7 +67,7 @@ class RedisConnection {
   async addUser(email: string, nickname: string, password: string, token: string) {
     const userKey = getUserKey(email)
     const tokenKey = getTokenKey(token)
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await hashPassword(password)
     const oneHour = 60 * 60
 
     return this.redis
@@ -142,6 +145,28 @@ class RedisConnection {
       // Skip
     }
     return false
+  }
+
+  async setPasswordResetToken(email: string, token: string) {
+    const thirtyMinutes = 30 * 60
+    const key = getPasswordResetKey(token)
+    return this.redis.set(key, email, 'EX', thirtyMinutes)
+  }
+
+  async getPasswordResetEmail(token: string) {
+    const key = getPasswordResetKey(token)
+    return await this.redis.get(key)
+  }
+
+  async deletePasswordResetToken(token: string) {
+    const key = getPasswordResetKey(token)
+    return this.redis.del(key)
+  }
+
+  async updateUserPassword(email: string, password: string) {
+    const userKey = getUserKey(email)
+    const hashedPassword = await hashPassword(password)
+    return this.redis.hset(userKey, 'pwd', hashedPassword)
   }
 
   async isVerified(email: string) {

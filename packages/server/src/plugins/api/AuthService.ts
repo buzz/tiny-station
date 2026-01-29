@@ -13,6 +13,16 @@ ${baseUrl}?token=${token}
 If it wasn't you who registered, please just ignore this message.
 `
 
+const passwordResetText = (token: string, baseUrl: string) => `Hey there!
+
+Open this link to reset your password:
+${baseUrl}?resetToken=${token}
+
+This link will expire in 30 minutes.
+
+If it wasn't you who requested this, please just ignore this message.
+`
+
 class AuthService {
   constructor(
     private config: Config,
@@ -52,8 +62,8 @@ class AuthService {
         'Listen App - Confirmation Mail',
         confirmationText(token, this.config.baseUrl)
       )
-    } catch (error) {
-      console.error('Failed to send mail:', error)
+    } catch {
+      console.error('Failed to send mail:')
       await this.redis.deleteUser(email)
       await this.redis.deleteToken(token)
       await this.redis.unsubscribe(email)
@@ -96,6 +106,53 @@ class AuthService {
     this.log.debug(`updateNotifications: email=${email} subscribed=${subscribed}`)
 
     await (subscribed ? this.redis.subscribe(email) : this.redis.unsubscribe(email))
+  }
+
+  async requestPasswordReset(email: string) {
+    this.log.info(`Password reset request: email=${email}`)
+
+    const user = await this.redis.findUser(email)
+
+    if (!user?.ver) {
+      return
+    }
+
+    const token = AuthService.generateVerificationToken()
+
+    try {
+      await this.redis.setPasswordResetToken(email, token)
+    } catch {
+      throw new TypeError('Failed to process password reset request.')
+    }
+
+    try {
+      await this.mailer.send(
+        email,
+        'Listen App - Password Reset',
+        passwordResetText(token, this.config.baseUrl)
+      )
+    } catch {
+      console.error('Failed to send password reset email:')
+      await this.redis.deletePasswordResetToken(token)
+      throw new Error('Failed to send password reset email. Try again later…')
+    }
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    this.log.debug(`Password reset: token=${token}`)
+
+    const email = await this.redis.getPasswordResetEmail(token)
+
+    if (!email) {
+      throw new Error('Invalid or expired reset token.')
+    }
+
+    try {
+      await this.redis.updateUserPassword(email, newPassword)
+      await this.redis.deletePasswordResetToken(token)
+    } catch {
+      throw new TypeError('Failed to reset password.')
+    }
   }
 
   private static generateVerificationToken() {
