@@ -1,14 +1,17 @@
 <!-- OPENSPEC:START -->
+
 # OpenSpec Instructions
 
 These instructions are for AI assistants working in this project.
 
 Always open `@/openspec/AGENTS.md` when the request:
+
 - Mentions planning or proposals (words like proposal, spec, change, plan)
 - Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
 - Sounds ambiguous and you need the authoritative spec before coding
 
 Use `@/openspec/AGENTS.md` to learn:
+
 - How to create and apply change proposals
 - Spec format and conventions
 - Project structure and guidelines
@@ -27,6 +30,10 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - Format: `pnpm format`
 - Format (only check): `pnpm format --check`
 - Type check: `pnpm ts:check`
+- Test (all packages): `pnpm run test`
+- Test (common): `pnpm run test --project @listen-app/common`
+- Test (frontend): `pnpm run test --project @listen-app/frontend`
+- Test (server): `pnpm run test --project @listen-app/server`
 
 ## Workspaces
 

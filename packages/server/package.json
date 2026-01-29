@@ -11,7 +11,11 @@
   },
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec node dist/index.js",
-    "start": "NODE_ENV=production node dist/index.js"
+    "start": "NODE_ENV=production node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@fastify/error": "^4.2.0",

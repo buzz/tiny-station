@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext"
   },
-  "include": ["eslint.config.js"],
+  "include": ["eslint.config.js", "vitest.config.ts"],
   "files": [],
   "references": [
     { "path": "./packages/common" },

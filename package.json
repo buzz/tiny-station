@@ -31,6 +31,8 @@
     "server:dev": "pnpm run --filter server dev",
     "server:start": "pnpm run --filter server start",
     "start": "pnpm run server:start",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "ts:check": "tsc --build --emitDeclarationOnly",
     "ts:clean": "tsc --build --clean",
     "ts:dev": "tsc --build --watch"
@@ -50,8 +52,11 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^62.0.0",
     "globals": "^17.0.0",
+    "jsdom": "^27.4.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.53.1"
+    "typescript-eslint": "^8.53.1",
+    "vite-tsconfig-paths": "^6.0.5",
+    "vitest": "^4.0.18"
   }
 }

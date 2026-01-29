@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
@@ -27,12 +29,12 @@
   },
   "devDependencies": {
     "@listen-app/common": "workspace:*",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/linkify-it": "^5.0.0",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@types/react-modal": "^3.16.3",
-    "@vitejs/plugin-react-swc": "^4.2.2",
-    "vite": "^7.3.1",
-    "vite-tsconfig-paths": "^6.0.5"
+    "@vitejs/plugin-react-swc": "^4.2.2"
   }
 }
