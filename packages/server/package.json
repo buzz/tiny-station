@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fastify/error": "^4.2.0",
+    "@fastify/formbody": "^8.0.2",
     "@listen-app/common": "workspace:*",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",

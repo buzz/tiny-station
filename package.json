@@ -27,7 +27,7 @@
     "format": "prettier --write packages",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "server:build": "pnpm --filter server exec tsc --build",
+    "server:build": "tsc --build",
     "server:dev": "pnpm run --filter server dev",
     "server:start": "pnpm run --filter server start",
     "start": "pnpm run server:start",

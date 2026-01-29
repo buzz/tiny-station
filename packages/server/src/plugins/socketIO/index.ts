@@ -12,7 +12,7 @@ import StreamInfoDispatcher from './StreamInfoDispatcher.js'
 import type AbstractHandler from './AbstractHandler.js'
 
 function hasAuthToken(auth: unknown): auth is AuthWithToken {
-  return isObject(auth) && auth.token === 'string' && auth.token.length > 0
+  return isObject(auth) && typeof auth.token === 'string' && auth.token.length > 0
 }
 
 const socketIOPlugin = fastifyPlugin((fastify) => {
@@ -36,20 +36,16 @@ const socketIOPlugin = fastifyPlugin((fastify) => {
       io.use((socket, next) => {
         const { auth } = socket.handshake
         if (hasAuthToken(auth)) {
-          console.log('socketIO JWT auth')
           verifyJwt(auth.token, fastify.config.jwtSecret)
             .then((userData) => {
-              console.log('socketIO JWT auth: success', userData)
               socket.data.user = userData
               next()
             })
-            .catch((error) => {
-              console.log('socketIO JWT auth: fail', error)
+            .catch(() => {
               // Token verification failed
               next()
             })
         } else {
-          console.log('socketIO JWT auth: no token')
           // No token provided -> Guest
           next()
         }

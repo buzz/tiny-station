@@ -1,3 +1,4 @@
+import fastifyFormbody from '@fastify/formbody'
 import fastifyPlugin from 'fastify-plugin'
 
 import StreamInfoHandler from './StreamInfoHandler.js'
@@ -6,6 +7,7 @@ const streamInfoPlugin = fastifyPlugin((fastify) => {
   const streamInfoHandler = new StreamInfoHandler(fastify.config.icecastUrl, fastify.log)
 
   fastify
+    .register(fastifyFormbody) // Icecast sends `application/x-www-form-urlencoded`
     .decorate('streamInfoHandler', streamInfoHandler)
     .after(() => {
       fastify
