@@ -34,6 +34,13 @@
     }
   }
 
+  .loading {
+    text-align: center;
+    padding: 0.5rem;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+
   @media (max-width: var(--breakpoint-sm)) {
     & {
       padding: 0 0.15rem 0 0.5rem;

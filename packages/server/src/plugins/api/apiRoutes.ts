@@ -2,6 +2,8 @@ import type { FastifyRequest, onRequestAsyncHookHandler } from 'fastify'
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod'
 
 import {
+  chatMessagesQuerySchema,
+  chatMessagesResponseSchema,
   errorResponseSchema,
   forgotPasswordBodySchema,
   loginBodySchema,
@@ -233,6 +235,36 @@ const apiRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to reset password'
         await reply.status(400).send({ error: message })
+      }
+    }
+  )
+
+  fastify.get(
+    '/chat/messages',
+    {
+      schema: {
+        querystring: chatMessagesQuerySchema,
+        response: {
+          200: chatMessagesResponseSchema,
+          400: errorResponseSchema,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { limit, before } = request.query
+
+      try {
+        const messages = await (before === undefined
+          ? fastify.redis.getLatestMessages(limit)
+          : fastify.redis.getMessagesBefore(before, limit))
+
+        const hasMore = messages.length === limit
+        const earliestMessage = messages.at(-1)
+        const earliestTimestamp = earliestMessage === undefined ? null : earliestMessage.timestamp
+
+        await reply.status(200).send({ messages, pagination: { hasMore, earliestTimestamp } })
+      } catch {
+        await reply.status(400).send({ error: 'Failed to fetch messages' })
       }
     }
   )

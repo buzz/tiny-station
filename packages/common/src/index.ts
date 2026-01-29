@@ -1,4 +1,6 @@
 export type {
+  ChatMessagesQuery,
+  ChatMessagesResponse,
   ErrorResponse,
   ForgotPasswordBody,
   LoginBody,
@@ -12,6 +14,8 @@ export type {
   VerifyJwtResponse,
 } from './apiSchemas.js'
 export {
+  chatMessagesQuerySchema,
+  chatMessagesResponseSchema,
   errorResponseSchema,
   forgotPasswordBodySchema,
   loginBodySchema,

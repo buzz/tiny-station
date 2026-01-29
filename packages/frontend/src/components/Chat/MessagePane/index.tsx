@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import type { RefObject } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import useChat from '#hooks/useChat'
 import type { Messages, MessageWithoutUuid } from '#contexts/ChatContext'
@@ -8,6 +7,9 @@ import MessageContent from './MessageContent'
 import TimeSince from './TimeSince'
 
 import style from './MessagePane.module.css'
+
+const AT_TOP_THRESHOLD = 100
+const AT_BOTTOM_THRESHOLD = 50
 
 function sortUUidsByTimestamp(messages: Messages) {
   return Object.keys(messages).toSorted((a, b) => {
@@ -26,9 +28,9 @@ function sortUUidsByTimestamp(messages: Messages) {
   })
 }
 
-function Message({ message: { timestamp, senderNickname, message }, ref }: MessageProps) {
+function Message({ message: { timestamp, senderNickname, message } }: MessageProps) {
   return (
-    <div className={style.message} ref={ref}>
+    <div className={style.message}>
       <TimeSince timestamp={timestamp} />
       <span className={style.nickname}>{senderNickname}:</span>
       <MessageContent text={message} />
@@ -38,35 +40,94 @@ function Message({ message: { timestamp, senderNickname, message }, ref }: Messa
 
 interface MessageProps {
   message: MessageWithoutUuid
-  ref?: RefObject<HTMLDivElement | null>
 }
 
 function MessagePane() {
-  const { messages } = useChat()
+  const { messages, loadOlderMessages, isLoading, hasMore } = useChat()
 
-  const uuidsSorted = sortUUidsByTimestamp(messages)
-  const scrollToRef = useRef<HTMLDivElement | null>(null)
+  const uuidsSorted = useMemo(() => sortUUidsByTimestamp(messages), [messages])
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const isAtBottomRef = useRef(true)
+  const hasLoadedInitialRef = useRef(false)
+  // Handle scroll anchoring
+  const [prevScrollHeight, setPrevScrollHeight] = useState(0)
 
-  useEffect(() => {
-    if (scrollToRef.current) {
-      scrollToRef.current.scrollIntoView({ behavior: 'smooth' })
+  useLayoutEffect(() => {
+    const container = containerRef.current
+    if (container && prevScrollHeight) {
+      // Adjust scroll position by the delta of the new content
+      container.scrollTop = container.scrollHeight - prevScrollHeight
+      queueMicrotask(() => {
+        setPrevScrollHeight(0)
+      })
     }
+  }, [uuidsSorted, prevScrollHeight])
+
+  // Handle auto-scroll
+  useEffect(() => {
+    if (uuidsSorted.length === 0) {
+      return
+    }
+
+    if (!hasLoadedInitialRef.current) {
+      // Scroll to bottom on first load
+      hasLoadedInitialRef.current = true
+      const scrollToBottom = () => {
+        const container = containerRef.current
+        if (container) {
+          container.scrollTop = container.scrollHeight
+        }
+      }
+      scrollToBottom()
+      requestAnimationFrame(() => {
+        scrollToBottom()
+      })
+      const timeoutId = setTimeout(() => {
+        scrollToBottom()
+      }, 100)
+
+      return () => {
+        clearTimeout(timeoutId)
+      }
+    } else if (isAtBottomRef.current && containerRef.current) {
+      // Scroll to bottom on first message
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+
+    return
   }, [uuidsSorted])
 
-  const sortedMessages = uuidsSorted.map((uuid, idx) => {
-    const message = messages[uuid]
-    if (!message) {
-      return null
+  const onScroll = useCallback(() => {
+    const container = containerRef.current
+    if (!container) {
+      return
     }
-    return idx === uuidsSorted.length - 1 ? (
-      // Scroll to most recent message
-      <Message message={message} key={uuid} ref={scrollToRef} />
-    ) : (
-      <Message message={message} key={uuid} />
-    )
-  })
 
-  return <div className={style.messagePane}>{sortedMessages}</div>
+    // Check if user is near top to load more
+    if (container.scrollTop < AT_TOP_THRESHOLD && !isLoading && hasMore) {
+      setPrevScrollHeight(container.scrollHeight)
+      void loadOlderMessages()
+    }
+
+    const scrollPositionFromBottom = container.scrollHeight - container.scrollTop
+    isAtBottomRef.current = scrollPositionFromBottom <= container.clientHeight + AT_BOTTOM_THRESHOLD
+  }, [isLoading, hasMore, loadOlderMessages])
+
+  return (
+    <div className={style.messagePane} ref={containerRef} onScroll={onScroll}>
+      {uuidsSorted.map((uuid) => {
+        const message = messages[uuid]
+        if (!message) {
+          return null
+        }
+        return <Message message={message} key={uuid} />
+      })}
+      {isLoading && <div className={style.loading}>Loading...</div>}
+    </div>
+  )
 }
 
 export default MessagePane

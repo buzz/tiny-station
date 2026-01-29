@@ -67,6 +67,29 @@ const resetPasswordBodySchema = z
     path: ['passwordConfirm'],
   })
 
+const chatMessagesQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+  before: z.coerce.number().int().optional(),
+})
+
+const chatMessagesResponseSchema = z.object({
+  messages: z.array(
+    z.object({
+      uuid: z.string(),
+      timestamp: z.number(),
+      senderNickname: z.string(),
+      message: z.string(),
+    })
+  ),
+  pagination: z.object({
+    hasMore: z.boolean(),
+    earliestTimestamp: z.number().nullable(),
+  }),
+})
+
+type ChatMessagesQuery = z.infer<typeof chatMessagesQuerySchema>
+type ChatMessagesResponse = z.infer<typeof chatMessagesResponseSchema>
+
 type ErrorResponse = z.infer<typeof errorResponseSchema>
 type MessageResponse = z.infer<typeof messageResponseSchema>
 
@@ -81,6 +104,8 @@ type ForgotPasswordBody = z.infer<typeof forgotPasswordBodySchema>
 type ResetPasswordBody = z.infer<typeof resetPasswordBodySchema>
 
 export type {
+  ChatMessagesQuery,
+  ChatMessagesResponse,
   ErrorResponse,
   ForgotPasswordBody,
   LoginBody,
@@ -95,6 +120,8 @@ export type {
 }
 
 export {
+  chatMessagesQuerySchema,
+  chatMessagesResponseSchema,
   errorResponseSchema,
   forgotPasswordBodySchema,
   loginBodySchema,

@@ -39,9 +39,6 @@ class ChatManager extends AbstractHandler {
     })
 
     await socket.join('chat')
-
-    // TODO: use paginated REST API
-    socket.emit('chat:push-messages', await this.redis.getMessages())
   }
 
   private static processString(str: string) {

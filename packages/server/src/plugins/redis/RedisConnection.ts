@@ -217,6 +217,66 @@ class RedisConnection {
     return messages
   }
 
+  async getMessagesBefore(timestamp: number, limit: number): Promise<ChatMessage[]> {
+    const res = await this.redis.zrevrangebyscore(
+      MESSAGES_KEY,
+      String(timestamp),
+      '(0',
+      'WITHSCORES',
+      'LIMIT',
+      0,
+      limit
+    )
+
+    const messages: ChatMessage[] = []
+
+    for (let i = 0; i < res.length; i += 2) {
+      const jsonData = res[i]
+      const timestampString = res[i + 1]
+
+      if (!jsonData || !timestampString) {
+        throw new Error('Expected JSON data and timestamp')
+      }
+
+      const msgTimestamp = Number.parseInt(timestampString, 10)
+      const [uuid, senderNickname, message] = JSON.parse(jsonData) as [string, string, string]
+
+      messages.push({ uuid, timestamp: msgTimestamp, senderNickname, message })
+    }
+
+    return messages
+  }
+
+  async getLatestMessages(limit: number): Promise<ChatMessage[]> {
+    const res = await this.redis.zrevrangebyscore(
+      MESSAGES_KEY,
+      '+inf',
+      '-inf',
+      'WITHSCORES',
+      'LIMIT',
+      0,
+      limit
+    )
+
+    const messages: ChatMessage[] = []
+
+    for (let i = 0; i < res.length; i += 2) {
+      const jsonData = res[i]
+      const timestampString = res[i + 1]
+
+      if (!jsonData || !timestampString) {
+        throw new Error('Expected JSON data and timestamp')
+      }
+
+      const msgTimestamp = Number.parseInt(timestampString, 10)
+      const [uuid, senderNickname, message] = JSON.parse(jsonData) as [string, string, string]
+
+      messages.push({ uuid, timestamp: msgTimestamp, senderNickname, message })
+    }
+
+    return messages
+  }
+
   storeMessage({ uuid, timestamp, senderNickname, message }: ChatMessage) {
     return this.redis.zadd(
       MESSAGES_KEY,
