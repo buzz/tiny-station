@@ -1,19 +1,3 @@
-## REMOVED Requirements
-
-### Requirement: Chat Push Messages Event
-
-**Reason**: Historical messages are now fetched via REST API, eliminating the need for the socket-based push event.
-
-**Migration**: Clients should use `GET /api/chat/messages` to load historical messages on initial connect and when scrolling to load older messages. Live messages continue to arrive via `chat:message` event.
-
-#### Deleted Scenario: Server pushes all messages on connect
-
-- **REMOVED**: The server no longer emits `chat:push-messages` event when a client connects
-- **REMOVED**: Clients no longer receive all historical messages via socket event
-- **REPLACED BY**: REST API endpoint `GET /api/chat/messages` with pagination support
-
----
-
 ## MODIFIED Requirements
 
 ### Requirement: Chat Functionality
