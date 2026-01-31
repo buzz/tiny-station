@@ -24,7 +24,7 @@
     "react-modal": "^3.16.3",
     "react-switch": "^7.1.0",
     "simplebar": "^6.3.3",
-    "socket.io-client": "^4.8.3",
+    "socket.io-client": "catalog:",
     "tlds": "^1.261.0"
   },
   "devDependencies": {

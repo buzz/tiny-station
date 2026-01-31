@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.server-test.tsbuildinfo",
+    "types": ["node", "vitest"]
+  },
+  "include": ["src", "test-utils"]
+}

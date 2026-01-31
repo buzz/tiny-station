@@ -32,11 +32,11 @@ pnpm run test --project @listen-app/server
 
 ## Test File Naming Conventions
 
-| Pattern                 | Location          | Purpose               |
-| ----------------------- | ----------------- | --------------------- |
-| `*.test.ts`             | All packages      | Unit tests            |
-| `*.integration.test.ts` | packages/server   | Integration tests     |
-| `*.test.tsx`            | packages/frontend | React component tests |
+| Pattern       | Location          | Purpose                |
+| ------------- | ----------------- | ---------------------- |
+| `*.test.ts`   | All packages      | Unit tests             |
+| `*.test.ts`   | packages/server   | Unit/integration tests |
+| `*.test.tsx`  | packages/frontend | React component tests  |
 
 ## Mocking
 

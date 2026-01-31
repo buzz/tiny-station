@@ -29,9 +29,7 @@ const config = defineConfig(
       globals: globals.es2022,
       parserOptions: {
         projectService: {
-          // Just for linting this file (`eslint.config.js`)
-          allowDefaultProject: ['*.js'],
-          defaultProject: 'tsconfig.json',
+          defaultProject: './tsconfig.json',
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -112,7 +110,7 @@ const config = defineConfig(
 
   // packages/server
   {
-    files: ['packages/server/src/**/*.ts'],
+    files: ['packages/server/**/*.ts'],
     languageOptions: {
       globals: globals.node,
       parserOptions: {
@@ -129,7 +127,7 @@ const config = defineConfig(
           allowAfterThis: true, // For private class properties
         },
       ],
-      'import-x/extensions': ['error', 'always'],
+      'import-x/extensions': ['error', 'ignorePackages'],
       'unicorn/prefer-event-target': 'off',
       'unicorn/no-process-exit': 'off',
     },

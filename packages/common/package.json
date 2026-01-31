@@ -15,7 +15,8 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "@socket.io/component-emitter": "^3.1.2"
+    "@socket.io/component-emitter": "^3.1.2",
+    "socket.io-client": "catalog:"
   },
   "dependencies": {
     "zod": "catalog:"

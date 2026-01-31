@@ -7,15 +7,14 @@
     "#*.js": {
       "types": "./src/*.ts",
       "default": "./dist/*.js"
-    }
+    },
+    "#test-utils/*.js": "./test-utils/*.ts"
   },
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec node dist/index.js",
     "start": "NODE_ENV=production node dist/index.js",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "test:unit": "vitest run --config vitest.unit.config.ts",
-    "test:integration": "vitest run --config vitest.integration.config.ts"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fastify/error": "^4.2.0",
@@ -34,9 +33,14 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@testcontainers/redis": "^11.11.0",
     "@types/bcrypt": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^7.0.5",
-    "nodemon": "^3.1.11"
+    "@types/supertest": "^6.0.3",
+    "nodemon": "^3.1.11",
+    "socket.io-client": "catalog:",
+    "supertest": "^7.2.2",
+    "testcontainers": "^11.11.0"
   }
 }
