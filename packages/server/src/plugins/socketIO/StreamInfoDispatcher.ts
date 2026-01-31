@@ -4,7 +4,7 @@ import { SOCKETIO_STREAM_INFO_ROOM } from '#constants.js'
 import type StreamInfoHandler from '#plugins/streamInfo/StreamInfoHandler.js'
 
 import AbstractHandler from './AbstractHandler.js'
-import type { Socket, SocketIOServer } from './index.js'
+import type { Socket, SocketIOServer } from './socketIOPlugin.ts'
 
 class StreamInfoDispatcher extends AbstractHandler {
   constructor(

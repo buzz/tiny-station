@@ -2,9 +2,9 @@ import { createContext, useEffect, useMemo } from 'react'
 import { useCookies } from 'react-cookie'
 import { io } from 'socket.io-client'
 import type { PropsWithChildren } from 'react'
-import type { ManagerOptions, Socket as SocketIOSocket, SocketOptions } from 'socket.io-client'
+import type { ManagerOptions, SocketOptions } from 'socket.io-client'
 
-import type { ClientEvents, ServerEvents } from '@listen-app/common'
+import type { ClientSocket } from '@listen-app/common'
 
 import { getCookie } from '#utils'
 
@@ -18,7 +18,7 @@ function SocketIOProvider({ children }: PropsWithChildren) {
     if (token) {
       opts.auth = { token }
     }
-    return io(opts)
+    return io(opts) as unknown as ClientSocket
   }, [token])
 
   // Handle connection lifecycle
@@ -33,10 +33,7 @@ function SocketIOProvider({ children }: PropsWithChildren) {
   return <SocketIOContext value={socket}>{children}</SocketIOContext>
 }
 
-type Socket = SocketIOSocket<ServerEvents, ClientEvents>
+const SocketIOContext = createContext<ClientSocket | null>(null)
 
-const SocketIOContext = createContext<Socket | null>(null)
-
-export type { Socket }
 export { SocketIOProvider }
 export default SocketIOContext

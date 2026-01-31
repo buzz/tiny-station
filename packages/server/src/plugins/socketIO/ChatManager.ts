@@ -6,7 +6,7 @@ import { MAX_CHAT_MESSAGE_LENGTH } from '#constants.js'
 import type RedisConnection from '#plugins/redis/RedisConnection.js'
 
 import AbstractHandler from './AbstractHandler.js'
-import type { Socket, SocketIOServer } from './index.js'
+import type { Socket, SocketIOServer } from './socketIOPlugin.ts'
 
 class ChatManager extends AbstractHandler {
   constructor(

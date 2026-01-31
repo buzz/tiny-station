@@ -1,4 +1,4 @@
-import type { Socket, SocketIOServer } from './index.js'
+import type { Socket, SocketIOServer } from './socketIOPlugin.ts'
 
 abstract class AbstractHandler {
   constructor(protected io: SocketIOServer) {}

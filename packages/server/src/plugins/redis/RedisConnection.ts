@@ -20,11 +20,13 @@ const hashPassword = (password: string) => bcrypt.hash(password, 10)
 class RedisConnection {
   private redis: Redis
 
-  constructor(config: Config) {
-    this.redis = new Redis(config.redisUrl, {
-      keyPrefix: `${REDIS_KEY_PREFIX}:`,
-      showFriendlyErrorStack: config.isDebug,
-    })
+  constructor(config: Config, redisInstance?: Redis) {
+    this.redis =
+      redisInstance ?? // for testing
+      new Redis(config.redisUrl, {
+        keyPrefix: `${REDIS_KEY_PREFIX}:`,
+        showFriendlyErrorStack: config.isDebug,
+      })
   }
 
   quit() {
@@ -286,4 +288,5 @@ class RedisConnection {
   }
 }
 
+export { getNicknameKey, getPasswordResetKey, getTokenKey, getUserKey, hashPassword }
 export default RedisConnection

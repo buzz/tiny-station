@@ -1,4 +1,5 @@
 import type { EventsMap } from '@socket.io/component-emitter'
+import type { Socket as SocketIOClientSocket } from 'socket.io-client'
 
 import type { ChatMessage } from './chat.js'
 import type { StreamInfo } from './stream.js'
@@ -15,4 +16,6 @@ interface ClientEvents extends EventsMap {
   'stream:request': () => void
 }
 
-export type { ClientEvents, ServerEvents }
+type ClientSocket = SocketIOClientSocket<ServerEvents, ClientEvents>
+
+export type { ClientEvents, ClientSocket, ServerEvents }

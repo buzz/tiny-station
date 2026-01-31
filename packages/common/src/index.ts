@@ -29,5 +29,5 @@ export {
   verifyJwtResponseSchema,
 } from './apiSchemas.js'
 export type { ChatMessage } from './chat.js'
-export type { ClientEvents, ServerEvents } from './events.js'
+export type { ClientEvents, ClientSocket, ServerEvents } from './socketIO.js'
 export type { StreamInfo } from './stream.js'
