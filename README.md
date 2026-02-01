@@ -22,6 +22,10 @@
 
 TinyStation is an open-source web radio app that lets you tune in to a single live station and chat with other listeners in real time. Users can register and log in to join the community, listen to the stream, and participate in the conversation; all from a single, simple interface, and it’s completely self-hosted.
 
+<p align="center">
+  <img width="540" height="649" src="images/screenshot.webp" alt="TinyStation Screenshot">
+</p>
+
 ## ⚡ Quick Start (local)
 
 Run Redis, Icecast services.
