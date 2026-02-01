@@ -122,8 +122,14 @@
   }
 
   :global(.rc-slider-handle) {
-    background-color: var(--color-panel-bg);
+    background-color: var(--color-navbar-base);
     border-color: var(--color-navbar-base);
+    opacity: 1;
+  }
+
+  :global(.rc-slider-handle-dragging) {
+    border-color: var(--color-navbar-base) !important;
+    box-shadow: 0 0 0 1px var(--color-navbar-base) !important;
   }
 
   :global(.rc-slider-handle:active),
