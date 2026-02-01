@@ -49,6 +49,7 @@ function getConfig(isDebug: boolean): Config {
   const baseUrl = getEnvString('VITE_BASE_URL')
   const icecastUrl = getEnvString('ICECAST_URL')
   const redisUrl = getEnvString('REDIS_URL')
+  const redisKeyPrefix = getEnvString('REDIS_KEY_PREFIX')
   const jwtSecret = getEnvString('JWT_SECRET')
   const notifyDelay = getEnvNumber('NOTIFY_DELAY')
   const smtpHost = getEnvString('SMTP_HOST')
@@ -64,6 +65,7 @@ function getConfig(isDebug: boolean): Config {
     baseUrl,
     icecastUrl,
     redisUrl,
+    redisKeyPrefix,
     jwtSecret,
     notifyDelay,
     smtpHost,
@@ -81,6 +83,7 @@ interface Config {
   baseUrl: string
   icecastUrl: string
   redisUrl: string
+  redisKeyPrefix: string
   jwtSecret: string
   notifyDelay: number
   smtpHost: string

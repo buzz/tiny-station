@@ -14,6 +14,7 @@ import type StreamInfoHandler from '#plugins/streamInfo/StreamInfoHandler.js'
 const mockConfig = {
   jwtSecret: 'test-jwt-secret-key-for-testing',
   redisUrl: 'redis://localhost:6379',
+  redisKeyPrefix: 'tiny-station',
   baseUrl: 'http://localhost:3000',
   isDebug: false,
   icecastUrl: '',

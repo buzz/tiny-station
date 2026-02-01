@@ -3,7 +3,6 @@ import { Redis } from 'ioredis'
 
 import type { ChatMessage } from '@tiny-station/common'
 
-import { REDIS_KEY_PREFIX } from '#constants.js'
 import type { Config } from '#plugins/config.js'
 
 const MESSAGES_KEY = 'messages'
@@ -24,7 +23,7 @@ class RedisConnection {
     this.redis =
       redisInstance ?? // for testing
       new Redis(config.redisUrl, {
-        keyPrefix: `${REDIS_KEY_PREFIX}:`,
+        keyPrefix: `${config.redisKeyPrefix}:`,
         showFriendlyErrorStack: config.isDebug,
       })
   }
