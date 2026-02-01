@@ -1,4 +1,8 @@
-# 📻 TinyStation
+<p align="center">
+  <img width="128" height="128" src="images/logo.webp" alt="TinyStation">
+</p>
+
+# TinyStation
 
 [![License: AGPL-3.0+](https://img.shields.io/badge/License-AGPL--3.0%2B-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
