@@ -4,7 +4,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import type { Redis } from 'ioredis'
 import type { Mocked } from 'vitest'
 
-import type { ClientSocket, StreamInfo } from '@listen-app/common'
+import type { ClientSocket, StreamInfo } from '@tiny-station/common'
 
 import { createMockStreamInfoHandler, mockConfig } from '#test-utils/mocks.js'
 import { createTestToken, makeRedisConnection } from '#test-utils/utils.js'

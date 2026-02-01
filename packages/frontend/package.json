@@ -1,5 +1,5 @@
 {
-  "name": "@listen-app/frontend",
+  "name": "@tiny-station/frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -28,7 +28,7 @@
     "tlds": "^1.261.0"
   },
   "devDependencies": {
-    "@listen-app/common": "workspace:*",
+    "@tiny-station/common": "workspace:*",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/linkify-it": "^5.0.0",

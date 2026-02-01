@@ -128,7 +128,7 @@ Debug logging MUST preserve the existing debuglog pattern from Node.js util modu
 #### Scenario: Debug messages use debuglog pattern
 
 - **WHEN** server logs debug messages
-- **THEN** `debuglog('listen-app')` or `debuglog('listen-app:component')` is used
+- **THEN** `debuglog('tiny-station')` or `debuglog('tiny-station:component')` is used
 - **AND** no separate logging library is added
 - **AND** log output format matches existing pattern
 

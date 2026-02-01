@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define testing requirements for the `@listen-app/frontend` package, including React component tests with @testing-library/react and jsdom environment configuration.
+Define testing requirements for the `@tiny-station/frontend` package, including React component tests with @testing-library/react and jsdom environment configuration.
 
 ## ADDED Requirements
 

@@ -2,7 +2,7 @@ import { EventEmitter } from 'node:events'
 
 import type { FastifyBaseLogger } from 'fastify'
 
-import type { StreamInfo } from '@listen-app/common'
+import type { StreamInfo } from '@tiny-station/common'
 
 import { POLL_INTERVAL } from '#constants.js'
 import { icecastStatusSchema } from '#schemas.js'

@@ -1,6 +1,6 @@
 # Testing Guide
 
-This document describes the testing infrastructure and patterns for the listen-app monorepo.
+This document describes the testing infrastructure and patterns for the tiny-station monorepo.
 
 ## Test Stack
 
@@ -21,13 +21,13 @@ pnpm run test
 
 ```bash
 # packages/common
-pnpm run test --project @listen-app/common
+pnpm run test --project @tiny-station/common
 
 # packages/frontend
-pnpm run test --project @listen-app/frontend
+pnpm run test --project @tiny-station/frontend
 
 # packages/server
-pnpm run test --project @listen-app/server
+pnpm run test --project @tiny-station/server
 ```
 
 ## Test File Naming Conventions

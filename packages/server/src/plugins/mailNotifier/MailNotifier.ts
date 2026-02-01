@@ -1,6 +1,6 @@
 import type { FastifyBaseLogger } from 'fastify'
 
-import type { StreamInfo } from '@listen-app/common'
+import type { StreamInfo } from '@tiny-station/common'
 
 import { NOTIFIER_IGNORE_PATTERN } from '#constants.js'
 import type { Config } from '#plugins/config.js'

@@ -31,9 +31,9 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - Format (only check): `pnpm format --check`
 - Type check: `pnpm ts:check`
 - Test (all packages): `pnpm run test`
-- Test (common): `pnpm run test --project @listen-app/common`
-- Test (frontend): `pnpm run test --project @listen-app/frontend`
-- Test (server): `pnpm run test --project @listen-app/server`
+- Test (common): `pnpm run test --project @tiny-station/common`
+- Test (frontend): `pnpm run test --project @tiny-station/frontend`
+- Test (server): `pnpm run test --project @tiny-station/server`
 
 ## Workspaces
 

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import type { ChatMessage } from '@listen-app/common'
+import type { ChatMessage } from '@tiny-station/common'
 
 import { MAX_CHAT_MESSAGE_LENGTH } from '#constants.js'
 import type RedisConnection from '#plugins/redis/RedisConnection.js'

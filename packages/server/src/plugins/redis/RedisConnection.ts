@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { Redis } from 'ioredis'
 
-import type { ChatMessage } from '@listen-app/common'
+import type { ChatMessage } from '@tiny-station/common'
 
 import { REDIS_KEY_PREFIX } from '#constants.js'
 import type { Config } from '#plugins/config.js'

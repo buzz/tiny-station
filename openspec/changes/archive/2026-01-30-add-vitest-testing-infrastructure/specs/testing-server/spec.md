@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define testing requirements for the `@listen-app/server` package, including unit tests, integration tests, and mocking patterns for external dependencies.
+Define testing requirements for the `@tiny-station/server` package, including unit tests, integration tests, and mocking patterns for external dependencies.
 
 ## ADDED Requirements
 

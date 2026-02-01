@@ -29,19 +29,19 @@ Vitest MUST correctly resolve TypeScript path aliases used in the monorepo.
 
 #### Scenario: Common package imports work in server tests
 
-- **WHEN** importing `@listen-app/common` in server test files
+- **WHEN** importing `@tiny-station/common` in server test files
 - **THEN** the import resolves to the correct module
 - **AND** no module resolution errors occur
 
 #### Scenario: Common package imports work in frontend tests
 
-- **WHEN** importing `@listen-app/common` in frontend test files
+- **WHEN** importing `@tiny-station/common` in frontend test files
 - **THEN** the import resolves to the correct module
 - **AND** no module resolution errors occur
 
 #### Scenario: Server package imports work in server tests
 
-- **WHEN** importing `@listen-app/server` in server test files
+- **WHEN** importing `@tiny-station/server` in server test files
 - **THEN** the import resolves to the correct module
 - **AND** no module resolution errors occur
 

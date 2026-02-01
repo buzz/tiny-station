@@ -1,7 +1,7 @@
 import { createContext, useCallback, useMemo, useState } from 'react'
 import type { PropsWithChildren } from 'react'
 
-import type { StreamInfo } from '@listen-app/common'
+import type { StreamInfo } from '@tiny-station/common'
 
 import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 

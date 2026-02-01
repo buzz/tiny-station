@@ -4,7 +4,7 @@ import supertest from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { Mocked } from 'vitest'
 
-import type { ChatMessagesResponse, ErrorResponse, VerifyJwtResponse } from '@listen-app/common'
+import type { ChatMessagesResponse, ErrorResponse, VerifyJwtResponse } from '@tiny-station/common'
 
 import {
   createMockLogger,

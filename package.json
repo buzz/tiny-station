@@ -1,6 +1,6 @@
 {
-  "name": "listen-app",
-  "description": "Icecast listen app",
+  "name": "tiny-station",
+  "description": "",
   "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "private": true,
@@ -15,10 +15,10 @@
     "name": "buzz",
     "url": "https://github.com/buzz"
   },
-  "homepage": "https://github.com/buzz/listen-app",
+  "homepage": "https://github.com/buzz/tiny-station",
   "repository": {
     "type": "git",
-    "url": "https://github.com/buzz/listen-app.git"
+    "url": "https://github.com/buzz/tiny-station.git"
   },
   "scripts": {
     "build": "pnpm run server:build && pnpm run frontend:build",
@@ -32,9 +32,9 @@
     "server:start": "pnpm run --filter server start",
     "start": "pnpm run server:start",
     "test": "vitest run",
-    "test:common": "pnpm exec vitest run --project @listen-app/common",
-    "test:frontend": "pnpm exec vitest run --project @listen-app/frontend",
-    "test:server": "pnpm exec vitest run --project @listen-app/server",
+    "test:common": "pnpm exec vitest run --project @tiny-station/common",
+    "test:frontend": "pnpm exec vitest run --project @tiny-station/frontend",
+    "test:server": "pnpm exec vitest run --project @tiny-station/server",
     "test:watch": "vitest watch",
     "ts:check": "tsc --build --emitDeclarationOnly",
     "ts:clean": "tsc --build --clean",

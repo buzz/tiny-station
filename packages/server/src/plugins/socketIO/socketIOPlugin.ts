@@ -2,7 +2,7 @@ import fastifyPlugin from 'fastify-plugin'
 import { Server } from 'socket.io'
 import type { Socket as SocketIOSocket } from 'socket.io'
 
-import type { ClientEvents, ServerEvents } from '@listen-app/common'
+import type { ClientEvents, ServerEvents } from '@tiny-station/common'
 
 import { isObject, verifyJwt } from '#utils.js'
 import type { UserData } from '#types.js'

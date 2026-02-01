@@ -59,7 +59,7 @@ class AuthService {
     try {
       await this.mailer.send(
         email,
-        'Listen App - Confirmation Mail',
+        'TinyStation - Confirmation Mail',
         confirmationText(token, this.config.baseUrl)
       )
     } catch {
@@ -128,7 +128,7 @@ class AuthService {
     try {
       await this.mailer.send(
         email,
-        'Listen App - Password Reset',
+        'TinyStation - Password Reset',
         passwordResetText(token, this.config.baseUrl)
       )
     } catch {

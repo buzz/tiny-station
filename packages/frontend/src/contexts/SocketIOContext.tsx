@@ -4,7 +4,7 @@ import { io } from 'socket.io-client'
 import type { PropsWithChildren } from 'react'
 import type { ManagerOptions, SocketOptions } from 'socket.io-client'
 
-import type { ClientSocket } from '@listen-app/common'
+import type { ClientSocket } from '@tiny-station/common'
 
 import { getCookie } from '#utils'
 

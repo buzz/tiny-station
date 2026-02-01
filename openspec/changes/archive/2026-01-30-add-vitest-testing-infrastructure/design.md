@@ -73,7 +73,7 @@ export default defineConfig({
 
 - Leverages existing `tsconfig.json` configurations
 - Consistent with Vite's module resolution
-- Supports workspace path aliases like `@listen-app/common`
+- Supports workspace path aliases like `@tiny-station/common`
 
 #### 5. Mocking Strategy
 

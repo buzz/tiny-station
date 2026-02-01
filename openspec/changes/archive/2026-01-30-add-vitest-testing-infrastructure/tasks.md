@@ -26,7 +26,7 @@
 
 - [x] Create `packages/common/vitest.config.ts`
   - Use jsdom environment (for compatibility)
-  - Configure path aliases to resolve `@listen-app/common`
+  - Configure path aliases to resolve `@tiny-station/common`
   - Set up test file pattern `**/*.test.ts`
 
 - [x] Add test scripts to `packages/common/package.json`
@@ -51,8 +51,8 @@
 
 - [x] Create `packages/server/vitest.config.ts`
   - Use happy-dom or Node environment
-  - Configure path aliases for `@listen-app/common`
-  - Configure path aliases for `@listen-app/server`
+  - Configure path aliases for `@tiny-station/common`
+  - Configure path aliases for `@tiny-station/server`
   - Set up test file patterns:
     - `**/*.test.ts` for unit tests
     - `**/*.integration.test.ts` for integration tests
@@ -93,7 +93,7 @@
 
 - [x] Create `packages/frontend/vitest.config.ts`
   - Use jsdom environment
-  - Configure path aliases for `@listen-app/common`
+  - Configure path aliases for `@tiny-station/common`
   - Configure CSS module handling with `moduleNameMapper`
   - Configure SVG import handling
   - Set up test file pattern `**/*.test.tsx`

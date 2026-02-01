@@ -8,14 +8,14 @@ import {
   messageResponseSchema,
   updateNotificationsResponseSchema,
   verifyJwtResponseSchema,
-} from '@listen-app/common'
+} from '@tiny-station/common'
 import type {
   ForgotPasswordBody,
   LoginBody,
   RegisterBody,
   ResetPasswordBody,
   UpdateNotificationsBody,
-} from '@listen-app/common'
+} from '@tiny-station/common'
 
 import { COOKIE_NICKNAME } from '#constants'
 import useModal from '#hooks/useModal'

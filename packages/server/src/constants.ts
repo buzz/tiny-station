@@ -1,6 +1,6 @@
 const POLL_INTERVAL = 30 // seconds
 const PORT = 3001
-const REDIS_KEY_PREFIX = 'listen-app'
+const REDIS_KEY_PREFIX = 'tiny-station'
 const SOCKETIO_STREAM_INFO_ROOM = 'streamInfo'
 const MAX_CHAT_MESSAGE_LENGTH = 512
 const NOTIFIER_IGNORE_PATTERN = '__TEST__'

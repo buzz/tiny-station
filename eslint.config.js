@@ -60,8 +60,8 @@ const config = defineConfig(
           groups: [
             [String.raw`^\u0000`], // side-effects
             groupWithTypes('^node:'),
-            groupWithTypes(String.raw`^@?(?:(?!listen-app\/))\w`), // 3rd party
-            groupWithTypes(String.raw`^@listen-app\/`), // Internal packages
+            groupWithTypes(String.raw`^@?(?:(?!tiny-station\/))\w`), // 3rd party
+            groupWithTypes(String.raw`^@tiny-station\/`), // Internal packages
             [String.raw`(?<!\u0000)$`], // absolute
             groupWithTypes('^#'), // ts paths
             groupWithTypes(String.raw`^\.`), // relative

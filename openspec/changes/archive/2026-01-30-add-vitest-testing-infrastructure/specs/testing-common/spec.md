@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define testing requirements for the `@listen-app/common` package, focusing on Zod schema validation tests.
+Define testing requirements for the `@tiny-station/common` package, focusing on Zod schema validation tests.
 
 ## ADDED Requirements
 

@@ -1,8 +1,8 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import type { PropsWithChildren } from 'react'
 
-import { chatMessagesResponseSchema } from '@listen-app/common'
-import type { ChatMessage } from '@listen-app/common'
+import { chatMessagesResponseSchema } from '@tiny-station/common'
+import type { ChatMessage } from '@tiny-station/common'
 
 import useSocketIO, { useSocketEvent } from '#hooks/useSocketIO'
 import { callApi } from '#utils'

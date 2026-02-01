@@ -2,7 +2,7 @@
 
 - [x] 1.1 Remove Socket.io event handlers for user auth operations (user:verify-jwt, user:login-fail, user:login-success, user:register-fail, user:register-success, user:update-notif-success, user:verify-jwt-fail, user:delete-success)
 - [x] 1.2 Keep Socket.io event handler for user:kick
-- [x] 1.3 Add imports for types from `@listen-app/common` (RegisterBody, LoginBody, LoginResponse, VerifyJwtResponse, UpdateNotificationsBody, ErrorResponse, MessageResponse)
+- [x] 1.3 Add imports for types from `@tiny-station/common` (RegisterBody, LoginBody, LoginResponse, VerifyJwtResponse, UpdateNotificationsBody, ErrorResponse, MessageResponse)
 - [x] 1.4 Remove unused socket.emit calls in existing handler functions
 
 ## 2. Implement REST API client functions

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Icecast streaming listener application with real-time chat functionality, allowing users to listen to live radio streams and interact through an online chat system. Features include stream metadata display, user authentication, real-time message delivery, and email notifications.
+Icecast streaming web radio application with real-time chat functionality, allowing users to listen to a live radio stream and interact through an online chat system. Features include stream metadata display, user authentication, real-time message delivery, and email notifications.
 
 ## Tech Stack
 
@@ -61,9 +61,9 @@ Icecast streaming listener application with real-time chat functionality, allowi
 
 - AGPL-3.0-or-later license
 - Frontend supports Vite build
-- Backend uses Node debug logging with debuglog('listen-app')
+- Backend uses Node debug logging with debuglog('tiny-station')
 - Requires Redis server for user management/chat history
-- Production deployment uses Docker with non-root user (listen-app)
+- Production deployment uses Docker with non-root user (tiny-station)
 - Common package for shared types and utilities across frontend and server
 
 ## External Dependencies

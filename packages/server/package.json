@@ -1,5 +1,5 @@
 {
-  "name": "@listen-app/server",
+  "name": "@tiny-station/server",
   "description": "Server for stream listener",
   "version": "0.1.0",
   "type": "module",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@fastify/error": "^4.2.0",
     "@fastify/formbody": "^8.0.2",
-    "@listen-app/common": "workspace:*",
+    "@tiny-station/common": "workspace:*",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "fastify": "^5.7.2",

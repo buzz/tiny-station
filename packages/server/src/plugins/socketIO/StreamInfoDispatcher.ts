@@ -1,4 +1,4 @@
-import type { StreamInfo } from '@listen-app/common'
+import type { StreamInfo } from '@tiny-station/common'
 
 import { SOCKETIO_STREAM_INFO_ROOM } from '#constants.js'
 import type StreamInfoHandler from '#plugins/streamInfo/StreamInfoHandler.js'

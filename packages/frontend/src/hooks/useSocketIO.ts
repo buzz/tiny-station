@@ -1,6 +1,6 @@
 import { use, useEffect } from 'react'
 
-import type { ClientSocket, ServerEvents } from '@listen-app/common'
+import type { ClientSocket, ServerEvents } from '@tiny-station/common'
 
 import SocketIOContext from '#contexts/SocketIOContext'
 

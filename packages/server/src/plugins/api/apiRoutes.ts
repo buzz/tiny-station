@@ -15,7 +15,7 @@ import {
   updateNotificationsResponseSchema,
   verifyEmailBodySchema,
   verifyJwtResponseSchema,
-} from '@listen-app/common'
+} from '@tiny-station/common'
 
 import { UnauthorizedError, verifyJwt, withUser } from '#utils.js'
 

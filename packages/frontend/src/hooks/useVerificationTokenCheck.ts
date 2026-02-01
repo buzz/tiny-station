@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-import { errorResponseSchema } from '@listen-app/common'
-import type { VerifyEmailBody } from '@listen-app/common'
+import { errorResponseSchema } from '@tiny-station/common'
+import type { VerifyEmailBody } from '@tiny-station/common'
 
 import useModal from '#hooks/useModal'
 import { callApi } from '#utils'

@@ -4,7 +4,7 @@ import { vi } from 'vitest'
 import type { FastifyBaseLogger } from 'fastify'
 import type { Mocked } from 'vitest'
 
-import type { StreamInfo } from '@listen-app/common'
+import type { StreamInfo } from '@tiny-station/common'
 
 import type { Config } from '#plugins/config.js'
 import type Mailer from '#plugins/mailer/Mailer.js'

@@ -46,7 +46,7 @@ The packages/server package MUST resolve monorepo path aliases for test files.
 
 #### Scenario: Path aliases work in tests
 
-- **WHEN** a test file imports from `@listen-app/common` or other workspace packages
+- **WHEN** a test file imports from `@tiny-station/common` or other workspace packages
 - **THEN** the import resolves correctly without errors
 
 ### Requirement: Sample Server Test
