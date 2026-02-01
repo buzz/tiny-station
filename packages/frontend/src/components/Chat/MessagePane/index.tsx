@@ -116,16 +116,21 @@ function MessagePane() {
     isAtBottomRef.current = scrollPositionFromBottom <= container.clientHeight + AT_BOTTOM_THRESHOLD
   }, [isLoading, hasMore, loadOlderMessages])
 
+  const messageOutput =
+    Object.keys(messages).length > 0 ? (
+      uuidsSorted.map((uuid) => {
+        const message = messages[uuid]
+        return message ? <Message message={message} key={uuid} /> : null
+      })
+    ) : (
+      <div className={style.noMessages}>
+        <em>No messages...</em> 😕
+      </div>
+    )
+
   return (
     <div className={style.messagePane} ref={containerRef} onScroll={onScroll}>
-      {uuidsSorted.map((uuid) => {
-        const message = messages[uuid]
-        if (!message) {
-          return null
-        }
-        return <Message message={message} key={uuid} />
-      })}
-      {isLoading && <div className={style.loading}>Loading...</div>}
+      {messageOutput}
     </div>
   )
 }
