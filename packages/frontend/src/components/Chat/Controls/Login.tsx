@@ -68,17 +68,17 @@ function Login() {
           <FontAwesomeIcon icon={faUserPlus} />
           New account
         </button>
+        <button
+          className={style.forgotPasswordLink}
+          disabled={inputsDisabled}
+          type="button"
+          onClick={() => {
+            showForgotPasswordForm()
+          }}
+        >
+          Forgot password?
+        </button>
       </div>
-      <button
-        className={style.forgotPasswordLink}
-        disabled={inputsDisabled}
-        type="button"
-        onClick={() => {
-          showForgotPasswordForm()
-        }}
-      >
-        Forgot password?
-      </button>
     </form>
   )
 }

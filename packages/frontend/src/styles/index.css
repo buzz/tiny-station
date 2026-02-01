@@ -36,6 +36,7 @@
   --font-size-base: 20px;
   --font-size-base-small-viewport: calc(0.8 * var(--font-size-base));
   --font-size-small: 80%;
+  --font-size-tiny: 65%;
   --box-shadow-default: 0 0 6px rgb(0 0 0 / 40%);
   --font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',

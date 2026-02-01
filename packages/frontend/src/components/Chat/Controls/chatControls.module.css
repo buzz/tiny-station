@@ -114,18 +114,16 @@
 .forgotPasswordLink {
   background: none;
   border: none;
-  color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
+  font-size: var(--font-size-tiny);
+  padding: 0;
   text-decoration: underline;
 
-  &:hover {
-    color: var(--text-primary);
+  &:focus {
+    border: none !important;
   }
 
   &:disabled {
-    cursor: not-allowed;
     opacity: 0.5;
   }
 }
