@@ -1,6 +1,6 @@
 {
   "name": "tiny-station",
-  "description": "",
+  "description": "TinyStation is an open-source web radio application that combines live audio streaming with real-time chat functionality.",
   "version": "0.1.0",
   "license": "AGPL-3.0-or-later",
   "private": true,
