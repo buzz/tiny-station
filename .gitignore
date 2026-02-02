@@ -9,3 +9,5 @@ dist
 logs
 *.log
 pnpm-debug.log*
+docker/certs
+docker/tiny-station-public

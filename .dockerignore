@@ -3,15 +3,4 @@
 **/.git
 **/README.md
 **/node_modules
-.gitignore
-.editorconfig
-.dockerignore
-LICENSE.txt
-Dockerfile
 packages/*/dist
-openspec
-.opencode
-TODO.txt
-.vscode
-docs
-AGENTS.md

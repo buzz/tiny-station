@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 cp -R public-dist/* public/
 export NODE_ENV=production

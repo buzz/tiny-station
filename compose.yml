@@ -1,0 +1,46 @@
+services:
+  tiny-station:
+    build:
+      context: .
+      dockerfile: docker/tiny-station/Dockerfile
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - ./docker/tiny-station-public:/tiny-station/public
+    depends_on:
+      - icecast
+      - mailpit
+      - redis
+
+  redis:
+    image: redis:7-alpine
+
+  icecast:
+    build: docker/icecast
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - ./docker/certs:/etc/certificates:ro
+    ports:
+      - "4443:4443"
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/certs:/etc/certificates:ro
+      - ./docker/tiny-station-public:/tiny-station-public:ro
+    depends_on:
+      - tiny-station
+    ports:
+      - "443:443"
+
+  mailpit:
+    image: axllent/mailpit
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    ports:
+      - "8025:8025"
