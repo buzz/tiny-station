@@ -62,8 +62,8 @@ class AuthService {
         'TinyStation - Confirmation Mail',
         confirmationText(token, this.config.baseUrl)
       )
-    } catch {
-      console.error('Failed to send mail:')
+    } catch (error) {
+      console.error('Failed to send mail:', error)
       await this.redis.deleteUser(email)
       await this.redis.deleteToken(token)
       await this.redis.unsubscribe(email)
