@@ -42,7 +42,7 @@ class StreamInfoHandler extends EventEmitter<StreamInfoEvents> {
   handleSourceConnect() {
     this.streamPollTimeout = setTimeout(() => {
       this.fetchInfo()
-    })
+    }, 2000)
   }
 
   handleSourceDisconnect() {
