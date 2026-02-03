@@ -4,7 +4,7 @@
 
 # TinyStation
 
-[![License: AGPL-3.0+](https://img.shields.io/badge/License-AGPL--3.0%2B-blue.svg)](LICENSE)
+[![License: AGPL-3.0+](https://img.shields.io/badge/License-AGPL--3.0%2B-blue.svg)](LICENSE.txt)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB.svg)](https://react.dev/)
 [![Fastify](https://img.shields.io/badge/Fastify-5-23D5.svg)](https://fastify.dev/)
@@ -26,28 +26,53 @@ TinyStation is an open-source web radio app that lets you tune in to a single li
   <img width="540" height="649" src="images/screenshot.webp" alt="TinyStation Screenshot">
 </p>
 
-## ⚡ Quick Start (local)
+## ⚡ Quick Start
 
-Run Redis, Icecast services.
+TinyStation is a multi-service application requiring Redis for persistence, Icecast for streaming, and a mail service for notifications.
 
 ```bash
+# Copy environment file and customize
 cp .env .env.local
-# Edit .env.local
+# Edit .env.local with your settings
 
-# Install dependencies
-pnpm install
-
-# Start development servers
-pnpm run server:dev   # Backend (Fastify + Socket.IO)
-pnpm run frontend:dev # Frontend (React + Vite)
-
-# Or run everything
-pnpm run start
+# Generate local certificates and start all services
+bash docker/start-local.sh
 ```
+
+This script automatically:
+- Generates self-signed certificates using [mkcert][mkcert]
+- Builds and starts all services via Docker Compose
+
+Access the application
+- Frontend: https://localhost
+- [Icecast][icecast] web interface: https://localhost:4443
+- [Mailpit][mailpit] web interface: http://localhost:8025
 
 ## 🚀 Deployment
 
-TBD...
+### Required Services
+
+TinyStation requires these additional services to function:
+
+| Service                                  | Purpose                           |
+| ---------------------------------------- | --------------------------------- |
+| [**Icecast**][icecast]                   | Audio streaming server            |
+| **Redis/Valkey**                         | Data persistence                  |
+| **Mail** (e.g. Postfix, …)               | Email notifications               |
+| **Reverse Proxy** (e.g. nginx, Caddy, …) | Reverse proxy and SSL termination |
+
+### Docker Compose Deployment
+
+A minimal [Docker Compose stack](./compose.yml) is provided for testing and experimentation only. It is not
+production-ready. The included Dockerfiles and configuration are intended as a starting point for
+building a production deployment and will require adaptation and hardening.
+
+### Configuration
+
+TinyStation uses environment variables for configuration. Two files are used:
+
+- [**`.env`**](./.env): Default configuration template
+- **`.env.local`**: Your local overrides
 
 ## 📦 Packages
 
@@ -60,6 +85,10 @@ TBD...
 ## 🛠️ Development
 
 ```bash
+# Start development servers
+pnpm run server:dev   # Backend (Fastify + Socket.IO)
+pnpm run frontend:dev # Frontend (React + Vite)
+
 # Lint and format
 pnpm run lint
 pnpm run lint:fix
@@ -85,3 +114,7 @@ Found a bug or have a feature idea? Head over to the [Issues](https://github.com
 ## 📄 License
 
 AGPL-3.0-or-later. See [LICENSE.txt](./LICENSE.txt) for details.
+
+[icecast]: https://icecast.org/
+[mailpit]: https://mailpit.axllent.org/
+[mkcert]: https://github.com/FiloSottile/mkcert
