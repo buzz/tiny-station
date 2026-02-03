@@ -14,7 +14,7 @@ const groupWithTypes = (/** @type {string} */ re) => [re, String.raw`${re}.*\u00
 /** * Shared configuration for all projects */
 const config = defineConfig(
   // Global Ignores
-  { ignores: ['**/dist/**', '**/node_modules/**'] },
+  { ignores: ['**/dist/**', 'docker/', '**/node_modules/**'] },
 
   // Base Configs (JS, Import, Unicorn, TS)
   eslintJs.configs.recommended,
