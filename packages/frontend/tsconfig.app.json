@@ -17,6 +17,6 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true
   },
-  "include": ["src"],
+  "include": ["src", "test-utils"],
   "references": [{ "path": "../common" }]
 }
