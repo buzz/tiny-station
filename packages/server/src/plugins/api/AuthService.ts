@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { FastifyBaseLogger } from 'fastify'
 
-import type { Config } from '#plugins/config.js'
+import type { Config } from '#plugins/configPlugin.js'
 import type Mailer from '#plugins/mailer/Mailer.js'
 import type RedisConnection from '#plugins/redis/RedisConnection.js'
 

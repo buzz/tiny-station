@@ -1,4 +1,4 @@
-import type { Config } from './plugins/config.js'
+import type { Config } from './plugins/configPlugin.ts'
 import type Mailer from './plugins/mailer/Mailer.ts'
 import type RedisConnection from './plugins/redis/RedisConnection.ts'
 import type { SocketIOServer } from './plugins/socketIO/socketIOPlugin.ts'

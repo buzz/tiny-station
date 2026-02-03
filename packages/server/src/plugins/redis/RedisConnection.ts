@@ -3,7 +3,7 @@ import { Redis } from 'ioredis'
 
 import type { ChatMessage } from '@tiny-station/common'
 
-import type { Config } from '#plugins/config.js'
+import type { Config } from '#plugins/configPlugin.js'
 
 const MESSAGES_KEY = 'messages'
 const SUBSCRIPTIONS_KEY = 'subs'

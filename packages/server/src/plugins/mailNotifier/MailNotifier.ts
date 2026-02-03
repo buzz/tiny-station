@@ -3,7 +3,7 @@ import type { FastifyBaseLogger } from 'fastify'
 import type { StreamInfo } from '@tiny-station/common'
 
 import { NOTIFIER_IGNORE_PATTERN } from '#constants.js'
-import type { Config } from '#plugins/config.js'
+import type { Config } from '#plugins/configPlugin.js'
 import type Mailer from '#plugins/mailer/Mailer.js'
 import type RedisConnection from '#plugins/redis/RedisConnection.js'
 import type StreamInfoHandler from '#plugins/streamInfo/StreamInfoHandler.js'

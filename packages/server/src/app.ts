@@ -4,7 +4,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import errorHandler from './errorHandler.js'
 import apiPlugin from './plugins/api/index.js'
-import configPlugin from './plugins/config.js'
+import configPlugin from './plugins/configPlugin.js'
 import mailerPlugin from './plugins/mailer/index.js'
 import mailNotifierPlugin from './plugins/mailNotifier/index.js'
 import redisPlugin from './plugins/redis/index.js'
