@@ -82,6 +82,9 @@ pnpm workspaces:
   - Use appropriate error types
   - Avoid silent failures
   - Handle specific errors that are expected
+- Testing
+  - Use mocking sparingly; default to integration tests if possible
+  - React Testing Library: Avoid `data-testid`; use semantic queries first.
 
 ### Documentation
 

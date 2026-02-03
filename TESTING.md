@@ -51,3 +51,5 @@ const mockRedis = {
   getEmail: vi.fn().mockResolvedValue('user@example.com'),
 }
 ```
+
+IMPORTANT: Mocking is meant as an escape hatch. Use it sparingly!
