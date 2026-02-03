@@ -6,30 +6,22 @@ import type { StreamOnlineState } from '#contexts/StreamInfoContext'
 
 import style from './NavBar.module.css'
 
-function getTimeSince(startTime: Date) {
-  let duration = Date.now() - startTime.getTime()
-  const parts = []
+function getTimeSince(startTime: Date): string {
+  const durationMs = Date.now() - startTime.getTime()
 
-  const msInHour = 1000 * 60 * 60
-  const hours = Math.trunc(duration / msInHour)
+  const seconds = Math.floor((durationMs / 1000) % 60)
+  const minutes = Math.floor((durationMs / (1000 * 60)) % 60)
+  const hours = Math.floor(durationMs / (1000 * 60 * 60))
+
   if (hours > 0) {
-    parts.push(hours)
-    duration -= hours * msInHour
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
-  const msInMinute = 1000 * 60
-  const minutes = Math.trunc(duration / msInMinute)
-  parts.push(minutes.toString().padStart(2, '0'))
-  duration -= minutes * msInMinute
-
-  const msInSeconds = 1000
-  const seconds = Math.trunc(duration / msInSeconds)
-  if (seconds > 0 || parts.length > 0) {
-    parts.push(seconds.toString().padStart(2, '0'))
-    duration -= minutes * msInMinute
+  if (minutes > 0) {
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
 
-  return parts.length > 0 ? parts.join(':') : 'less than 1 min'
+  return 'less than 1 min'
 }
 
 function OnlineCounter({ streamOnline, streamStart }: OnlineCounterProps) {
@@ -37,7 +29,7 @@ function OnlineCounter({ streamOnline, streamStart }: OnlineCounterProps) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
-    if (typeof streamStart !== 'string') {
+    if (!streamStart) {
       return
     }
 
