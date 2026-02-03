@@ -1,4 +1,3 @@
-import usePasswordResetTokenCheck from '#hooks/usePasswordResetTokenCheck'
 import useUser from '#hooks/useUser'
 
 import ForgotPassword from './ForgotPassword'
@@ -9,8 +8,6 @@ import ResetPassword from './ResetPassword'
 
 function Controls() {
   const { loginState } = useUser()
-
-  usePasswordResetTokenCheck()
 
   if (loginState === 'loggedIn') {
     return <MessageInput />

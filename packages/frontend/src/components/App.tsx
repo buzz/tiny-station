@@ -5,6 +5,7 @@ import { ModalProvider } from '#contexts/ModalContext'
 import { SocketIOProvider } from '#contexts/SocketIOContext'
 import { StreamInfoProvider } from '#contexts/StreamInfoContext'
 import { UserProvider } from '#contexts/UserContext'
+import usePasswordResetTokenCheck from '#hooks/usePasswordResetTokenCheck'
 import useVerificationTokenCheck from '#hooks/useVerificationTokenCheck'
 
 import Chat from './Chat'
@@ -13,6 +14,7 @@ import NavBar from './NavBar'
 
 function InnerApp() {
   useVerificationTokenCheck()
+  usePasswordResetTokenCheck()
 
   return (
     <>
