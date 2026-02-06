@@ -112,6 +112,7 @@ const apiRoutes: FastifyPluginCallbackZod<{ authService: AuthService }> = (
       try {
         if (await authService.verifyEmail(token)) {
           await reply.status(200).send({ message: 'Email verified successfully' })
+          return
         }
       } catch {
         // Empty
