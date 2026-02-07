@@ -52,7 +52,7 @@ describe('OnlineCounter', () => {
     const now = new Date()
     render(<OnlineCounter streamOnline="online" streamStart={now} />)
 
-    expect(screen.getByText(/less than 1 min/i)).toBeInTheDocument()
+    expect(screen.getByText(/00:\d\d/)).toBeInTheDocument()
   })
 
   it('should show "Online since" with formatted time when online with streamStart', () => {
@@ -68,8 +68,7 @@ describe('OnlineCounter', () => {
     const startTime = new Date(now - 30_000) // 30 seconds ago
     render(<OnlineCounter streamOnline="online" streamStart={startTime} />)
 
-    const timeLabel = screen.getByText('less than 1 min')
-    expect(timeLabel).toBeInTheDocument()
+    expect(screen.getByText(/00:\d\d/)).toBeInTheDocument()
   })
 
   it('should display formatted time when stream started more than a minute ago', () => {

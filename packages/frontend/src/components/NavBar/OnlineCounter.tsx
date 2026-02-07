@@ -13,15 +13,12 @@ function getTimeSince(startTime: Date): string {
   const minutes = Math.floor((durationMs / (1000 * 60)) % 60)
   const hours = Math.floor(durationMs / (1000 * 60 * 60))
 
-  if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-  }
+  const secondsDisplay = seconds.toString().padStart(2, '0')
+  const minutesDisplay = minutes.toString().padStart(2, '0')
 
-  if (minutes > 0) {
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-  }
-
-  return 'less than 1 min'
+  return hours > 0
+    ? `${hours}:${minutesDisplay}:${secondsDisplay}`
+    : `${minutesDisplay}:${secondsDisplay}`
 }
 
 function OnlineCounter({ streamOnline, streamStart }: OnlineCounterProps) {
