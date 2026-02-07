@@ -4,3 +4,6 @@
 **/README.md
 **/node_modules
 packages/*/dist
+packages/*/test-utils
+packages/*/src/**/*.test.ts
+packages/*/src/**/*.test.tsx
