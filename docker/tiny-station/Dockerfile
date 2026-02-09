@@ -12,6 +12,11 @@ COPY pnpm-workspace.yaml ./
 COPY tsconfig*.json ./
 COPY packages ./packages
 
+ARG VITE_BASE_URL
+ARG VITE_COOKIE_TOKEN
+ENV VITE_BASE_URL=$VITE_BASE_URL
+ENV VITE_COOKIE_TOKEN=$VITE_COOKIE_TOKEN
+
 RUN set -xe && \
   npm install -g pnpm && \
   pnpm install --frozen-lockfile && \
